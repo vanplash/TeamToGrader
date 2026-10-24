@@ -131,7 +131,7 @@
         <div id="section-cases" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Bomzh -->
             <div class="cyber-panel p-5 rounded-2xl text-center flex flex-col justify-between items-center h-[430px] border-panelBorder">
-                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zJYQJD_9W7m5O0m_7zO6-fujkGv5wh3brFoNmgiwCyrkBrazymctOedwVvYl_Y81DrxO_rhcG6uM_JnSI37HRw4XjUlwv3308_K7q79g/360fx360f" class="w-36 h-36 object-contain drop-shadow-xl">
+                <div class="w-36 h-36 flex items-center justify-center text-6xl text-gray-400 bg-black/40 rounded-xl"><i class="fa-solid fa-box-archive"></i></div>
                 <div>
                     <h3 class="cyber-font text-3xl text-gray-200">Бомженятко</h3>
                     <p class="text-xs text-textGray mt-1">Дешевий старт для новачків.</p>
@@ -140,7 +140,7 @@
             </div>
             <!-- Injir (Spy meme) -->
             <div class="cyber-panel p-5 rounded-2xl text-center flex flex-col justify-between items-center h-[430px] border-amber-600/40">
-                <img src="https://wiki.teamfortress.com/w/images/f/f3/Spy_mercenary_package_concept.png" class="w-36 h-36 object-contain drop-shadow-xl" alt="Spy meme">
+                <div class="w-36 h-36 flex items-center justify-center text-6xl text-amber-500 bg-black/40 rounded-xl"><i class="fa-solid fa-user-secret"></i></div>
                 <div>
                     <h3 class="cyber-font text-3xl text-amber-500">Інжирчик</h3>
                     <p class="text-xs text-textGray mt-1">«That Engineer is a Spy!» 🕵️‍♂️</p>
@@ -149,7 +149,7 @@
             </div>
             <!-- 50/50 -->
             <div class="cyber-panel p-5 rounded-2xl text-center flex flex-col justify-between items-center h-[430px] border-red-600/40">
-                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopuj7DAR17PLfYQJD_9W7m5O0m_7zO6-fujkGv5wh3brFosjwiwK28hBuN2mlLIGTewE3Zl3YqVftwe_s0Z7qup7Iz3Zj6HM8pSuJlwv33086N6R_fQ/360fx360f" class="w-36 h-36 object-contain drop-shadow-xl">
+                <div class="w-36 h-36 flex items-center justify-center text-6xl text-red-500 bg-black/40 rounded-xl"><i class="fa-solid fa-scale-balanced"></i></div>
                 <div>
                     <h3 class="cyber-font text-3xl text-red-500">50 / 50</h3>
                     <p class="text-xs text-textGray mt-1">Або топ, або нічого.</p>
@@ -158,7 +158,7 @@
             </div>
             <!-- Rich -->
             <div class="cyber-panel p-5 rounded-2xl text-center flex flex-col justify-between items-center h-[430px] border-amber-400/40">
-                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zLZAJG7dizq4y0nvL8J_LEmj4G65Mh2u2T89it2Vax-hdoNWD1JteWdAFvN1rWq1C-w-m9jJTovp_NnyNlvSEr537YnB2zhxxEOPsu26cQW44G3Q/360fx360f" class="w-36 h-36 object-contain drop-shadow-xl">
+                <div class="w-36 h-36 flex items-center justify-center text-6xl text-accentGold bg-black/40 rounded-xl"><i class="fa-solid fa-gem"></i></div>
                 <div>
                     <h3 class="cyber-font text-3xl text-accentGold">Богач</h3>
                     <p class="text-xs text-textGray mt-1">Елітний шмот та шапки.</p>
@@ -194,14 +194,14 @@
         let isSpinning = false;
 
         const itemsDB = [
-            { id: '1', name: 'Mercenary Badge', price: 5, quality: 'unique', img: 'https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2PLacDBA5ciJnJm0h8j_-r-Uzj8Fv5Un37rHptjwiwC2_hJuZmimLI6Wcw48MArSqFjvx-7t15O6tZ-YnHM1uXEl4n-NnxK1h08ZcKUx0j3V85U/360fx360f' },
-            { id: '2', name: 'Scout Bat', price: 8, quality: 'unique', img: 'https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopuj7DAR17PLfYQJD_9W7m5O0m_7zO6-fujkGv5wh3brFosjwiwK28hBuN2mlLIGTewE3Zl3YqVftwe_s0Z7qup7Iz3Zj6HM8pSuJlwv33086N6R_fQ/360fx360f' },
-            { id: '3', name: 'Strange Shotgun', price: 30, quality: 'strange', img: 'https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopuj7DAR17PLfYQJD_9W7m5O0m_7zO6-fujkGv5wh3brFosjwiwK28hBuN2mlLIGTewE3Zl3YqVftwe_s0Z7qup7Iz3Zj6HM8pSuJlwv33086N6R_fQ/360fx360f' },
-            { id: '4', name: 'Engineer Wrench', price: 15, quality: 'unique', img: 'https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2PLacDBA5ciJnJm0h8j_-r-Uzj8Fv5Un37rHptjwiwC2_hJuZmimLI6Wcw48MArSqFjvx-7t15O6tZ-YnHM1uXEl4n-NnxK1h08ZcKUx0j3V85U/360fx360f' },
-            { id: '5', name: 'Australium Wrench', price: 120, quality: 'australium', img: 'https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zLZAJG7dizq4y0nvL8J_LEmj4G65Mh2u2T89it2Vax-hdoNWD1JteWdAFvN1rWq1C-w-m9jJTovp_NnyNlvSEr537YnB2zhxxEOPsu26cQW44G3Q/360fx360f' },
-            { id: '6', name: 'Australium Rocket Launcher', price: 500, quality: 'australium', img: 'https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zLZAJG7dizq4y0nvL8J_LEmj4G65Mh2u2T89it2Vax-hdoNWD1JteWdAFvN1rWq1C-w-m9jJTovp_NnyNlvSEr537YnB2zhxxEOPsu26cQW44G3Q/360fx360f' },
-            { id: '7', name: 'Burning Flames Team Captain', price: 3000, quality: 'unusual', img: 'https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2PLacDBA5ciJnJm0h8j_-r-Uzj8Fv5Un37rHptjwiwC2_hJuZmimLI6Wcw48MArSqFjvx-7t15O6tZ-YnHM1uXEl4n-NnxK1h08ZcKUx0j3V85U/360fx360f' },
-            { id: '8', name: 'Golden Frying Pan', price: 5000, quality: 'australium', img: 'https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2PLacDBA5ciJnJm0h8j_-r-Uzj8Fv5Un37rHptjwiwC2_hJuZmimLI6Wcw48MArSqFjvx-7t15O6tZ-YnHM1uXEl4n-NnxK1h08ZcKUx0j3V85U/360fx360f' }
+            { id: '1', name: 'Mercenary Badge', price: 5, quality: 'unique', icon: 'fa-shield-halved' },
+            { id: '2', name: 'Scout Bat', price: 8, quality: 'unique', icon: 'fa-baseball-bat-ball' },
+            { id: '3', name: 'Strange Shotgun', price: 30, quality: 'strange', icon: 'fa-gun' },
+            { id: '4', name: 'Engineer Wrench', price: 15, quality: 'unique', icon: 'fa-wrench' },
+            { id: '5', name: 'Australium Wrench', price: 120, quality: 'australium', icon: 'fa-screwdriver-wrench' },
+            { id: '6', name: 'Australium Rocket Launcher', price: 500, quality: 'australium', icon: 'fa-rocket' },
+            { id: '7', name: 'Burning Flames Team Captain', price: 3000, quality: 'unusual', icon: 'fa-hat-cowboy' },
+            { id: '8', name: 'Golden Frying Pan', price: 5000, quality: 'australium', icon: 'fa-utensils' }
         ];
 
         const casesDB = {
@@ -227,13 +227,11 @@
 
         function switchTab(tab) {
             ['upgrader', 'cases', 'inventory'].forEach(t => {
-                let sec = document.getElementById(`section-${t}`);
-                let btn = document.getElementById(`tab-btn-${t}`);
+                let sec = document.getElementById(`section-${t}`); let btn = document.getElementById(`tab-btn-${t}`);
                 if(sec) sec.classList.add('hidden');
                 if(btn) btn.classList.remove('active');
             });
-            let activeSec = document.getElementById(`section-${tab}`);
-            let activeBtn = document.getElementById(`tab-btn-${tab}`);
+            let activeSec = document.getElementById(`section-${tab}`); let activeBtn = document.getElementById(`tab-btn-${tab}`);
             if(activeSec) activeSec.classList.remove('hidden');
             if(activeBtn) activeBtn.classList.add('active');
 
@@ -247,13 +245,13 @@
             inventory.forEach((item, index) => {
                 const isSel = selectedInv.includes(index);
                 const div = document.createElement('div');
-                div.className = `item-card p-2 rounded-xl flex flex-col items-center text-center ${isSel ? 'selected' : ''}`;
+                div.className = `item-card p-3 rounded-xl flex flex-col items-center text-center ${isSel ? 'selected' : ''}`;
                 div.onclick = function() {
                     if(isSel) selectedInv = selectedInv.filter(i => i !== index);
                     else selectedInv.push(index);
                     renderInv();
                 };
-                div.innerHTML = `<img src="${item.img}" class="w-14 h-14 object-contain mb-1"><div class="text-[11px] font-bold truncate w-full text-white">${item.name}</div><div class="text-[10px] text-accentGold font-bold">${item.price} ТК</div>`;
+                div.innerHTML = `<div class="text-3xl text-amber-400 mb-1"><i class="fa-solid ${item.icon}"></i></div><div class="text-[11px] font-bold truncate w-full text-white">${item.name}</div><div class="text-[10px] text-accentGold font-bold">${item.price} ТК</div>`;
                 grid.appendChild(div);
             });
             calcOdds();
@@ -274,7 +272,7 @@
                     renderCatalog();
                     calcOdds();
                 };
-                div.innerHTML = `<div class="flex items-center gap-2 truncate"><img src="${item.img}" class="w-10 h-10 object-contain"><span class="text-xs font-bold truncate text-white">${item.name}</span></div><span class="text-xs text-accentGold font-bold">${item.price} ТК</span>`;
+                div.innerHTML = `<div class="flex items-center gap-2.5 truncate"><div class="text-xl text-amber-400"><i class="fa-solid ${item.icon}"></i></div><span class="text-xs font-bold truncate text-white">${item.name}</span></div><span class="text-xs text-accentGold font-bold">${item.price} ТК</span>`;
                 grid.appendChild(div);
             });
         }
@@ -286,30 +284,7 @@
             selectedInv.forEach(idx => { if(inventory[idx]) total += inventory[idx].price; });
             
             let betElem = document.getElementById('totalBet');
-            if(betElem) betElem.innerText = `${total.toFixed(0)} ТК`;
-
-            let upgBtn = document.getElementById('upgradeBtn');
-            if(!targetItem || total <= 0 || total >= targetItem.price) {
-                drawWheel(0);
-                if(upgBtn) {
-                    upgBtn.disabled = true;
-                    upgBtn.classList.add('opacity-40', 'cursor-not-allowed');
-                }
-                return;
-            }
-
-            let chance = (total / targetItem.price) * 100;
-            if(chance > 95) chance = 95;
-            drawWheel(chance);
-            if(upgBtn) {
-                upgBtn.disabled = false;
-                upgBtn.classList.remove('opacity-40', 'cursor-not-allowed');
-            }
-        }
-
-        function drawWheel(chance, rotationAngle = 0) {
-            let chanceElem = document.getElementById('chanceText');
-            if(chanceElem) chanceElem.innerText = `${chance.toFixed(2)}%`;
+            if(betElem) betElem.innerText = `${total.toFixed(0)} ТК`;  let upgBtn = document.getElementById('upgradeBtn'); if(!targetItem \vert{}\vert{} total <= 0 \vert{}\vert{} total >= targetItem.price) { drawWheel(0); if(upgBtn) { upgBtn.disabled = true; upgBtn.classList.add('opacity-40', 'cursor-not-allowed'); } return; }  let chance = (total / targetItem.price) * 100; if(chance > 95) chance = 95; drawWheel(chance); if(upgBtn) { upgBtn.disabled = false; upgBtn.classList.remove('opacity-40', 'cursor-not-allowed'); } }  function drawWheel(chance, rotationAngle = 0) { let chanceElem = document.getElementById('chanceText'); if(chanceElem) chanceElem.innerText = `${chance.toFixed(2)}%`;
             const canvas = document.getElementById('wheelCanvas');
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
@@ -320,10 +295,8 @@
             ctx.rotate(rotationAngle);
             ctx.translate(-140, -140);
 
-            // Background circle
             ctx.beginPath(); ctx.arc(140, 140, 125, 0, Math.PI * 2); ctx.fillStyle = '#181b22'; ctx.fill();
 
-            // Chance fill arc
             const angle = (chance / 100) * (Math.PI * 2);
             ctx.beginPath(); ctx.moveTo(140, 140); ctx.arc(140, 140, 115, -Math.PI / 2, -Math.PI / 2 + angle, false); ctx.lineTo(140, 140); ctx.fillStyle = '#f3ba2f'; ctx.fill();
             
@@ -363,7 +336,6 @@
             if(chance > 95) chance = 95;
             let win = Math.random() * 100 < chance;
 
-            // ANIMATION LOGIC
             let startTime = null;
             let duration = 2500;
             let totalRotations = Math.PI * 2 * 5;
@@ -392,78 +364,4 @@
                     }
                     let resBox = document.getElementById('resItemBox');
                     if(resBox) {
-                        resBox.innerHTML = `<img src="${targetItem.img}" class="w-24 h-24 object-contain mx-auto mb-1"><div class="font-bold text-lg text-white">${targetItem.name}</div>`;
-                    }
-                    if(win) inventory.push(targetItem);
-                    renderInv();
-                }
-            }
-
-            requestAnimationFrame(animateSpin);
-        }
-
-        function closeResult() {
-            const overlay = document.getElementById('resultOverlay');
-            if(overlay) overlay.classList.add('hidden');
-            calcOdds();
-        }
-
-        function openCase(caseKey) {
-            const c = casesDB[caseKey];
-            if(!c) return;
-            if(balance < c.cost) {
-                alert('Недостатньо ТК! Поповніть через адмін-панель.');
-                return;
-            }
-            balance -= c.cost;
-            updateUI();
-            const won = c.items[Math.floor(Math.random() * c.items.length)];
-            inventory.push(won);
-            alert(`Ви відкрили кейс і виграли: ${won.name}!`);
-            renderInv();
-        }
-
-        function renderFullInv() {
-            const grid = document.getElementById('fullInvGrid');
-            if(!grid) return;
-            grid.innerHTML = '';
-            inventory.forEach(item => {
-                const div = document.createElement('div');
-                div.className = "cyber-panel p-4 rounded-xl text-center flex flex-col items-center justify-between";
-                div.innerHTML = `<img src="${item.img}" class="w-20 h-20 object-contain mb-2"><div class="text-xs font-bold text-white">${item.name}</div><div class="text-xs text-accentGold font-bold mt-1">${item.price} ТК</div>`;
-                grid.appendChild(div);
-            });
-        }
-
-        function requestAdmin() {
-            let pin = prompt("Введіть PIN (tf2admin):");
-            if(pin === "tf2admin") {
-                let modal = document.getElementById('adminModal');
-                if(modal) modal.classList.remove('hidden');
-            } else if(pin !== null) {
-                alert("Невірний PIN!");
-            }
-        }
-
-        function toggleAdmin() {
-            let modal = document.getElementById('adminModal');
-            if(modal) modal.classList.toggle('hidden');
-        }
-
-        function addAdminRef() {
-            let adminInput = document.getElementById('adminInput');
-            let amt = adminInput ? (parseFloat(adminInput.value) || 0) : 0;
-            balance += amt;
-            updateUI();
-            toggleAdmin();
-            alert(`Успішно нараховано ${amt} ТК!`);
-        }
-
-        window.onload = function() {
-            updateUI();
-            renderInv();
-            renderCatalog();
-        };
-    </script>
-</body>
-</html>
+                        resBox.innerHTML = `<div class="text-4xl text-amber-400 mb-2"><i class="fa-solid ${
