@@ -3,351 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Самий кращий апгрейдер по Team Fortress 2</title>
+    <title>Team Fortress 2 Upgrader & Cases</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;700&family=Oswald:wght@500;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        tfRed: '#B8383B',
-                        tfRedDark: '#8B2527',
-                        tfBlu: '#5B7A8C',
-                        tfBluDark: '#3A5261',
-                        tfDark: '#2B2625',
-                        tfDarker: '#1B1716',
-                        tfPanel: '#3B3533',
-                        tfBorder: '#524B48',
-                        tfOrange: '#CF6A32',
-                        tfYellow: '#FFD700',
+                        tfDark: '#1b1a17', tfDarker: '#12110f', tfPanel: '#2a2825',
+                        tfBorder: '#423f3a', tfOrange: '#b86125', tfYellow: '#ffd700',
+                        qUnique: '#ffd700', qStrange: '#cf6a32', qUnusual: '#8650ac', qAustralium: '#e6b800'
                     }
                 }
             }
         }
     </script>
-
     <style>
-        body {
-            background-color: #120f0e;
-            background-image: radial-gradient(#2b2625 1px, transparent 0);
-            background-size: 24px 24px;
-            color: #e1dcd6;
-            font-family: 'Roboto Condensed', sans-serif;
-            user-select: none;
-        }
-        .tf-font { font-family: 'Teko', 'Oswald', sans-serif; letter-spacing: 0.05em; text-transform: uppercase; }
-        .tf-box { background: linear-gradient(180deg, #3B3533 0%, #2B2625 100%); border: 2px solid #524B48; box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.5); }
-        .tf-box-inner { background: #1B1716; border: 2px solid #322C2A; box-shadow: inset 0 2px 5px rgba(0,0,0,0.8); }
-        .glow-unusual { box-shadow: 0 0 15px rgba(134, 80, 172, 0.6); border-color: #8650AC !important; }
-        .glow-australium { box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); border-color: #FFD700 !important; }
-        .glow-strange { box-shadow: 0 0 10px rgba(207, 106, 50, 0.5); border-color: #CF6A32 !important; }
-        .tf-btn { background: linear-gradient(180deg, #B8383B 0%, #8B2527 100%); border: 2px solid #D64548; color: #FFF; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); box-shadow: 0 4px 0 #5C1819, 0 5px 10px rgba(0,0,0,0.5); transition: all 0.05s ease; }
-        .tf-btn:hover { background: linear-gradient(180deg, #C94447 0%, #9C2C2E 100%); transform: translateY(-1px); }
-        .tf-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #5C1819, 0 2px 5px rgba(0,0,0,0.5); }
-        .tf-btn-gold { background: linear-gradient(180deg, #E6B800 0%, #B38F00 100%); border: 2px solid #FFE066; color: #1B1716; text-shadow: none; box-shadow: 0 4px 0 #806600, 0 5px 10px rgba(0,0,0,0.5); }
-        .tf-btn-gold:hover { background: linear-gradient(180deg, #FFC800 0%, #C9A000 100%); }
-        .tf-btn-gold:active { transform: translateY(3px); box-shadow: 0 1px 0 #806600, 0 2px 5px rgba(0,0,0,0.5); }
-        #upgradeWheelCanvas { filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.8)); width: 100%; max-width: 280px; height: auto; }
-        .flame-bg { background: radial-gradient(circle, rgba(207,106,50,0.15) 0%, rgba(27,23,22,0) 70%); }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1B1716; }
-        ::-webkit-scrollbar-thumb { background: #524B48; border-radius: 4px; }
+        body { background-color: #12110f; color: #d0c5b4; font-family: 'Roboto Condensed', sans-serif; user-select: none; }
+        .tf-font { font-family: 'Teko', sans-serif; letter-spacing: 0.05em; text-transform: uppercase; }
+        .tf-box { background: linear-gradient(180deg, #2a2825 0%, #1b1a17 100%); border: 2px solid #423f3a; box-shadow: 0 4px 12px rgba(0,0,0,0.6); }
+        .tf-btn { background: linear-gradient(180deg, #b86125 0%, #8a4515 100%); border: 2px solid #d97736; color: #fff; font-family: 'Teko', sans-serif; font-size: 1.25rem; letter-spacing: 0.05em; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); box-shadow: 0 4px 0 #5c2d0e; transition: all 0.05s; }
+        .tf-btn:hover { background: linear-gradient(180deg, #cf7130 0%, #9e501a 100%); }
+        .tf-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #5c2d0e; }
+        .tf-btn-gold { background: linear-gradient(180deg, #ffd700 0%, #c9a000 100%); border: 2px solid #ffea75; color: #1b1a17; text-shadow: none; box-shadow: 0 4px 0 #806600; }
+        .tf-btn-gold:hover { background: linear-gradient(180deg, #ffe033 0%, #e0b400 100%); }
+        .item-card { background: #22201d; border: 2px solid #423f3a; transition: all 0.2s; position: relative; overflow: hidden; }
+        .item-card:hover { border-color: #b86125; transform: translateY(-2px); }
+        .item-card.selected { border-color: #ffd700 !important; background: #2f2b25; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #423f3a; border-radius: 3px; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
+<body class="min-h-screen flex flex-col justify-between">
 
     <!-- HEADER -->
-    <header class="tf-box border-b-4 border-tfOrange p-3 shadow-2xl relative z-20">
+    <header class="tf-box border-b-4 border-tfOrange p-4">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-tfOrange rounded-full border-2 border-tfYellow flex items-center justify-center text-tfDarker font-bold text-2xl shadow-lg">
-                    <i class="fa-solid fa-wrench"></i>
+                <div class="w-10 h-10 bg-tfOrange rounded flex items-center justify-center text-tfDarker text-2xl font-bold border border-tfYellow">
+                    <i class="fa-solid fa-gamepad"></i>
                 </div>
                 <div>
-                    <h1 class="tf-font text-2xl md:text-3xl leading-none text-tfYellow tracking-wider">
-                        Самий кращий апгрейдер по Team Fortress 2
-                    </h1>
-                    <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">MANN CO. STATIONS & CASES</p>
+                    <h1 class="tf-font text-3xl text-tfYellow leading-none">Team Fortress 2 Upgrader</h1>
+                    <p class="text-xs text-gray-400 tracking-wider">MANN CO. CASES & UPGRADE SYSTEM</p>
                 </div>
             </div>
 
-            <!-- NAVIGATION TABS -->
             <div class="flex gap-2">
-                <button onclick="switchTab('upgrader')" id="tabBtn-upgrader" class="tf-btn px-4 py-2 rounded text-sm font-bold uppercase">⚡ Апгрейдер</button>
-                <button onclick="switchTab('cases')" id="tabBtn-cases" class="tf-btn px-4 py-2 rounded text-sm font-bold uppercase bg-tfPanel border-tfBorder opacity-80">🎁 Кейси</button>
-                <button onclick="switchTab('inventory')" id="tabBtn-inventory" class="tf-btn px-4 py-2 rounded text-sm font-bold uppercase bg-tfPanel border-tfBorder opacity-80">🎒 Інвентар</button>
+                <button onclick="switchTab('upgrader')" id="tab-upgrader" class="tf-btn px-4 py-1 rounded">⚡ Апгрейдер</button>
+                <button onclick="switchTab('cases')" id="tab-cases" class="tf-btn px-4 py-1 rounded opacity-75">🎁 Кейси</button>
+                <button onclick="switchTab('inventory')" id="tab-inventory" class="tf-btn px-4 py-1 rounded opacity-75">🎒 Інвентар</button>
             </div>
 
-            <!-- BALANCES -->
             <div class="flex items-center gap-4 bg-tfDarker px-4 py-2 rounded border border-tfBorder">
-                <div class="text-center px-2">
-                    <span class="block text-xs text-gray-400">Метал</span>
+                <div>
+                    <span class="text-xs text-gray-400 block">Баланс:</span>
                     <span id="balRef" class="tf-font text-2xl text-tfYellow">50.00 ref</span>
                 </div>
-                <div class="h-8 w-px bg-tfBorder"></div>
-                <div class="text-center px-2">
-                    <span class="block text-xs text-gray-400">Ключі</span>
-                    <span id="balKeys" class="tf-font text-2xl text-tfOrange">5 🔑</span>
-                </div>
-                <button onclick="requestAdminAccess()" class="ml-2 bg-tfPanel hover:bg-tfBorder border border-tfBorder px-2 py-1 rounded text-xs text-yellow-400 font-bold" title="Адмін панель">
+                <button onclick="requestAdmin()" class="text-xs text-gray-400 hover:text-white bg-tfPanel px-2 py-1 rounded border border-tfBorder" title="Адмін панель">
                     <i class="fa-solid fa-user-shield"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- CONTENT SECTIONS -->
-    <main class="max-w-7xl w-full mx-auto p-4 my-2 flex-1">
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl w-full mx-auto p-4 flex-1">
 
         <!-- TAB 1: UPGRADER -->
         <div id="section-upgrader" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            <section class="lg:col-span-3 tf-box p-4 rounded-lg flex flex-col h-[600px]">
-                <div class="flex justify-between items-center border-b border-tfBorder pb-2 mb-3">
-                    <h2 class="tf-font text-2xl text-tfYellow"><i class="fa-solid fa-box-archive mr-2"></i>Твій Інвентар</h2>
-                    <span id="invCount" class="text-xs bg-tfDarker px-2 py-1 rounded text-gray-400">0 Items</span>
+            <!-- Left: Inventory -->
+            <div class="lg:col-span-3 tf-box p-4 rounded h-[580px] flex flex-col">
+                <h2 class="tf-font text-2xl text-tfYellow border-b border-tfBorder pb-1 mb-2">Твій інвентар</h2>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs text-gray-400">Внесіть метал або скіни:</span>
+                    <input id="directRef" type="number" min="0" value="0" oninput="calcOdds()" class="w-20 bg-tfPanel border border-tfBorder text-right px-2 py-1 rounded text-tfYellow font-bold text-sm">
                 </div>
-                <div class="bg-tfDarker p-2 rounded mb-3 border border-tfBorder flex justify-between items-center">
-                    <span class="text-sm text-gray-300 font-bold">Баланс (ref):</span>
-                    <input id="directRefInput" type="number" step="0.5" min="0" value="0" oninput="handleDirectRefChange()" class="w-24 bg-tfPanel border border-tfBorder rounded text-right px-2 py-1 font-bold text-tfYellow">
+                <div id="invGrid" class="flex-1 overflow-y-auto grid grid-cols-2 gap-2 pr-1 content-start"></div>
+                <div class="mt-2 pt-2 border-t border-tfBorder text-center">
+                    <span class="text-xs text-gray-400">ЗАГАЛЬНА СТАВКА</span>
+                    <div id="totalBet" class="tf-font text-3xl text-tfYellow">0.00 ref</div>
                 </div>
-                <div id="userInventoryGrid" class="tf-box-inner p-2 rounded flex-1 overflow-y-auto grid grid-cols-2 gap-2"></div>
-                <div class="mt-3 border-t border-tfBorder pt-2 text-center bg-tfDarker p-2 rounded">
-                    <span class="text-xs text-gray-400 block uppercase">Ставка (Загалом)</span>
-                    <span id="totalDepositVal" class="tf-font text-3xl text-tfYellow">0.00 ref</span>
-                </div>
-            </section>
+            </div>
 
-            <section class="lg:col-span-6 tf-box p-6 rounded-lg flex flex-col items-center justify-between h-[600px] relative overflow-hidden flame-bg">
-                <div class="text-center z-10 w-full">
-                    <div id="targetDisplayBadge" class="inline-block px-3 py-1 rounded text-xs uppercase font-bold bg-gray-800 text-gray-400 border border-gray-600 mb-1">Оберіть ціль</div>
-                    <h2 id="targetDisplayName" class="tf-font text-3xl text-white truncate max-w-md mx-auto">---</h2>
+            <!-- Center: Wheel & Upgrader Machine -->
+            <div class="lg:col-span-6 tf-box p-6 rounded h-[580px] flex flex-col items-center justify-between relative overflow-hidden">
+                <div class="text-center z-10">
+                    <span id="targetBadge" class="text-xs bg-gray-800 text-gray-300 px-3 py-1 rounded border border-gray-600 uppercase font-bold">Оберіть ціль праворуч</span>
+                    <h2 id="targetName" class="tf-font text-3xl text-white mt-1">---</h2>
                 </div>
-                <div class="relative my-auto flex items-center justify-center">
-                    <canvas id="upgradeWheelCanvas" width="300" height="300" class="rounded-full"></canvas>
-                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
-                        <span class="text-xs text-gray-400 uppercase font-bold">Шанс</span>
-                        <span id="chancePercentText" class="tf-font text-5xl font-bold text-tfYellow">0.00%</span>
-                        <span id="rollRangeText" class="text-xs text-tfOrange font-mono bg-tfDarker/80 px-2 py-0.5 rounded border border-tfBorder mt-1">Roll: 0 - 0</span>
+
+                <div class="relative flex items-center justify-center my-auto">
+                    <canvas id="wheelCanvas" width="260" height="260" class="rounded-full shadow-2xl"></canvas>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
+                        <span class="text-xs text-gray-400 uppercase">Шанс</span>
+                        <span id="chanceText" class="tf-font text-5xl text-tfYellow font-bold">0.00%</span>
                     </div>
                 </div>
-                <div id="resultBanner" class="hidden absolute inset-x-0 top-1/2 -translate-y-1/2 bg-tfDarker/95 border-y-4 border-tfYellow p-6 text-center z-30 shadow-2xl">
-                    <h3 id="resultTitle" class="tf-font text-5xl">УСПІХ!</h3>
-                    <p id="resultDesc" class="text-lg text-gray-200 mt-1">Ви виграли предмет!</p>
-                    <div id="resultItemShow" class="mt-3 flex justify-center"></div>
-                </div>
-                <div class="w-full z-10 px-4">
-                    <button id="upgradeBtn" onclick="executeUpgrade()" disabled class="tf-btn tf-btn-gold w-full py-4 rounded-lg tf-font text-4xl uppercase opacity-50 cursor-not-allowed">
-                        <i class="fa-solid fa-bolt mr-2"></i> РОЗПОЧАТИ АПГРЕЙД
-                    </button>
-                </div>
-            </section>
 
-            <section class="lg:col-span-3 tf-box p-4 rounded-lg flex flex-col h-[600px]">
-                <div class="flex justify-between items-center border-b border-tfBorder pb-2 mb-3">
-                    <h2 class="tf-font text-2xl text-tfYellow"><i class="fa-solid fa-crosshairs mr-2"></i>Ціль Апгрейду</h2>
+                <div id="resultOverlay" class="hidden absolute inset-0 bg-tfDarker/90 flex flex-col items-center justify-center z-30 p-6 text-center">
+                    <h3 id="resTitle" class="tf-font text-5xl mb-2">УСПІХ!</h3>
+                    <div id="resItemBox" class="mb-4"></div>
+                    <button onclick="closeResult()" class="tf-btn px-6 py-2 rounded">Продовжити</button>
                 </div>
-                <div class="flex gap-1 mb-2 overflow-x-auto pb-1 text-xs">
-                    <button onclick="filterCatalog('all')" class="px-2 py-1 bg-tfDarker border border-tfBorder rounded">Всі</button>
-                    <button onclick="filterCatalog('australium')" class="px-2 py-1 bg-tfDarker border border-tfBorder rounded">Australium</button>
-                    <button onclick="filterCatalog('unusual')" class="px-2 py-1 bg-tfDarker border border-tfBorder rounded">Unusual</button>
-                </div>
-                <div id="targetCatalogGrid" class="tf-box-inner p-2 rounded flex-1 overflow-y-auto space-y-2"></div>
-            </section>
+
+                <button id="upgradeBtn" onclick="startUpgrade()" disabled class="tf-btn tf-btn-gold w-full py-3 rounded tf-font text-3xl uppercase opacity-50 cursor-not-allowed">
+                    РОЗПОЧАТИ АПГРЕЙД
+                </button>
+            </div>
+
+            <!-- Right: Target Catalog -->
+            <div class="lg:col-span-3 tf-box p-4 rounded h-[580px] flex flex-col">
+                <h2 class="tf-font text-2xl text-tfYellow border-b border-tfBorder pb-1 mb-2">Цілі апгрейду</h2>
+                <div id="catalogGrid" class="flex-1 overflow-y-auto space-y-2 pr-1"></div>
+            </div>
         </div>
 
         <!-- TAB 2: CASES -->
         <div id="section-cases" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="tf-box p-4 rounded-lg text-center flex flex-col items-center justify-between h-[400px]">
-                <div class="text-6xl text-tfYellow my-4"><i class="fa-solid fa-box"></i></div>
+            <div class="tf-box p-6 rounded text-center flex flex-col justify-between items-center h-[420px]">
+                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zJYQJD_9W7m5O0m_7zO6-fujkGv5wh3brFoNmgiwCyrkBrazymctOedwVvYl_Y81DrxO_rhcG6uM_JnSI37HRw4XjUlwv3308_K7q79g/360fx360f" class="w-36 h-36 object-contain">
                 <h3 class="tf-font text-3xl text-tfYellow">Mann Co. Supply Crate</h3>
-                <p class="text-sm text-gray-300">Класичний ящик з унікальними та strange предметами.</p>
-                <button onclick="openCase(15, 'Mann Co. Crate')" class="tf-btn tf-btn-gold w-full py-3 rounded tf-font text-2xl uppercase">Відкрити (15 ref)</button>
+                <p class="text-xs text-gray-400">Класичний ящик зброї та шапок TF2.</p>
+                <button onclick="openCase(20)" class="tf-btn tf-btn-gold w-full py-3 rounded tf-font text-2xl uppercase">Відкрити (20 ref)</button>
             </div>
-            <div class="tf-box p-4 rounded-lg text-center flex flex-col items-center justify-between h-[400px] border-purple-500">
-                <div class="text-6xl text-purple-400 my-4"><i class="fa-solid fa-hat-cowboy"></i></div>
-                <h3 class="tf-font text-3xl text-purple-300">Unusual Hat Crate</h3>
-                <p class="text-sm text-gray-300">Шанс вибити шапку з ефектом Unusual (Burning Flames тощо).</p>
-                <button onclick="openCase(80, 'Unusual Crate')" class="tf-btn w-full py-3 rounded tf-font text-2xl uppercase">Відкрити (80 ref)</button>
+            <div class="tf-box p-6 rounded text-center flex flex-col justify-between items-center h-[420px] border-purple-500">
+                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2PLacDBA5ciJnJm0h8j_-r-Uzj8Fv5Un37rHptjwiwC2_hJuZmimLI6Wcw48MArSqFjvx-7t15O6tZ-YnHM1uXEl4n-NnxK1h08ZcKUx0j3V85U/360fx360f" class="w-36 h-36 object-contain">
+                <h3 class="tf-font text-3xl text-purple-400">Unusual Hat Crate</h3>
+                <p class="text-xs text-gray-400">Шанс вибити незвичайну шапку з ефектом.</p>
+                <button onclick="openCase(100)" class="tf-btn w-full py-3 rounded tf-font text-2xl uppercase">Відкрити (100 ref)</button>
             </div>
-            <div class="tf-box p-4 rounded-lg text-center flex flex-col items-center justify-between h-[400px] border-yellow-400">
-                <div class="text-6xl text-yellow-300 my-4"><i class="fa-solid fa-rocket"></i></div>
+            <div class="tf-box p-6 rounded text-center flex flex-col justify-between items-center h-[420px] border-yellow-500">
+                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zLZAJG7dizq4y0nvL8J_LEmj4G65Mh2u2T89it2Vax-hdoNWD1JteWdAFvN1rWq1C-w-m9jJTovp_NnyNlvSEr537YnB2zhxxEOPsu26cQW44G3Q/360fx360f" class="w-36 h-36 object-contain">
                 <h3 class="tf-font text-3xl text-yellow-300">Australium Weapon Case</h3>
-                <p class="text-sm text-gray-300">Чистий золотий Australium для справжніх колекціонерів.</p>
-                <button onclick="openCase(250, 'Australium Crate')" class="tf-btn tf-btn-gold w-full py-3 rounded tf-font text-2xl uppercase">Відкрити (250 ref)</button>
+                <p class="text-xs text-gray-400">Чистий золотий австраліум найвищої якості.</p>
+                <button onclick="openCase(300)" class="tf-btn tf-btn-gold w-full py-3 rounded tf-font text-2xl uppercase">Відкрити (300 ref)</button>
             </div>
         </div>
 
         <!-- TAB 3: INVENTORY -->
-        <div id="section-inventory" class="hidden tf-box p-6 rounded-lg">
-            <h2 class="tf-font text-3xl text-tfYellow mb-4"><i class="fa-solid fa-warehouse mr-2"></i>Склад твоїх предметів</h2>
-            <div id="fullInventoryGrid" class="grid grid-cols-2 md:grid-cols-6 gap-4"></div>
+        <div id="section-inventory" class="hidden tf-box p-6 rounded">
+            <h2 class="tf-font text-3xl text-tfYellow mb-4">Ваш колекційний інвентар</h2>
+            <div id="fullInvGrid" class="grid grid-cols-2 md:grid-cols-5 gap-4"></div>
         </div>
 
     </main>
 
     <!-- ADMIN MODAL -->
-    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="tf-box max-w-md w-full p-6 rounded-lg border-2 border-tfYellow relative">
-            <button onclick="toggleAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fa-solid fa-xmark"></i></button>
-            <h2 class="tf-font text-3xl text-tfYellow mb-4">Панель Адміністратора</h2>
-            <div class="space-y-4">
-                <div>
-                    <label class="text-xs text-gray-400 block mb-1">Додати Refined Metal:</label>
-                    <div class="flex gap-2">
-                        <input id="adminRefInput" type="number" value="100" class="bg-tfPanel border border-tfBorder px-3 py-2 rounded text-tfYellow font-bold w-full">
-                        <button onclick="adminAddRef()" class="tf-btn px-4 py-2 rounded uppercase text-sm font-bold">Додати</button>
-                    </div>
-                </div>
-            </div>
+    <div id="adminModal" class="fixed inset-0 bg-black/80 flex items-center justify-center hidden z-50">
+        <div class="tf-box max-w-sm w-full p-6 rounded relative">
+            <button onclick="toggleAdmin()" class="absolute top-3 right-3 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="tf-font text-2xl text-tfYellow mb-3">Адмін-панель</h3>
+            <input id="adminInput" type="number" value="500" class="w-full bg-tfPanel border border-tfBorder p-2 rounded text-tfYellow font-bold mb-3">
+            <button onclick="addAdminRef()" class="tf-btn w-full py-2 rounded">Додати Refined Metal</button>
         </div>
     </div>
 
     <!-- SCRIPT -->
     <script>
-        let userBalanceRef = parseFloat(localStorage.getItem('tf2_bal')) || 50.0;
-        let userKeys = parseInt(localStorage.getItem('tf2_keys')) || 5;
-        let selectedDepositItemIds = JSON.parse(localStorage.getItem('tf2_sel_items')) || [];
-        let directRefDeposit = parseFloat(localStorage.getItem('tf2_direct_ref')) || 0.0;
-        let selectedTargetItem = JSON.parse(localStorage.getItem('tf2_target')) || null;
-        let isSpinning = false;
-
-        const QUALITIES = {
-            unique: { name: 'Unique', color: '#FFD700' },
-            strange: { name: 'Strange', color: '#CF6A32' },
-            unusual: { name: 'Unusual', color: '#8650AC', class: 'glow-unusual' },
-            australium: { name: 'Australium', color: '#E6B800', class: 'glow-australium' }
-        };
-
-        let targetCatalog = [
-            { id: 't1', name: '✨ Australium Rocket Launcher', price: 120, quality: 'australium', category: 'australium', icon: 'fa-rocket' },
-            { id: 't2', name: '🔥 Burning Flames Team Captain', price: 4500, quality: 'unusual', category: 'unusual', effect: 'Burning Flames', icon: 'fa-hat-cowboy' },
-            { id: 't3', name: '🗡️ Australium Knife', price: 65, quality: 'australium', category: 'australium', icon: 'fa-khanda' },
-            { id: 't4', name: '🍌 Potassium Bonnet', price: 40, quality: 'unique', category: 'hat', icon: 'fa-hat-wizard' },
-            { id: 't5', name: '🎩 Unusual Pillar of Hats', price: 28, quality: 'unusual', category: 'unusual', effect: 'Sunbeams', icon: 'fa-graduation-cap' }
-        ];
-
-        let userInventory = JSON.parse(localStorage.getItem('tf2_inv')) || [
-            { id: 'u1', name: 'Mercenary Badge', price: 5, quality: 'unique', icon: 'fa-shield' },
-            { id: 'u2', name: 'Strange Scattergun', price: 18, quality: 'strange', icon: 'fa-crosshairs' }
-        ];
-
-        function saveState() {
-            localStorage.setItem('tf2_bal', userBalanceRef);
-            localStorage.setItem('tf2_keys', userKeys);
-            localStorage.setItem('tf2_inv', JSON.stringify(userInventory));
-            localStorage.setItem('tf2_target', JSON.stringify(selectedTargetItem));
-        }
-
-        window.onload = function() {
-            updateHeader();
-            renderUserInventory();
-            renderTargetCatalog('all');
-            renderFullInventory();
-            if(selectedTargetItem) selectTargetItem(selectedTargetItem);
-        };
-
-        function updateHeader() {
-            if(userBalanceRef < 0) userBalanceRef = 0;
-            document.getElementById('balRef').innerText = `${userBalanceRef.toFixed(2)} ref`;
-            document.getElementById('balKeys').innerText = `${userKeys} 🔑`;
-            saveState();
-        }
-
-        function switchTab(tab) {
-            ['upgrader', 'cases', 'inventory'].forEach(t => {
-                document.getElementById(`section-${t}`).classList.add('hidden');
-                document.getElementById(`tabBtn-${t}`).className = "tf-btn px-4 py-2 rounded text-sm font-bold uppercase bg-tfPanel border-tfBorder opacity-80";
-            });
-            document.getElementById(`section-${tab}`).classList.remove('hidden');
-            document.getElementById(`tabBtn-${tab}`).className = "tf-btn px-4 py-2 rounded text-sm font-bold uppercase";
-            if(tab === 'inventory') renderFullInventory();
-        }
-
-        function renderUserInventory() {
-            const grid = document.getElementById('userInventoryGrid');
-            grid.innerHTML = '';
-            document.getElementById('invCount').innerText = `${userInventory.length} Items`;
-            userInventory.forEach(item => {
-                const isSelected = selectedDepositItemIds.includes(item.id);
-                const q = QUALITIES[item.quality] || QUALITIES.unique;
-                const div = document.createElement('div');
-                div.className = `tf-box p-2 rounded cursor-pointer text-center border-2 ${isSelected ? 'border-tfYellow bg-tfDark' : 'border-tfBorder'}`;
-                div.onclick = () => {
-                    if(isSelected) selectedDepositItemIds = selectedDepositItemIds.filter(id => id !== item.id);
-                    else selectedDepositItemIds.push(item.id);
-                    renderUserInventory();
-                };
-                div.innerHTML = `<div class="text-xl mb-1" style="color:${q.color}"><i class="fa-solid ${item.icon || 'fa-box'}"></i></div><div class="text-xs font-bold truncate" style="color:${q.color}">${item.name}</div><div class="text-[10px] text-tfYellow">${item.price} ref</div>`;
-                grid.appendChild(div);
-            });
-            calcOdds();
-        }
-
-        function renderTargetCatalog(filter) {
-            const grid = document.getElementById('targetCatalogGrid');
-            grid.innerHTML = '';
-            targetCatalog.filter(i => filter === 'all' || i.category === filter).forEach(item => {
-                const isSelected = selectedTargetItem && selectedTargetItem.id === item.id;
-                const q = QUALITIES[item.quality];
-                const div = document.createElement('div');
-                div.className = `tf-box p-2 rounded cursor-pointer flex justify-between items-center border-2 ${isSelected ? 'border-tfYellow bg-tfDark' : 'border-tfBorder'}`;
-                div.onclick = () => selectTargetItem(item);
-                div.innerHTML = `<div class="flex items-center gap-2 truncate"><div style="color:${q.color}"><i class="fa-solid ${item.icon}"></i></div><span class="text-xs font-bold truncate" style="color:${q.color}">${item.name}</span></div><span class="text-xs text-tfYellow">${item.price}ref</span>`;
-                grid.appendChild(div);
-            });
-        }
-
-        function selectTargetItem(item) {
-            selectedTargetItem = item;
-            document.getElementById('targetDisplayName').innerText = item.name;
-            document.getElementById('targetDisplayName').style.color = QUALITIES[item.quality].color;
-            document.getElementById('targetDisplayBadge').innerText = item.quality.toUpperCase();
-            renderTargetCatalog('all');
-            calcOdds();
-        }
-
-        function handleDirectRefChange() {
-            let val = parseFloat(document.getElementById('directRefInput').value) || 0;
-            if(val > userBalanceRef) val = userBalanceRef;
-            directRefDeposit = val;
-            calcOdds();
-        }
-
-        function calcOdds() {
-            let sum = directRefDeposit;
-            selectedDepositItemIds.forEach(id => {
-                const it = userInventory.find(i => i.id === id);
-                if(it) sum += it.price;
-            });
-            document.getElementById('totalDepositVal').innerText = `${sum.toFixed(2)} ref`;
-            if(!selectedTargetItem || sum <= 0 || sum >= selectedTargetItem.price) {
-                updateWheel(0);
-                document.getElementById('upgradeBtn').disabled = true;
-                document.getElementById('upgradeBtn').classList.add('opacity-50', 'cursor-not-allowed');
-                return;
-            }
-            let chance = (sum / selectedTargetItem.price) * 100;
-            if(chance > 95) chance = 95;
-            updateWheel(chance);
-            document.getElementById('upgradeBtn').disabled = false;
-            document.getElementById('upgradeBtn').classList.remove('opacity-50', 'cursor-not-allowed');
-        }
-
-        function updateWheel(chance) {
-            document.getElementById('chancePercentText').innerText = `${chance.toFixed(2)}%`;
-            document.getElementById('rollRangeText').innerText = `Roll: 0 - ${chance.toFixed(2)}`;
-            const canvas = document.getElementById('upgradeWheelCanvas');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0,0,300,300);
-            ctx.beginPath(); ctx.arc(150,150,130,0,Math.PI*2); ctx.fillStyle='#1B1716'; ctx.fill();
-            const angle = (chance/100)*(Math.PI*2);
-            ctx.beginPath(); ctx.moveTo(150,150); ctx.arc(150,150,120,-Math.PI/2,-Math.PI/2+angle,false); ctx.lineTo(150,150); ctx.fillStyle='#CF6A32'; ctx.fill();
-        }
-
-        function executeUpgrade() {
-            if(isSpinning || !selectedTargetItem) return
+        let balance = parseFloat(localStorage.getItem('tf_bal')) || 50.0;
+        let selectedInv = JSON.parse(localStorage.getItem('tf_sel')) || [];
+        let targetItem = null
