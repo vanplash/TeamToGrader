@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="uk" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TF2 Апгрейдер та Рулетка Кейсів</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        tfDark: '#12100e',
+                        tfCard: '#1d1916',
+                        tfBorder: '#383029',
+                        tfOrange: '#cf7329',
+                        tfYellow: '#f2a900',
+                        tfGreen: '#5b8f22',
+                        tfRed: '#a82929',
+                        // Кольори якості предметів TF2
+                        qNormal: '#b2b2b2',
+                        qUnique: '#7d6d00',
+                        qVintage: '#476291',
+                        qGenuine: '#4d7455',
+                        qStrange: '#cf6a32',
+                        qUnusual: '#8650ac',
+                        qCommando: '#d32ce6',
+                        qAssassin: '#eb4b4b',
+                        qElite: '#af1414',
+                        qAustralium: '#ffd700'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome Іконки -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Стилі -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Teko:wght@500;700&family=Inter:wght@400;600;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c0a09;
+            color: #e7e5e4;
+            background-image: radial-gradient(circle at 50% 20%, #261f18 0%, #0c0a09 70%);
+            min-height: 100vh;
+        }
+
+        .tf-font {
+            font-family: 'Teko', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        /* Ефекти сяйва якості */
+        .glow-unusual { box-shadow: 0 0 15px rgba(134, 80, 172, 0.5); border-color: #8650ac !important; }
+        .glow-australium { box-shadow: 0 0 18px rgba(255, 215, 0, 0.6); border-color: #ffd700 !important; }
+        .glow-strange { box-shadow: 0 0 12px rgba(207, 106, 50, 0.4); border-color: #cf6a32 !important; }
+        .glow-elite { box-shadow: 0 0 12px rgba(175, 20, 20, 0.5); border-color: #af1414 !important; }
+
+        /* Кастомний скролбар */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #12100e; }
+        ::-webkit-scrollbar-thumb { background: #383029; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cf7329; }
+
+        /* Стилі для каруселі кейсів */
+        .case-carousel-wrapper {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+        .case-carousel-track {
+            display: flex;
+            transition: transform 6s cubic-bezier(0.1, 0.9, 0.2, 1);
+            will-change: transform;
+        }
+        .carousel-indicator {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: #f2a900;
+            box-shadow: 0 0 12px #f2a900;
+            z-index: 20;
+            transform: translateX(-50%);
+        }
+
+        /* Контейнер рулетки */
+        .radial-wheel-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 8px currentColor;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen select-none">
+
+    <!-- ВЕРХНЯ НАВІГАЦІЯ -->
+    <header class="bg-tfDark border-b border-tfBorder sticky top-0 z-40 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <!-- Логотип та Назва -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('upgrader')">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-tfOrange to-amber-700 flex items-center justify-center text-white shadow-lg border border-amber-400/30">
+                    <i class="fa-solid fa-crosshairs text-xl animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="tf-font text-2xl font-bold tracking-wider text-amber-500 leading-none">TF2<span class="text-white">UPGRADER</span></h1>
+                    <p class="text-[11px] text-stone-300 font-semibold tracking-wide">Самий кращий апгрейдер по Team Fortress 2</p>
+                </div>
+            </div>
+
+            <!-- Посилання Навігації -->
+            <nav class="hidden md:flex items-center gap-1 bg-stone-900/80 p-1 rounded-xl border border-tfBorder">
+                <button id="nav-upgrader" onclick="switchTab('upgrader')" class="px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-tfOrange bg-stone-800">
+                    <i class="fa-solid fa-bolt"></i> Апгрейдер
+                </button>
+                <button id="nav-cases" onclick="switchTab('cases')" class="px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-stone-400 hover:text-white">
+                    <i class="fa-solid fa-box-open"></i> Кейси
+                </button>
+                <button id="nav-store" onclick="switchTab('store')" class="px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-stone-400 hover:text-white">
+                    <i class="fa-solid fa-store"></i> Магазин
+                </button>
+                <button id="nav-inventory" onclick="switchTab('inventory')" class="px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-stone-400 hover:text-white">
+                    <i class="fa-solid fa-backpack"></i> Інвентар <span id="nav-inv-count" class="bg-stone-800 text-xs px-2 py-0.5 rounded-full border border-stone-700">0</span>
+                </button>
+                <button id="nav-withdraw" onclick="switchTab('withdraw')" class="px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-stone-400 hover:text-white">
+                    <i class="fa-solid fa-arrow-up-from-bracket"></i> Вивід
+                </button>
+            </nav>
+
+            <!-- Баланс та Акаунт -->
+            <div class="flex items-center gap-3">
+                <!-- Баланс Металу -->
+                <div class="bg-stone-900/90 border border-tfBorder px-3 py-1.5 rounded-xl flex items-center gap-3">
+                    <div class="flex items-center gap-1.5" title="Очищений метал (Refined)">
+                        <i class="fa-solid fa-cubes text-amber-500"></i>
+                        <span id="user-balance-ref" class="font-bold text-amber-400 text-sm">100.00</span>
+                        <span class="text-xs text-stone-400 font-semibold">Реф</span>
+                    </div>
+                    <div class="h-4 w-[1px] bg-stone-700"></div>
+                    <button onclick="openDepositModal()" class="text-xs bg-tfOrange hover:bg-amber-600 text-white font-bold px-2 py-1 rounded transition" title="Поповнити">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Кнопка Входу Steam / Профіль -->
+                <div id="user-profile-btn" class="relative">
+                    <!-- Заповнюється через JS -->
+                </div>
+
+                <!-- Кнопка Адмін Панелі -->
+                <button onclick="openAdminModal()" class="w-9 h-9 bg-stone-800 hover:bg-stone-700 border border-stone-700 rounded-xl flex items-center justify-center text-stone-400 hover:text-amber-400 transition" title="Адмін панель">
+                    <i class="fa-solid fa-user-shield"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- МОБІЛЬНЕ МЕНЮ (Нижня панель) -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-tfDark border-t border-tfBorder z-40 flex justify-around p-2">
+        <button onclick="switchTab('upgrader')" class="flex flex-col items-center text-xs text-tfOrange py-1">
+            <i class="fa-solid fa-bolt text-base mb-1"></i> Апгрейд
+        </button>
+        <button onclick="switchTab('cases')" class="flex flex-col items-center text-xs text-stone-400 py-1">
+            <i class="fa-solid fa-box-open text-base mb-1"></i> Кейси
+        </button>
+        <button onclick="switchTab('store')" class="flex flex-col items-center text-xs text-stone-400 py-1">
+            <i class="fa-solid fa-store text-base mb-1"></i> Магазин
+        </button>
+        <button onclick="switchTab('inventory')" class="flex flex-col items-center text-xs text-stone-400 py-1">
+            <i class="fa-solid fa-backpack text-base mb-1"></i> Інвентар
+        </button>
+        <button onclick="switchTab('withdraw')" class="flex flex-col items-center text-xs text-stone-400 py-1">
+            <i class="fa-solid fa-arrow-up-from-bracket text-base mb-1"></i> Вивід
+        </button>
+    </div>
+
+    <!-- ОСНОВНИЙ КОНТЕНТ -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 pb-20 md:pb-6">
+
+        <!-- ================= ВКЛАДКА 1: АПГРЕЙДЕР ================= -->
+        <section id="tab-upgrader" class="tab-content block">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                <!-- Ліва колонка: Обрані предмети для ставки -->
+                <div class="lg:col-span-4 bg-tfCard border border-tfBorder rounded-2xl p-4 shadow-xl">
+                    <div class="flex items-center justify-between mb-3 border-b border-tfBorder pb-2">
+                        <h2 class="tf-font text-xl text-stone-200 uppercase tracking-wide flex items-center gap-2">
+                            <i class="fa-solid fa-hand-holding-dollar text-tfOrange"></i> Твоя ставка
+                        </h2>
+                        <span id="left-selected-value" class="text-sm font-bold text-amber-400">0.00 Реф</span>
+                    </div>
+
+                    <!-- Вікно обраних предметів -->
+                    <div id="left-bet-box" class="min-h-[140px] bg-stone-950/60 rounded-xl border border-dashed border-stone-800 p-3 flex flex-wrap gap-2 items-center justify-center">
+                        <p class="text-xs text-stone-500 text-center">Обери предмети з інвентарю нижче або вкажи чистий метал</p>
+                    </div>
+
+                    <!-- Введення чистих Рефінів -->
+                    <div class="mt-3 flex items-center gap-2">
+                        <span class="text-xs text-stone-400 font-semibold">Чисті Рефіни:</span>
+                        <input type="number" id="raw-ref-input" value="0" min="0" step="1" oninput="updateBetFromRawRef()" class="w-full bg-stone-900 border border-stone-700 rounded-lg px-3 py-1.5 text-sm font-bold text-amber-400 focus:outline-none focus:border-tfOrange">
+                    </div>
+
+                    <!-- Вибір з інвентарю -->
+                    <div class="mt-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs uppercase text-stone-400 font-bold">Предмети інвентарю</span>
+                            <button onclick="selectAllInventory()" class="text-[11px] text-tfOrange hover:underline">Обрати все</button>
+                        </div>
+                        <div id="upgrader-inv-list" class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-60 overflow-y-auto p-1 bg-stone-950/40 rounded-xl border border-stone-800/80">
+                            <!-- Предмети додаються через JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Центральна колонка: Колесо Шансів та Дія -->
+                <div class="lg:col-span-4 flex flex-col items-center justify-center bg-tfCard/70 border border-tfBorder rounded-2xl p-6 shadow-2xl relative overflow-hidden">
+                    
+                    <div class="text-center mb-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-stone-400">Множник</span>
+                        <div id="multiplier-badge" class="tf-font text-3xl font-extrabold text-amber-400">1.00x</div>
+                    </div>
+
+                    <!-- Радіальне колесо -->
+                    <div class="radial-wheel-container my-2 flex items-center justify-center">
+                        <canvas id="wheelCanvas" width="280" height="280" class="rounded-full shadow-2xl"></canvas>
+                        
+                        <!-- Центр колеса -->
+                        <div class="absolute inset-0 m-auto w-36 h-36 bg-tfDark rounded-full border-4 border-tfBorder shadow-inner flex flex-col items-center justify-center pointer-events-none z-10">
+                            <span id="chance-percentage" class="tf-font text-4xl font-extrabold text-white leading-none">0.00%</span>
+                            <span class="text-[10px] text-stone-400 font-bold uppercase tracking-widest">Шанс виграшу</span>
+                        </div>
+                    </div>
+
+                    <!-- Вибір режиму та Кнопка -->
+                    <div class="w-full mt-4 space-y-3">
+                        <div class="flex bg-stone-900 p-1 rounded-xl border border-stone-800">
+                            <button id="roll-under-btn" onclick="setRollMode('under')" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition bg-tfOrange text-white">
+                                <i class="fa-solid fa-arrow-down-short-wide"></i> Менше (0 - Шанс)
+                            </button>
+                            <button id="roll-over-btn" onclick="setRollMode('over')" class="flex-1 py-1.5 text-xs font-bold rounded-lg transition text-stone-400 hover:text-white">
+                                <i class="fa-solid fa-arrow-up-wide-short"></i> Більше (100 - Шанс)
+                            </button>
+                        </div>
+
+                        <!-- Кнопка Апгрейду -->
+                        <button id="upgrade-action-btn" onclick="performUpgrade()" class="w-full py-3.5 bg-gradient-to-r from-tfOrange to-amber-600 hover:from-amber-600 hover:to-tfOrange text-white tf-font text-2xl font-bold tracking-wider rounded-xl shadow-lg border border-amber-400/30 transition transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                            ПОЧАТИ АПГРЕЙД
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Права колонка: Цільовий предмет -->
+                <div class="lg:col-span-4 bg-tfCard border border-tfBorder rounded-2xl p-4 shadow-xl">
+                    <div class="flex items-center justify-between mb-3 border-b border-tfBorder pb-2">
+                        <h2 class="tf-font text-xl text-stone-200 uppercase tracking-wide flex items-center gap-2">
+                            <i class="fa-solid fa-bullseye text-tfYellow"></i> Бажаний предмет
+                        </h2>
+                        <span id="right-target-value" class="text-sm font-bold text-amber-400">0.00 Реф</span>
+                    </div>
+
+                    <!-- Вікно цільового предмета -->
+                    <div id="right-target-box" class="min-h-[140px] bg-stone-950/60 rounded-xl border border-dashed border-stone-800 p-3 flex flex-col items-center justify-center text-center">
+                        <p class="text-xs text-stone-500">Обери бажаний предмет із каталогу нижче</p>
+                    </div>
+
+                    <!-- Каталог предметів -->
+                    <div class="mt-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs uppercase text-stone-400 font-bold">Каталог предметів</span>
+                            <div class="flex items-center gap-1">
+                                <input type="text" id="target-search" oninput="renderTargetCatalog()" placeholder="Пошук..." class="bg-stone-900 border border-stone-800 rounded px-2 py-0.5 text-xs text-stone-200 focus:outline-none focus:border-tfOrange">
+                            </div>
+                        </div>
+                        <div id="target-catalog-list" class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-60 overflow-y-auto p-1 bg-stone-950/40 rounded-xl border border-stone-800/80">
+                            <!-- Предмети каталогу додаються через JS -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ================= ВКЛАДКА 2: КЕЙСИ ================= -->
+        <section id="tab-cases" class="tab-content hidden">
+            <!-- Вікно відкриття кейса -->
+            <div class="bg-tfCard border border-tfBorder rounded-2xl p-6 shadow-2xl mb-8">
+                <div class="text-center mb-4">
+                    <h2 id="active-case-title" class="tf-font text-3xl font-extrabold text-amber-500">ЯЩИК MANN CO.</h2>
+                    <p id="active-case-subtitle" class="text-xs text-stone-400">Крути рулетку та вибивай рідкісні аксесуари, Австралій та Незвичайні предмети!</p>
+                </div>
+
+                <!-- Рулетка відкриття -->
+                <div class="case-carousel-wrapper bg-stone-950 border-y-2 border-tfBorder py-4 rounded-xl shadow-inner my-6">
+                    <div class="carousel-indicator"></div>
+                    <div id="case-carousel-track" class="case-carousel-track gap-3 px-4">
+                        <!-- Картки рулетки генерація через JS -->
+                    </div>
+                </div>
+
+                <!-- Кнопка відкриття та ціна -->
+                <div class="flex flex-col items-center gap-3">
+                    <div class="flex items-center gap-2 text-stone-300 font-semibold">
+                        <span>Ціна відкриття:</span>
+                        <span id="active-case-price" class="text-amber-400 font-bold text-lg">15.00 Реф</span>
+                    </div>
+
+                    <button id="open-case-btn" onclick="spinCaseCarousel()" class="px-10 py-3 bg-gradient-to-r from-tfOrange to-amber-600 hover:from-amber-600 hover:to-tfOrange text-white tf-font text-2xl font-bold tracking-wider rounded-xl shadow-lg border border-amber-400/30 transition transform active:scale-95 disabled:opacity-50">
+                        ВІДКРИТИ КЕЙС
+                    </button>
+                </div>
+            </div>
+
+            <!-- Доступні кейси -->
+            <div>
+                <h3 class="tf-font text-2xl text-stone-200 mb-4 border-b border-tfBorder pb-2">Доступні Ящики Mann Co.</h3>
+                <div id="cases-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Кейси додаються через JS -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= ВКЛАДКА 3: МАГАЗИН ================= -->
+        <section id="tab-store" class="tab-content hidden">
+            <div class="bg-tfCard border border-tfBorder rounded-2xl p-6 shadow-xl">
+                <!-- Фільтри та пошук -->
+                <div class="flex flex-col md:flex-row gap-4 justify-between items-center mb-6 pb-4 border-b border-tfBorder">
+                    <div>
+                        <h2 class="tf-font text-3xl text-amber-500">МАГАЗИН ПРЕДМЕТІВ</h2>
+                        <p class="text-xs text-stone-400">Купуй зброю, Австралій та Unusual шапки напряму за Очищений метал.</p>
+                    </div>
+
+                    <!-- Пошук та фільтри -->
+                    <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                        <input type="text" id="store-search-input" oninput="renderStoreCatalog()" placeholder="Назва предмета..." class="bg-stone-900 border border-stone-700 text-stone-200 text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-tfOrange flex-grow">
+                        
+                        <select id="store-filter-rarity" onchange="renderStoreCatalog()" class="bg-stone-900 border border-stone-700 text-stone-200 text-sm rounded-xl px-3 py-2 focus:outline-none focus:border-tfOrange">
+                            <option value="all">Усі якості</option>
+                            <option value="unusual">Незвичайний (Unusual)</option>
+                            <option value="australium">Австралій (Australium)</option>
+                            <option value="strange">Дивний (Strange)</option>
+                            <option value="commando">Командо / Еліта</option>
+                            <option value="unique">Унікальний</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Сітка магазину -->
+                <div id="store-items-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    <!-- Предмети магазину через JS -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= ВКЛАДКА 4: ІНВЕНТАР ================= -->
+        <section id="tab-inventory" class="tab-content hidden">
+            <div class="bg-tfCard border border-tfBorder rounded-2xl p-6 shadow-xl">
+                <div class="flex flex-col sm:flex-row justify-between items-center mb-6 pb-4 border-b border-tfBorder gap-4">
+                    <div>
+                        <h2 class="tf-font text-3xl text-amber-500">ТВІЙ ІНВЕНТАР</h2>
+                        <p class="text-xs text-stone-400">Керуй виграними та купленими предметами. Продавай непотрібне за Метал.</p>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <span id="inv-total-value" class="text-sm font-bold text-amber-400 bg-stone-950 px-3 py-1.5 rounded-xl border border-stone-800">Загальна вартість: 0.00 Реф</span>
+                        <button onclick="sellAllItems()" class="bg-red-900/40 hover:bg-red-800 text-red-300 border border-red-700 text-xs font-bold px-3 py-2 rounded-xl transition">
+                            Продати все
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Сітка інвентарю -->
+                <div id="inventory-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <!-- Предмети інвентарю через JS -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= ВКЛАДКА 5: ВИВІД В STEAM ================= -->
+        <section id="tab-withdraw" class="tab-content hidden">
+            <div class="bg-tfCard border border-tfBorder rounded-2xl p-6 shadow-xl">
+                <div class="mb-6 pb-4 border-b border-tfBorder">
+                    <h2 class="tf-font text-3xl text-amber-500 flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-up-from-bracket"></i> ВИВІД ПРЕДМЕТІВ В STEAM
+                    </h2>
+                    <p class="text-xs text-stone-400">Обери предмет зі свого інвентарю та вкажи Trade URL для отримання трейду від нашого бота.</p>
+                </div>
+
+                <!-- Поле Trade URL -->
+                <div class="bg-stone-900 border border-stone-800 rounded-2xl p-4 mb-6">
+                    <label class="text-xs text-stone-300 font-bold block mb-2">Твоє Steam Trade URL Посилання:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="steam-trade-url" placeholder="https://steamcommunity.com/tradeoffer/new/?partner=12345678&token=abc" class="w-full bg-stone-950 border border-stone-700 rounded-xl px-4 py-2 text-sm text-stone-200 focus:outline-none focus:border-tfOrange">
+                        <button onclick="saveTradeUrl()" class="bg-tfOrange hover:bg-amber-600 text-white font-bold text-xs px-5 rounded-xl transition">
+                            Зберегти
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-stone-500 mt-2">Де знайти Trade URL? Перейди в свій інвентар Steam ➔ Обміни ➔ Хто може надсилати мені пропозиції обміну.</p>
+                </div>
+
+                <!-- Список предметів для виводу -->
+                <div>
+                    <h3 class="tf-font text-2xl text-stone-200 mb-3">Обери предмет для виводу</h3>
+                    <div id="withdraw-items-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        <!-- Динамічно заповнюється JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ================= МОДАЛЬНІ ВІКНА ================= -->
+
+    <!-- АДМІН ПАНЕЛЬ МОДАЛКА -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-tfCard border border-tfBorder rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div id="admin-login-step">
+                <h3 class="tf-font text-2xl text-amber-500 mb-2">АВТОРИЗАЦІЯ АДМІНІСТРАТОРА</h3>
+                <p class="text-xs text-stone-400 mb-4">Введи пароль власника для доступу до керування сайтом.</p>
+
+                <input type="password" id="admin-pin-input" placeholder="Пароль (За замовчуванням: tf2admin)" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-4 py-2.5 text-stone-100 text-sm mb-4 focus:outline-none focus:border-tfOrange">
+                
+                <button onclick="verifyAdminPin()" class="w-full bg-tfOrange hover:bg-amber-600 text-white font-bold py-2.5 rounded-xl transition">
+                    Увійти в Панель
+                </button>
+            </div>
+
+            <div id="admin-controls-step" class="hidden space-y-4">
+                <h3 class="tf-font text-2xl text-amber-500 border-b border-tfBorder pb-2">ПАНЕЛЬ ВЛАСНИКА</h3>
+
+                <!-- Нарахування металу -->
+                <div>
+                    <label class="text-xs text-stone-400 font-bold block mb-1">Нарахувати Очищений Метал</label>
+                    <div class="flex gap-2">
+                        <input type="number" id="admin-ref-amount" value="500" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-3 py-1.5 text-amber-400 font-bold text-sm">
+                        <button onclick="adminAddRef()" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-4 rounded-xl">Додати</button>
+                    </div>
+                </div>
+
+                <!-- Режим Підкрутки -->
+                <div>
+                    <label class="text-xs text-stone-400 font-bold block mb-1">Режим рулетки (Підкрутка)</label>
+                    <div class="flex gap-2">
+                        <button id="rig-normal-btn" onclick="setRigMode('normal')" class="flex-1 py-2 rounded-xl text-xs font-bold border border-stone-700 bg-stone-800 text-stone-300">Чесно</button>
+                        <button id="rig-win-btn" onclick="setRigMode('win')" class="flex-1 py-2 rounded-xl text-xs font-bold border border-green-700 bg-green-950/60 text-green-400">100% Виграш</button>
+                        <button id="rig-loss-btn" onclick="setRigMode('loss')" class="flex-1 py-2 rounded-xl text-xs font-bold border border-red-700 bg-red-950/60 text-red-400">100% Програш</button>
+                    </div>
+                </div>
+
+                <!-- Видача предмета -->
+                <div>
+                    <label class="text-xs text-stone-400 font-bold block mb-1">Видати топовий предмет</label>
+                    <button onclick="adminGrantGoldenPan()" class="w-full py-2 bg-yellow-600 hover:bg-yellow-500 text-stone-950 font-bold text-xs rounded-xl shadow">
+                        <i class="fa-solid fa-trophy"></i> Видати Золоту Сковороду
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ВХІД ЧЕРЕЗ STEAM МОДАЛКА -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-tfCard border border-tfBorder rounded-2xl max-w-sm w-full p-6 shadow-2xl relative text-center">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="w-16 h-16 bg-stone-900 border border-stone-700 rounded-2xl flex items-center justify-center mx-auto mb-3 text-amber-500 text-3xl">
+                <i class="fa-brands fa-steam"></i>
+            </div>
+
+            <h3 class="tf-font text-3xl text-amber-500 mb-1">ВХІД ЧЕРЕЗ STEAM</h3>
+            <p class="text-xs text-stone-400 mb-4">Офіційна симуляція Steam OpenID 2.0</p>
+
+            <div class="space-y-3">
+                <input type="text" id="steam-username-input" placeholder="Нікнейм Steam..." value="GabeNewell" class="w-full bg-stone-900 border border-stone-700 rounded-xl px-3 py-2 text-sm text-stone-100 focus:outline-none focus:border-tfOrange">
+                
+                <button onclick="processSteamLogin()" class="w-full py-3 bg-[#171a21] hover:bg-[#2a475e] text-white font-bold text-sm rounded-xl border border-stone-700 transition flex items-center justify-center gap-2 shadow-lg">
+                    <i class="fa-brands fa-steam text-lg text-amber-400"></i> Авторизуватися через Steam
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- МОДАЛКА ВИВЕДЕННЯ ТРЕЙДУ -->
+    <div id="trade-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-tfCard border border-tfBorder rounded-2xl max-w-md w-full p-6 shadow-2xl text-center relative">
+            <button onclick="closeTradeModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <div class="w-12 h-12 bg-amber-500/20 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl border border-amber-500/30">
+                <i class="fa-solid fa-robot"></i>
+            </div>
+
+            <h3 class="tf-font text-3xl text-amber-400 mb-1">ОБРОБКА ТРЕЙДУ STEAM</h3>
+            <p class="text-xs text-stone-400 mb-4">Бот #402 формує пропозицію обміну...</p>
+
+            <div id="trade-status-box" class="bg-stone-950 border border-stone-800 rounded-xl p-4 my-4 text-left space-y-2">
+                <div class="flex items-center gap-2 text-xs text-stone-300">
+                    <i class="fa-solid fa-spinner animate-spin text-tfOrange" id="trade-spinner"></i>
+                    <span id="trade-status-text">Перевірка Steam Trade URL...</span>
+                </div>
+            </div>
+
+            <button id="trade-confirm-btn" disabled onclick="closeTradeModal()" class="w-full py-2.5 bg-stone-800 text-stone-500 font-bold rounded-xl transition">
+                Очікуйте надсилання...
+            </button>
+        </div>
+    </div>
+
+
+    <!-- МОДАЛКА ВИГРАШУ -->
+    <div id="win-modal" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-tfCard border-2 border-amber-500 rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-amber-500/10 to-transparent pointer-events-none"></div>
+
+            <h3 class="tf-font text-4xl text-amber-400 tracking-wider">УСПІШНИЙ АПГРЕЙД!</h3>
+            <p class="text-xs text-stone-300 mb-4">Предмет додано у твій інвентар!</p>
+
+            <div id="win-item-card" class="bg-stone-950 border border-stone-800 rounded-2xl p-4 my-4 flex flex-col items-center">
+                <!-- Контент виграного предмета -->
+            </div>
+
+            <button onclick="closeWinModal()" class="w-full py-2.5 bg-tfOrange hover:bg-amber-600 text-white font-bold rounded-xl transition">
+                Забрати Предмет
+            </button>
+        </div>
+    </div>
+
+
+    <!-- СКРИПТИ ЛОГІКИ -->
+    <script>
+        /* ==========================================================================
+           1. КАТАЛОГ ПРЕДМЕТІВ ТА КЕЙСІВ
+           ========================================================================== */
+
+        const TF2_CATALOG = [
+            { id: 'item_scattergun', name: 'Обріз (Scattergun)', quality: 'unique', price: 2.50, img: 'https://wiki.teamfortress.com/w/images/8/8c/Item_icon_Scattergun.png' },
+            { id: 'item_rocket', name: 'Ракетомет (Rocket Launcher)', quality: 'unique', price: 3.00, img: 'https://wiki.teamfortress.com/w/images/c/c8/Item_icon_Rocket_Launcher.png' },
+            { id: 'item_sniper', name: 'Снайперська гвинтівка', quality: 'unique', price: 2.80, img: 'https://wiki.teamfortress.com/w/images/e/e0/Item_icon_Sniper_Rifle.png' },
+            { id: 'item_gold_paint', name: 'Фарба "Австралійське Золото"', quality: 'unique', price: 18.00, img: 'https://wiki.teamfortress.com/w/images/e/e5/Item_icon_Australium_Gold.png' },
+            { id: 'item_sandcannon', name: 'Ракетомет "Піщана Гармата"', quality: 'commando', price: 45.00, img: 'https://wiki.teamfortress.com/w/images/thumb/7/7f/Backpack_Sandcannon_Rocket_Launcher_Factory_New.png/250px-Backpack_Sandcannon_Rocket_Launcher_Factory_New.png' },
+            { id: 'item_nightowl', name: 'Гвинтівка "Нічна Сова"', quality: 'commando', price: 38.00, img: 'https://wiki.teamfortress.com/w/images/thumb/0/06/Backpack_Night_Owl_Sniper_Rifle_Factory_New.png/250px-Backpack_Night_Owl_Sniper_Rifle_Factory_New.png' },
+            { id: 'item_str_minigun', name: 'Дивний Кулемет (Minigun)', quality: 'strange', price: 25.00, img: 'https://wiki.teamfortress.com/w/images/f/f6/Item_icon_Minigun.png' },
+            { id: 'item_str_knife', name: 'Дивний Ніж (Knife)', quality: 'strange', price: 22.00, img: 'https://wiki.teamfortress.com/w/images/a/a2/Item_icon_Knife.png' },
+            { id: 'item_aus_scatter', name: 'Австралієвий Обріз', quality: 'australium', price: 180.00, img: 'https://wiki.teamfortress.com/w/images/a/a1/Item_icon_Australium_Scattergun.png' },
+            { id: 'item_aus_rocket', name: 'Австралієвий Ракетомет', quality: 'australium', price: 240.00, img: 'https://wiki.teamfortress.com/w/images/c/c0/Item_icon_Australium_Rocket_Launcher.png' },
+            { id: 'item_aus_minigun', name: 'Австралієвий Кулемет', quality: 'australium', price: 210.00, img: 'https://wiki.teamfortress.com/w/images/2/23/Item_icon_Australium_Minigun.png' },
+            { id: 'item_aus_knife', name: 'Австралієвий Ніж', quality: 'australium', price: 160.00, img: 'https://wiki.teamfortress.com/w/images/9/91/Item_icon_Australium_Knife.png' },
+            { id: 'item_aus_wrench', name: 'Австралієвий Гайковий Ключ', quality: 'australium', price: 195.00, img: 'https://wiki.teamfortress.com/w/images/1/18/Item_icon_Australium_Wrench.png' },
+            { id: 'item_unusual_tc', name: 'Team Captain (Burning Flames)', quality: 'unusual', price: 850.00, img: 'https://wiki.teamfortress.com/w/images/8/87/Item_icon_Team_Captain.png', effect: 'Палаюче полум\'я' },
+            { id: 'item_unusual_ke', name: 'Killer\'s Exclusive (Sunbeams)', quality: 'unusual', price: 620.00, img: 'https://wiki.teamfortress.com/w/images/9/90/Item_icon_Killer%27s_Exclusive.png', effect: 'Промені сонця' },
+            { id: 'item_golden_pan', name: 'Золота Сковорода (Golden Pan)', quality: 'australium', price: 3500.00, img: 'https://wiki.teamfortress.com/w/images/a/a6/Item_icon_Golden_Frying_Pan.png', effect: 'Своя від Сакстона Хейла' }
+        ];
+
+        const TF2_CASES = [
+            {
+                id: 'case_mann_co',
+                name: 'Ящик Ярмарку Mann Co.',
+                price: 15.00,
+                img: 'https://wiki.teamfortress.com/w/images/thumb/8/80/Mann_Co._Supply_Crate.png/200px-Mann_Co._Supply_Crate.png',
+                items: ['item_scattergun', 'item_rocket', 'item_sniper', 'item_str_minigun', 'item_aus_scatter']
+            },
+            {
+                id: 'case_scream_fortress',
+                name: 'Жахливий Ящик Scream Fortress',
+                price: 35.00,
+                img: 'https://wiki.teamfortress.com/w/images/thumb/7/7b/Spooky_Spoils_Crate.png/200px-Spooky_Spoils_Crate.png',
+                items: ['item_sandcannon', 'item_nightowl', 'item_unusual_tc', 'item_unusual_ke']
+            },
+            {
+                id: 'case_australium',
+                name: 'Сейф із Чистим Австралієм',
+                price: 120.00,
+                img: 'https://wiki.teamfortress.com/w/images/thumb/3/30/Mann_Co._Strongbox.png/200px-Mann_Co._Strongbox.png',
+                items: ['item_aus_scatter', 'item_aus_rocket', 'item_aus_minigun', 'item_aus_knife', 'item_aus_wrench', 'item_golden_pan']
+            }
+        ];
+
+
+        /* ==========================================================================
+           2. СТАН ТА ЗБЕРЕЖЕННЯ
+           ========================================================================== */
+
+        let currentUser = null;
+        let selectedBetItems = [];
+        let rawRefBet = 0;
+        let selectedTargetItem = null;
+        let rollMode = 'under';
+        let activeCase = TF2_CASES[0];
+        let rigMode = 'normal';
+        let isSpinning = false;
+        let tradeUrl = '';
+
+        let audioCtx = null;
+
+
+        /* ==========================================================================
+           3. ІНІЦІАЛІЗАЦІЯ
+           ========================================================================== */
+
+        window.onload = function() {
+            initAudio();
+            loadUserData();
+            renderUpgraderInventory();
+            renderTargetCatalog();
+            renderStoreCatalog();
+            renderCasesGrid();
+            setupActiveCase(TF2_CASES[0]);
+            drawWheel(0);
+        };
+
+        function switchTab(tabId) {
+            playSound('click');
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            ['upgrader', 'cases', 'store', 'inventory', 'withdraw'].forEach(id => {
+                const btn = document.getElementById(`nav-${id}`);
+                if (btn) {
+                    if (id === tabId) {
+                        btn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-tfOrange bg-stone-800";
+                    } else {
+                        btn.className = "px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 text-stone-400 hover:text-white";
+                    }
+                }
+            });
+
+            if (tabId === 'inventory') renderUserInventoryGrid();
+            if (tabId === 'withdraw') renderWithdrawGrid();
+        }
+
+
+        /* ==========================================================================
+           4. АУДІО
+           ========================================================================== */
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            try {
+                if (!audioCtx) initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.exponentialRampToValueAtTime(400, now + 0.05);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'tick') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(600, now);
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.03);
+                    osc.start(now);
+                    osc.stop(now + 0.03);
+                } else if (type === 'win') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(554.37, now + 0.1);
+                    osc.frequency.setValueAtTime(659.25, now + 0.2);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } else if (type === 'loss') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.linearRampToValueAtTime(150, now + 0.3);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                }
+            } catch (e) {}
+        }
+
+
+        /* ==========================================================================
+           5. АКАУНТ КОРИСТУВАЧА
+           ========================================================================== */
+
+        function loadUserData() {
+            const saved = localStorage.getItem('tf2_casino_user_ukr');
+            if (saved) {
+                currentUser = JSON.parse(saved);
+            } else {
+                currentUser = {
+                    username: 'Scout_UA',
+                    balance: 150.00,
+                    inventory: [
+                        { ...TF2_CATALOG[0], instanceId: 'inst_1' },
+                        { ...TF2_CATALOG[1], instanceId: 'inst_2' }
+                    ]
+                };
+                saveUserData();
+            }
+            updateUserUI();
+        }
+
+        function saveUserData() {
+            if (currentUser) {
+                localStorage.setItem('tf2_casino_user_ukr', JSON.stringify(currentUser));
+            }
+            updateUserUI();
+        }
+
+        function updateUserUI() {
+            document.getElementById('user-balance-ref').innerText = currentUser.balance.toFixed(2);
+            document.getElementById('nav-inv-count').innerText = currentUser.inventory.length;
+
+            const profileContainer = document.getElementById('user-profile-btn');
+            profileContainer.innerHTML = `
+                <button onclick="openAuthModal()" class="flex items-center gap-2 bg-stone-900 border border-tfBorder px-3 py-1.5 rounded-xl hover:border-tfOrange transition">
+                    <i class="fa-brands fa-steam text-tfOrange text-lg"></i>
+                    <span class="text-xs font-bold text-stone-200">${currentUser.username}</span>
+                </button>
+            `;
+        }
+
+
+        /* ==========================================================================
+           6. ЛОГІКА АПГРЕЙДЕРА
+           ========================================================================== */
+
+        function calculateUpgradeMetrics() {
+            const betItemsTotal = selectedBetItems.reduce((acc, item) => acc + item.price, 0);
+            const totalBet = betItemsTotal + rawRefBet;
+            
+            if (!selectedTargetItem || totalBet <= 0) {
+                return { chance: 0, multiplier: 0, totalBet: 0 };
+            }
+
+            const targetPrice = selectedTargetItem.price;
+            let chance = (totalBet / targetPrice) * 100;
+            if (chance > 95) chance = 95;
+            
+            const multiplier = targetPrice / totalBet;
+
+            return {
+                chance: parseFloat(chance.toFixed(2)),
+                multiplier: parseFloat(multiplier.toFixed(2)),
+                totalBet: parseFloat(totalBet.toFixed(2))
+            };
+        }
+
+        function updateUpgraderDisplay() {
+            const metrics = calculateUpgradeMetrics();
+
+            document.getElementById('chance-percentage').innerText = `${metrics.chance.toFixed(2)}%`;
+            document.getElementById('multiplier-badge').innerText = `${metrics.multiplier.toFixed(2)}x`;
+            document.getElementById('left-selected-value').innerText = `${metrics.totalBet.toFixed(2)} Реф`;
+            document.getElementById('right-target-value').innerText = selectedTargetItem ? `${selectedTargetItem.price.toFixed(2)} Реф` : '0.00 Реф';
+
+            drawWheel(metrics.chance);
+        }
+
+        function drawWheel(chancePercent, pointerAngle = 0) {
+            const canvas = document.getElementById('wheelCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const radius = width / 2 - 10;
+
+            ctx.clearRect(0, 0, width, height);
+
+            const center = width / 2;
+            const chanceRad = (chancePercent / 100) * Math.PI * 2;
+
+            ctx.beginPath();
+            ctx.arc(center, center, radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#1c1917';
+            ctx.fill();
+
+            if (chancePercent > 0) {
+                ctx.beginPath();
+                ctx.moveTo(center, center);
+                const startAngle = rollMode === 'under' ? -Math.PI / 2 : -Math.PI / 2 + (Math.PI * 2 - chanceRad);
+                const endAngle = startAngle + chanceRad;
+
+                ctx.arc(center, center, radius, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = '#cf7329';
+                ctx.fill();
+            }
+
+            ctx.beginPath();
+            ctx.arc(center, center, radius, 0, Math.PI * 2);
+            ctx.strokeStyle = '#383029';
+            ctx.lineWidth = 6;
+            ctx.stroke();
+
+            if (isSpinning) {
+                ctx.save();
+                ctx.translate(center, center);
+                ctx.rotate(pointerAngle);
+                
+                ctx.beginPath();
+                ctx.moveTo(0, -radius + 4);
+                ctx.lineTo(-8, -radius - 12);
+                ctx.lineTo(8, -radius - 12);
+                ctx.closePath();
+                ctx.fillStyle = '#f2a900';
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        function performUpgrade() {
+            if (isSpinning) return;
+            const metrics = calculateUpgradeMetrics();
+
+            if (!selectedTargetItem) {
+                alert('Обери бажаний предмет з правого каталогу!');
+                return;
+            }
+
+            if (metrics.totalBet <= 0) {
+                alert('Обери предмети або вкажи Чистий Метал для ставки!');
+                return;
+            }
+
+            if (rawRefBet > currentUser.balance) {
+                alert('Недостатньо Очищеного Металу на балансі!');
+                return;
+            }
+
+            isSpinning = true;
+            document.getElementById('upgrade-action-btn').disabled = true;
+
+            if (rawRefBet > 0) {
+                currentUser.balance -= rawRefBet;
+            }
+
+            selectedBetItems.forEach(item => {
+                const idx = currentUser.inventory.findIndex(i => i.instanceId === item.instanceId);
+                if (idx !== -1) currentUser.inventory.splice(idx, 1);
+            });
+            saveUserData();
+
+            let rollResult = Math.random() * 100;
+            let isWin = false;
+
+            if (rigMode === 'win') isWin = true;
+            else if (rigMode === 'loss') isWin = false;
+            else {
+                isWin = rollMode === 'under' ? rollResult <= metrics.chance : rollResult >= (100 - metrics.chance);
+            }
+
+            let targetAngle = 0;
+            if (isWin) {
+                targetAngle = (metrics.chance / 200) * Math.PI * 2;
+            } else {
+                targetAngle = Math.PI + (Math.random() * Math.PI / 2);
+            }
+
+            let currentAngle = 0;
+            const totalRounds = 4 * Math.PI * 2;
+            const finalAngle = totalRounds + targetAngle;
+            const startTime = performance.now();
+            const duration = 3500;
+
+            function animateSpin(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+
+                currentAngle = easeOut * finalAngle;
+                drawWheel(metrics.chance, currentAngle);
+
+                if (Math.random() < 0.2) playSound('tick');
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateSpin);
+                } else {
+                    isSpinning = false;
+                    document.getElementById('upgrade-action-btn').disabled = false;
+
+                    if (isWin) {
+                        playSound('win');
+                        const wonItem = { ...selectedTargetItem, instanceId: 'inst_' + Date.now() };
+                        currentUser.inventory.unshift(wonItem);
+                        saveUserData();
+                        showWinModal(wonItem);
+                    } else {
+                        playSound('loss');
+                        alert('Апгрейд невдалий! Твої предмети згоріли.');
+                    }
+
+                    selectedBetItems = [];
+                    rawRefBet = 0;
+                    document.getElementById('raw-ref-input').value = 0;
+                    renderUpgraderInventory();
+                    updateUpgraderDisplay();
+                }
+            }
+
+            requestAnimationFrame(animateSpin);
+        }
+
+        function setRollMode(mode) {
+            rollMode = mode;
+            playSound('click');
+            if (mode === 'under') {
+                document.getElementById('roll-under-btn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg transition bg-tfOrange text-white";
+                document.getElementById('roll-over-btn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg transition text-stone-400 hover:text-white";
+            } else {
+                document.getElementById('roll-over-btn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg transition bg-tfOrange text-white";
+                document.getElementById('roll-under-btn').className = "flex-1 py-1.5 text-xs font-bold rounded-lg transition text-stone-400 hover:text-white";
+            }
+            updateUpgraderDisplay();
+        }
+
+        function toggleSelectBetItem(instanceId) {
+            playSound('click');
+            const existingIndex = selectedBetItems.findIndex(i => i.instanceId === instanceId);
+            if (existingIndex !== -1) {
+                selectedBetItems.splice(existingIndex, 1);
+            } else {
+                const item = currentUser.inventory.find(i => i.instanceId === instanceId);
+                if (item) selectedBetItems.push(item);
+            }
+            renderUpgraderInventory();
+            renderSelectedBetBox();
+            updateUpgraderDisplay();
+        }
+
+        function updateBetFromRawRef() {
+            const val = parseFloat(document.getElementById('raw-ref-input').value) || 0;
+            rawRefBet = Math.max(0, val);
+            updateUpgraderDisplay();
+        }
+
+        function selectTargetItem(itemId) {
+            playSound('click');
+            selectedTargetItem = TF2_CATALOG.find(i => i.id === itemId);
+            renderSelectedTargetBox();
+            updateUpgraderDisplay();
+        }
+
+
+        /* ==========================================================================
+           7. ВІДКРИТТЯ КЕЙСІВ
+           ========================================================================== */
+
+        function setupActiveCase(caseObj) {
+            activeCase = caseObj;
+            document.getElementById('active-case-title').innerText = caseObj.name.toUpperCase();
+            document.getElementById('active-case-price').innerText = `${caseObj.price.toFixed(2)} Реф`;
+
+            const track = document.getElementById('case-carousel-track');
+            track.style.transition = 'none';
+            track.style.transform = 'translateX(0px)';
+            track.innerHTML = '';
+
+            for (let i = 0; i < 30; i++) {
+                const randomItemId = caseObj.items[Math.floor(Math.random() * caseObj.items.length)];
+                const item = TF2_CATALOG.find(it => it.id === randomItemId) || TF2_CATALOG[0];
+                track.appendChild(createCarouselCard(item));
+            }
+        }
+
+        function createCarouselCard(item) {
+            const card = document.createElement('div');
+            card.className = `flex-shrink-0 w-32 h-36 bg-stone-900 border-2 ${getQualityBorderClass(item.quality)} rounded-xl p-2 flex flex-col items-center justify-between text-center shadow-lg`;
+            card.innerHTML = `
+                <span class="text-[10px] uppercase font-bold text-stone-400 tracking-wider">${getQualityName(item.quality)}</span>
+                <img src="${item.img}" class="w-16 h-16 object-contain my-1">
+                <span class="text-xs font-bold text-stone-200 truncate w-full">${item.name}</span>
+            `;
+            return card;
+        }
+
+        function spinCaseCarousel() {
+            if (isSpinning) return;
+            if (currentUser.balance < activeCase.price) {
+                alert('Недостатньо Металу для відкриття кейсу!');
+                return;
+            }
+
+            isSpinning = true;
+            document.getElementById('open-case-btn').disabled = true;
+
+            currentUser.balance -= activeCase.price;
+            saveUserData();
+
+            const winningItemId = activeCase.items[Math.floor(Math.random() * activeCase.items.length)];
+            const winningItem = TF2_CATALOG.find(it => it.id === winningItemId) || TF2_CATALOG[0];
+
+            const track = document.getElementById('case-carousel-track');
+            track.style.transition = 'none';
+            track.style.transform = 'translateX(0px)';
+
+            track.innerHTML = '';
+            const winnerIndex = 25;
+
+            for (let i = 0; i < 35; i++) {
+                let item = (i === winnerIndex) ? winningItem : TF2_CATALOG.find(it => it.id === activeCase.items[Math.floor(Math.random() * activeCase.items.length)]);
+                track.appendChild(createCarouselCard(item));
+            }
+
+            const cardWidth = 128 + 12;
+            const targetX = -(winnerIndex * cardWidth - (track.parentElement.clientWidth / 2) + 64);
+
+            setTimeout(() => {
+                track.style.transition = 'transform 5.5s cubic-bezier(0.15, 0.9, 0.2, 1)';
+                track.style.transform = `translateX(${targetX}px)`;
+            }, 50);
+
+            let tickInterval = setInterval(() => {
+                playSound('tick');
+            }, 180);
+
+            setTimeout(() => {
+                clearInterval(tickInterval);
+                isSpinning = false;
+                document.getElementById('open-case-btn').disabled = false;
+
+                playSound('win');
+                const wonItem = { ...winningItem, instanceId: 'inst_' + Date.now() };
+                currentUser.inventory.unshift(wonItem);
+                saveUserData();
+                showWinModal(wonItem);
+            }, 5600);
+        }
+
+        function renderCasesGrid() {
+            const container = document.getElementById('cases-grid');
+            container.innerHTML = TF2_CASES.map(c => `
+                <div class="bg-stone-900/90 border border-stone-800 rounded-2xl p-4 flex flex-col items-center text-center hover:border-tfOrange transition cursor-pointer" onclick="setupActiveCase(TF2_CASES.find(x=>x.id==='${c.id}'))">
+                    <img src="${c.img}" class="w-24 h-24 object-contain mb-3">
+                    <h4 class="font-bold text-stone-200 text-sm mb-1">${c.name}</h4>
+                    <span class="text-xs text-amber-400 font-bold mb-3">${c.price.toFixed(2)} Реф</span>
+                    <button class="w-full py-1.5 bg-stone-800 hover:bg-tfOrange text-stone-300 hover:text-white text-xs font-bold rounded-lg transition">Обрати Кейс</button>
+                </div>
+            `).join('');
+        }
+
+
+        /* ==========================================================================
+           8. МАГАЗИН ТА ІНВЕНТАР
+           ========================================================================== */
+
+        function renderStoreCatalog() {
+            const container = document.getElementById('store-items-grid');
+            const search = document.getElementById('store-search-input').value.toLowerCase();
+            const rarity = document.getElementById('store-filter-rarity').value;
+
+            const filtered = TF2_CATALOG.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(search);
+                const matchesRarity = rarity === 'all' || item.quality === rarity;
+                return matchesSearch && matchesRarity;
+            });
+
+            container.innerHTML = filtered.map(item => `
+                <div class="bg-stone-900 border-2 ${getQualityBorderClass(item.quality)} rounded-xl p-3 flex flex-col items-center justify-between text-center shadow-lg">
+                    <span class="text-[10px] uppercase font-bold text-stone-400">${getQualityName(item.quality)}</span>
+                    <img src="${item.img}" class="w-20 h-20 object-contain my-2">
+                    <h4 class="text-xs font-bold text-stone-200 truncate w-full mb-1">${item.name}</h4>
+                    <span class="text-xs font-bold text-amber-400 mb-2">${item.price.toFixed(2)} Реф</span>
+                    <button onclick="buyStoreItem('${item.id}')" class="w-full py-1.5 bg-tfOrange hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition">
+                        Купити
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function buyStoreItem(itemId) {
+            playSound('click');
+            const item = TF2_CATALOG.find(i => i.id === itemId);
+            if (!item) return;
+
+            if (currentUser.balance < item.price) {
+                alert('Недостатньо Металу на балансі!');
+                return;
+            }
+
+            currentUser.balance -= item.price;
+            const purchasedItem = { ...item, instanceId: 'inst_' + Date.now() };
+            currentUser.inventory.unshift(purchasedItem);
+            saveUserData();
+
+            playSound('win');
+            alert(`Успішно куплено ${item.name}! Додано в інвентар.`);
+        }
+
+        function renderUserInventoryGrid() {
+            const container = document.getElementById('inventory-grid');
+            const totalVal = currentUser.inventory.reduce((acc, i) => acc + i.price, 0);
+            document.getElementById('inv-total-value').innerText = `Загальна вартість: ${totalVal.toFixed(2)} Реф`;
+
+            if (currentUser.inventory.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center text-stone-500 py-10">Твій інвентар порожній. Відкривай кейси або купуй предмети в магазині!</p>`;
+                return;
+            }
+
+            container.innerHTML = currentUser.inventory.map(item => `
+                <div class="bg-stone-900 border-2 ${getQualityBorderClass(item.quality)} rounded-xl p-3 flex flex-col items-center justify-between text-center shadow-lg">
+                    <span class="text-[10px] uppercase font-bold text-stone-400">${getQualityName(item.quality)}</span>
+                    <img src="${item.img}" class="w-16 h-16 object-contain my-2">
+                    <h4 class="text-xs font-bold text-stone-200 truncate w-full mb-1">${item.name}</h4>
+                    <span class="text-xs font-bold text-amber-400 mb-2">${item.price.toFixed(2)} Реф</span>
+                    <button onclick="sellInventoryItem('${item.instanceId}')" class="w-full py-1 bg-red-900/60 hover:bg-red-800 text-red-200 text-[11px] font-bold rounded-lg transition">
+                        Продати за ${item.price.toFixed(2)} Реф
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function sellInventoryItem(instanceId) {
+            playSound('click');
+            const index = currentUser.inventory.findIndex(i => i.instanceId === instanceId);
+            if (index !== -1) {
+                const item = currentUser.inventory[index];
+                currentUser.balance += item.price;
+                currentUser.inventory.splice(index, 1);
+                saveUserData();
+                renderUserInventoryGrid();
+            }
+        }
+
+        function sellAllItems() {
+            if (currentUser.inventory.length === 0) return;
+            playSound('click');
+            const totalVal = currentUser.inventory.reduce((acc, i) => acc + i.price, 0);
+            currentUser.balance += totalVal;
+            currentUser.inventory = [];
+            saveUserData();
+            renderUserInventoryGrid();
+        }
+
+        function renderUpgraderInventory() {
+            const container = document.getElementById('upgrader-inv-list');
+            container.innerHTML = currentUser.inventory.map(item => {
+                const isSelected = selectedBetItems.some(i => i.instanceId === item.instanceId);
+                return `
+                    <div onclick="toggleSelectBetItem('${item.instanceId}')" class="bg-stone-900 border ${isSelected ? 'border-tfOrange ring-2 ring-tfOrange/50' : 'border-stone-800'} rounded-lg p-1.5 flex flex-col items-center text-center cursor-pointer hover:border-stone-600 transition">
+                        <img src="${item.img}" class="w-10 h-10 object-contain">
+                        <span class="text-[10px] font-bold text-stone-300 truncate w-full mt-1">${item.name}</span>
+                        <span class="text-[9px] text-amber-400 font-semibold">${item.price.toFixed(2)} Реф</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderTargetCatalog() {
+            const container = document.getElementById('target-catalog-list');
+            const search = document.getElementById('target-search').value.toLowerCase();
+
+            const filtered = TF2_CATALOG.filter(i => i.name.toLowerCase().includes(search));
+
+            container.innerHTML = filtered.map(item => {
+                const isSelected = selectedTargetItem && selectedTargetItem.id === item.id;
+                return `
+                    <div onclick="selectTargetItem('${item.id}')" class="bg-stone-900 border ${isSelected ? 'border-tfOrange ring-2 ring-tfOrange/50' : 'border-stone-800'} rounded-lg p-1.5 flex flex-col items-center text-center cursor-pointer hover:border-stone-600 transition">
+                        <img src="${item.img}" class="w-10 h-10 object-contain">
+                        <span class="text-[10px] font-bold text-stone-300 truncate w-full mt-1">${item.name}</span>
+                        <span class="text-[9px] text-amber-400 font-semibold">${item.price.toFixed(2)} Реф</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderSelectedBetBox() {
+            const container = document.getElementById('left-bet-box');
+            if (selectedBetItems.length === 0 && rawRefBet <= 0) {
+                container.innerHTML = `<p class="text-xs text-stone-500 text-center">Обери предмети з інвентарю нижче або вкажи чистий метал</p>`;
+                return;
+            }
+
+            container.innerHTML = selectedBetItems.map(item => `
+                <div class="bg-stone-900 border border-stone-700 rounded-lg p-1.5 flex items-center gap-2">
+                    <img src="${item.img}" class="w-8 h-8 object-contain">
+                    <div class="text-left">
+                        <p class="text-[10px] font-bold text-stone-200 truncate w-20">${item.name}</p>
+                        <p class="text-[9px] text-amber-400 font-semibold">${item.price.toFixed(2)} Реф</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderSelectedTargetBox() {
+            const container = document.getElementById('right-target-box');
+            if (!selectedTargetItem) {
+                container.innerHTML = `<p class="text-xs text-stone-500">Обери бажаний предмет із каталогу нижче</p>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <span class="text-[10px] uppercase font-bold text-stone-400 tracking-widest">${getQualityName(selectedTargetItem.quality)}</span>
+                <img src="${selectedTargetItem.img}" class="w-20 h-20 object-contain my-2">
+                <h4 class="text-sm font-bold text-stone-100">${selectedTargetItem.name}</h4>
+                <span class="text-xs font-bold text-amber-400">${selectedTargetItem.price.toFixed(2)} Реф</span>
+            `;
+        }
+
+        function selectAllInventory() {
+            selectedBetItems = [...currentUser.inventory];
+            renderUpgraderInventory();
+            renderSelectedBetBox();
+            updateUpgraderDisplay();
+        }
+
+        function getQualityBorderClass(quality) {
+            switch(quality) {
+                case 'unusual': return 'glow-unusual';
+                case 'australium': return 'glow-australium';
+                case 'strange': return 'glow-strange';
+                case 'commando': return 'border-purple-600';
+                default: return 'border-stone-700';
+            }
+        }
+
+        function getQualityName(quality) {
+            switch(quality) {
+                case 'unusual': return 'Незвичайний';
+                case 'australium': return 'Австралій';
+                case 'strange': return 'Дивний';
+                case 'commando': return 'Командо';
+                default: return 'Унікальний';
+            }
+        }
+
+
+        /* ==========================================================================
+           9. ВИВІД ПРЕДМЕТІВ В STEAM (WITHDRAW)
+           ========================================================================== */
+
+        function renderWithdrawGrid() {
+            const container = document.getElementById('withdraw-items-grid');
+            if (currentUser.inventory.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center text-stone-500 py-8">Немає предметів доступних для виводу.</p>`;
+                return;
+            }
+
+            container.innerHTML = currentUser.inventory.map(item => `
+                <div class="bg-stone-900 border-2 ${getQualityBorderClass(item.quality)} rounded-xl p-3 flex flex-col items-center justify-between text-center shadow-lg">
+                    <span class="text-[10px] uppercase font-bold text-stone-400">${getQualityName(item.quality)}</span>
+                    <img src="${item.img}" class="w-16 h-16 object-contain my-2">
+                    <h4 class="text-xs font-bold text-stone-200 truncate w-full mb-1">${item.name}</h4>
+                    <button onclick="initiateTrade('${item.instanceId}')" class="w-full py-1.5 bg-tfOrange hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-paper-plane"></i> Вивести
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function saveTradeUrl() {
+            const url = document.getElementById('steam-trade-url').value;
+            if (!url.includes('steamcommunity.com/tradeoffer')) {
+                alert('Будь ласка, вкажи дійсне посилання Steam Trade URL!');
+                return;
+            }
+            tradeUrl = url;
+            alert('Твоє посилання Trade URL успішно збережено!');
+        }
+
+        function initiateTrade(instanceId) {
+            if (!tradeUrl) {
+                alert('Спочатку вкажи та збережи свій Steam Trade URL у полі вище!');
+                return;
+            }
+
+            const itemIndex = currentUser.inventory.findIndex(i => i.instanceId === instanceId);
+            if (itemIndex === -1) return;
+
+            const item = currentUser.inventory[itemIndex];
+
+            // Відкриваємо модалку обміну
+            document.getElementById('trade-modal').classList.remove('hidden');
+            document.getElementById('trade-status-text').innerText = 'З\'єднання з Ботом Steam #402...';
+
+            setTimeout(() => {
+                document.getElementById('trade-status-text').innerText = 'Перевірка Steam Guard та Trade URL...';
+            }, 1500);
+
+            setTimeout(() => {
+                document.getElementById('trade-status-text').innerText = `Формування пропозиції: [${item.name}]...`;
+            }, 3000);
+
+            setTimeout(() => {
+                document.getElementById('trade-status-text').innerText = 'Пропозицію обміну надіслано в Steam! Перевір додаток.';
+                document.getElementById('trade-spinner').className = "fa-solid fa-circle-check text-green-500";
+                
+                const btn = document.getElementById('trade-confirm-btn');
+                btn.disabled = false;
+                btn.className = "w-full py-2.5 bg-tfOrange hover:bg-amber-600 text-white font-bold rounded-xl transition";
+                btn.innerText = "Закрити та Завершити";
+
+                // Видаляємо предмет з інвентарю після виводу
+                currentUser.inventory.splice(itemIndex, 1);
+                saveUserData();
+                renderWithdrawGrid();
+            }, 4800);
+        }
+
+        function closeTradeModal() {
+            document.getElementById('trade-modal').classList.add('hidden');
+        }
+
+
+        /* ==========================================================================
+           10. АДМІН ПАНЕЛЬ ТА АВТОРИЗАЦІЯ
+           ========================================================================== */
+
+        function openAdminModal() {
+            playSound('click');
+            document.getElementById('admin-modal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function verifyAdminPin() {
+            const pin = document.getElementById('admin-pin-input').value;
+            if (pin === 'tf2admin' || pin === 'admin') {
+                playSound('win');
+                document.getElementById('admin-login-step').classList.add('hidden');
+                document.getElementById('admin-controls-step').classList.remove('hidden');
+            } else {
+                alert('Невірний пароль адміністратора!');
+            }
+        }
+
+        function adminAddRef() {
+            const amt = parseFloat(document.getElementById('admin-ref-amount').value) || 0;
+            currentUser.balance += amt;
+            saveUserData();
+            alert(`Успішно нараховано ${amt} Очищеного Металу!`);
+        }
+
+        function setRigMode(mode) {
+            rigMode = mode;
+            playSound('click');
+            ['normal', 'win', 'loss'].forEach(m => {
+                document.getElementById(`rig-${m}-btn`).className = m === mode ? 
+                    "flex-1 py-2 rounded-xl text-xs font-bold border border-tfOrange bg-tfOrange text-white" : 
+                    "flex-1 py-2 rounded-xl text-xs font-bold border border-stone-700 bg-stone-800 text-stone-300";
+            });
+        }
+
+        function adminGrantGoldenPan() {
+            const pan = TF2_CATALOG.find(i => i.id === 'item_golden_pan');
+            if (pan) {
+                currentUser.inventory.unshift({ ...pan, instanceId: 'inst_' + Date.now() });
+                saveUserData();
+                alert('Золоту Сковороду додано в інвентар!');
+            }
+        }
+
+        function openAuthModal() {
+            playSound('click');
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        }
+
+        function processSteamLogin() {
+            const username = document.getElementById('steam-username-input').value || 'Scout_UA';
+            currentUser.username = username;
+            saveUserData();
+            closeAuthModal();
+            playSound('win');
+            alert(`Ласкаво просимо, ${username}! Вхід через Steam успішно виконано.`);
+        }
+
+        function openDepositModal() {
+            const amount = prompt("Вкажи кількість Очищеного Металу (Ref) для поповнення:", "50");
+            if (amount && !isNaN(amount)) {
+                currentUser.balance += parseFloat(amount);
+                saveUserData();
+                playSound('win');
+                alert(`Баланс успішно поповнено на ${amount} Рефінів!`);
+            }
+        }
+
+        function showWinModal(item) {
+            document.getElementById('win-item-card').innerHTML = `
+                <span class="text-[10px] uppercase font-bold text-stone-400">${getQualityName(item.quality)}</span>
+                <img src="${item.img}" class="w-28 h-28 object-contain my-3">
+                <h4 class="text-base font-bold text-stone-100">${item.name}</h4>
+                <span class="text-sm font-bold text-amber-400">${item.price.toFixed(2)} Реф</span>
+            `;
+            document.getElementById('win-modal').classList.remove('hidden');
+        }
+
+        function closeWinModal() {
+            document.getElementById('win-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
