@@ -22,18 +22,18 @@
     <style>
         body { background-color: #121214; color: #f3f4f6; font-family: 'Montserrat', sans-serif; user-select: none; }
         .cyber-font { font-family: 'Teko', sans-serif; letter-spacing: 0.05em; text-transform: uppercase; }
-        .cyber-panel { background: #181b22; border: 1px solid #272b36; box-shadow: 0 4px 20px rgba(0,0,0,0.5); position: relative; z-index: 10; }
-        .cyber-btn { background: linear-gradient(135deg, #f3ba2f 0%, #d49a15 100%); color: #121214; font-weight: 800; font-family: 'Montserrat', sans-serif; transition: all 0.2s; box-shadow: 0 4px 15px rgba(243, 186, 47, 0.3); cursor: pointer; position: relative; z-index: 20; }
+        .cyber-panel { background: #181b22; border: 1px solid #272b36; box-shadow: 0 4px 20px rgba(0,0,0,0.5); position: relative; z-index: 10; pointer-events: auto; }
+        .cyber-btn { background: linear-gradient(135deg, #f3ba2f 0%, #d49a15 100%); color: #121214; font-weight: 800; font-family: 'Montserrat', sans-serif; transition: all 0.2s; box-shadow: 0 4px 15px rgba(243, 186, 47, 0.3); cursor: pointer; position: relative; z-index: 30; pointer-events: auto; }
         .cyber-btn:hover { background: linear-gradient(135deg, #ffd15c 0%, #e0a418 100%); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(243, 186, 47, 0.5); }
         .cyber-btn:active { transform: translateY(1px); }
-        .steam-btn { background: #171a21; border: 1px solid #2a475e; color: #ffffff; transition: all 0.2s; cursor: pointer; position: relative; z-index: 20; }
+        .steam-btn { background: #171a21; border: 1px solid #2a475e; color: #ffffff; transition: all 0.2s; cursor: pointer; position: relative; z-index: 30; pointer-events: auto; }
         .steam-btn:hover { background: #2a475e; border-color: #66c0f4; }
-        .item-card { background: #1e222b; border: 1px solid #2c323f; transition: all 0.2s; position: relative; cursor: pointer; z-index: 15; }
+        .item-card { background: #1e222b; border: 1px solid #2c323f; transition: all 0.2s; position: relative; cursor: pointer; z-index: 20; pointer-events: auto; }
         .item-card:hover { border-color: #f3ba2f; transform: translateY(-2px); }
         .item-card.selected { border-color: #f3ba2f !important; background: rgba(243, 186, 47, 0.15); box-shadow: 0 0 10px rgba(243, 186, 47, 0.3); }
-        .tab-btn { background: #1c2029; border: 1px solid #2e3544; color: #9ba1a6; transition: all 0.2s; cursor: pointer; position: relative; z-index: 20; }
+        .tab-btn { background: #1c2029; border: 1px solid #2e3544; color: #9ba1a6; transition: all 0.2s; cursor: pointer; position: relative; z-index: 30; pointer-events: auto; }
         .tab-btn.active { background: #f3ba2f; color: #121214; font-weight: 800; border-color: #f3ba2f; }
-        .drop-ticker { background: #151821; border-bottom: 1px solid #272b36; overflow: hidden; white-space: nowrap; height: 36px; display: flex; align-items: center; }
+        .drop-ticker { background: #151821; border-bottom: 1px solid #272b36; overflow: hidden; white-space: nowrap; height: 36px; display: flex; align-items: center; position: relative; z-index: 5; }
         .drop-ticker-track { display: inline-flex; gap: 12px; animation: ticker 20s linear infinite; }
         @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
         ::-webkit-scrollbar { width: 6px; }
@@ -56,7 +56,7 @@
             </div>
 
             <!-- TABS -->
-            <div class="flex gap-2 bg-black/40 p-1 rounded-xl border border-panelBorder relative z-30">
+            <div class="flex gap-2 bg-black/40 p-1 rounded-xl border border-panelBorder relative z-40">
                 <button type="button" onclick="switchTab('upgrader')" id="tab-btn-upgrader" class="tab-btn active px-4 py-2 rounded-lg font-bold text-xs uppercase">⚡ Апгрейдер</button>
                 <button type="button" onclick="switchTab('cases')" id="tab-btn-cases" class="tab-btn px-4 py-2 rounded-lg font-bold text-xs uppercase">🎁 Кейси</button>
                 <button type="button" onclick="switchTab('inventory')" id="tab-btn-inventory" class="tab-btn px-4 py-2 rounded-lg font-bold text-xs uppercase">🎒 Інвентар</button>
@@ -64,18 +64,17 @@
             </div>
 
             <!-- BALANCE, PROFILE & ADMIN -->
-            <div class="flex items-center gap-3 relative z-30">
+            <div class="flex items-center gap-3 relative z-40">
                 <div class="flex items-center gap-4 bg-black/40 px-4 py-2 rounded-xl border border-panelBorder">
                     <div>
                         <span class="text-[9px] text-textGray block font-bold">БАЛАНС</span>
                         <span id="balCoins" class="cyber-font text-2xl text-accentGold">100 ТК</span>
                     </div>
-                    <button type="button" onclick="requestAdmin()" class="w-9 h-9 rounded-lg bg-panelBorder flex items-center justify-center text-textGray hover:text-accentGold transition cursor-pointer relative z-30" title="Адмін-панель">
+                    <button type="button" onclick="requestAdmin()" class="w-9 h-9 rounded-lg bg-panelBorder flex items-center justify-center text-textGray hover:text-accentGold transition cursor-pointer relative z-40" title="Адмін-панель">
                         <i class="fa-solid fa-shield-halved"></i>
                     </button>
                 </div>
 
-                <!-- PROFILE / STEAM LOGIN -->
                 <div id="profileHeaderContainer"></div>
             </div>
         </div>
@@ -128,7 +127,7 @@
                 </div>
 
                 <!-- Result Overlay -->
-                <div id="resultOverlay" class="hidden absolute inset-0 bg-[#121214]/95 backdrop-blur-md flex flex-col items-center justify-center z-40 p-6 text-center">
+                <div id="resultOverlay" class="hidden absolute inset-0 bg-[#121214]/95 backdrop-blur-md flex flex-col items-center justify-center z-50 p-6 text-center">
                     <h3 id="resTitle" class="cyber-font text-6xl mb-2">УСПІХ!</h3>
                     <div id="resItemBox" class="mb-6 p-4 rounded-xl border border-panelBorder bg-panelBg"></div>
                     <button type="button" onclick="closeResult()" class="cyber-btn px-8 py-3 rounded-xl text-sm uppercase">Продовжити</button>
@@ -174,4 +173,25 @@
                 </div>
                 <button type="button" onclick="openCase('fifty')" class="cyber-btn w-full py-3 rounded-xl cyber-font text-2xl uppercase">Відкрити (250 ТК)</button>
             </div>
-            <div class="cyber-panel p-5 rounded-2xl text-center flex flex-col justify-between items-center h-[430px] border-amber-400/40
+            <div class="cyber-panel p-5 rounded-2xl text-center flex flex-col justify-between items-center h-[430px] border-amber-400/40">
+                <div class="w-36 h-36 flex items-center justify-center text-6xl text-accentGold bg-black/40 rounded-xl"><i class="fa-solid fa-gem"></i></div>
+                <div>
+                    <h3 class="cyber-font text-3xl text-accentGold">Богач</h3>
+                    <p class="text-xs text-textGray mt-1">Елітний шмот та шапки.</p>
+                </div>
+                <button type="button" onclick="openCase('rich')" class="cyber-btn w-full py-3 rounded-xl cyber-font text-2xl uppercase">Відкрити (1000 ТК)</button>
+            </div>
+        </div>
+
+        <!-- TAB 3: INVENTORY -->
+        <div id="section-inventory" class="hidden cyber-panel p-6 rounded-2xl">
+            <h2 class="cyber-font text-3xl text-accentGold mb-4">Колекція предметів</h2>
+            <div id="fullInvGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"></div>
+        </div>
+
+        <!-- TAB 4: PROFILE -->
+        <div id="section-profile" class="hidden cyber-panel p-8 rounded-2xl max-w-2xl mx-auto">
+            <div id="profileContentArea"></div>
+        </div>
+
+    </main>
