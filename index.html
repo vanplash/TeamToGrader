@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TF2 Upgrade Simulator - Mann Co. Upgrade Station</title>
+    <title>Самий кращий апгрейдер по Team Fortress 2</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -29,7 +29,6 @@
                         tfOrange: '#CF6A32',
                         tfYellow: '#FFD700',
                         
-                        // Quality Colors
                         qUnique: '#7D6D00',
                         qUniqueBorder: '#FFD700',
                         qStrange: '#CF6A32',
@@ -63,7 +62,6 @@
             text-transform: uppercase;
         }
 
-        /* TF2 Box Styling */
         .tf-box {
             background: linear-gradient(180deg, #3B3533 0%, #2B2625 100%);
             border: 2px solid #524B48;
@@ -76,7 +74,6 @@
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
         }
 
-        /* Quality Glow Effects */
         .glow-unusual {
             box-shadow: 0 0 15px rgba(134, 80, 172, 0.6);
             border-color: #8650AC !important;
@@ -90,7 +87,6 @@
             border-color: #CF6A32 !important;
         }
 
-        /* Custom TF Buttons */
         .tf-btn {
             background: linear-gradient(180deg, #B8383B 0%, #8B2527 100%);
             border: 2px solid #D64548;
@@ -127,17 +123,17 @@
             box-shadow: 0 1px 0 #806600, 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        /* Canvas Meter Wheel Overlay */
         #upgradeWheelCanvas {
             filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.8));
+            width: 100%;
+            max-width: 320px;
+            height: auto;
         }
 
-        /* Item Fire Animated Particles simulation */
         .flame-bg {
             background: radial-gradient(circle, rgba(207,106,50,0.15) 0%, rgba(27,23,22,0) 70%);
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -164,37 +160,37 @@
                     <i class="fa-solid fa-wrench"></i>
                 </div>
                 <div>
-                    <h1 class="tf-font text-3xl md:text-4xl leading-none text-tfYellow tracking-wider drop-shadow-md">
-                        MANN CO. UPGRADE STATION
+                    <h1 class="tf-font text-2xl md:text-3xl leading-none text-tfYellow tracking-wider drop-shadow-md">
+                        Самий кращий апгрейдер по Team Fortress 2
                     </h1>
-                    <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">TF2 Item Simulator & Casino</p>
+                    <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">MANN CO. STATIONS & UPGRADER</p>
                 </div>
             </div>
 
             <!-- Stats & Balances -->
             <div class="flex items-center gap-4 bg-tfDarker px-4 py-2 rounded border border-tfBorder">
                 <div class="text-center px-2">
-                    <span class="block text-xs text-gray-400">Refined Metal</span>
+                    <span class="block text-xs text-gray-400">Очищений метал</span>
                     <span id="balRef" class="tf-font text-2xl text-tfYellow">50.00 ref</span>
                 </div>
                 <div class="h-8 w-px bg-tfBorder"></div>
                 <div class="text-center px-2">
-                    <span class="block text-xs text-gray-400">Keys</span>
+                    <span class="block text-xs text-gray-400">Ключі</span>
                     <span id="balKeys" class="tf-font text-2xl text-tfOrange">0 🔑</span>
                 </div>
                 <div class="h-8 w-px bg-tfBorder"></div>
                 <div class="text-center px-2">
-                    <span class="block text-xs text-gray-400">Est. Value</span>
+                    <span class="block text-xs text-gray-400">Цінність ($)</span>
                     <span id="balUsd" class="tf-font text-2xl text-green-400">$80.00</span>
                 </div>
             </div>
 
             <!-- Controls & Admin Toggle -->
             <div class="flex items-center gap-2">
-                <button id="soundToggleBtn" onclick="toggleAudio()" class="px-3 py-2 bg-tfPanel border border-tfBorder rounded hover:bg-tfBorder transition text-gray-300">
+                <button id="soundToggleBtn" onclick="toggleAudio()" class="px-3 py-2 bg-tfPanel border border-tfBorder rounded hover:bg-tfBorder transition text-gray-300" title="Звук">
                     <i id="soundIcon" class="fa-solid fa-volume-high"></i>
                 </button>
-                <button onclick="toggleAdminModal()" class="tf-btn px-4 py-2 rounded text-sm font-bold flex items-center gap-2 uppercase tracking-wider">
+                <button onclick="requestAdminAccess()" class="tf-btn px-4 py-2 rounded text-sm font-bold flex items-center gap-2 uppercase tracking-wider">
                     <i class="fa-solid fa-user-shield text-tfYellow"></i> Адмін Панель
                 </button>
             </div>
@@ -213,7 +209,7 @@
 
             <!-- Deposit Balance Option / Direct Ref Deposit -->
             <div class="bg-tfDarker p-2 rounded mb-3 border border-tfBorder flex justify-between items-center">
-                <span class="text-sm text-gray-300 font-bold">Використати Баланс (ref):</span>
+                <span class="text-sm text-gray-300 font-bold">Баланс (ref):</span>
                 <input id="directRefInput" type="number" step="0.5" min="0" value="0" oninput="handleDirectRefChange()" 
                        class="w-24 bg-tfPanel border border-tfBorder rounded text-right px-2 py-1 font-bold text-tfYellow focus:outline-none focus:border-tfOrange">
             </div>
@@ -245,7 +241,6 @@
 
             <!-- WHEEL METER CANVAS DISPLAY -->
             <div class="relative my-auto flex items-center justify-center">
-                <!-- Canvas Gauge -->
                 <canvas id="upgradeWheelCanvas" width="320" height="320" class="rounded-full"></canvas>
 
                 <!-- Center Gauge Content / Odds Info -->
@@ -258,9 +253,9 @@
                 </div>
             </div>
 
-            <!-- RIG / MULTIPLIER MODE BADGE (Admin active Indicator) -->
+            <!-- RIG / MULTIPLIER MODE BADGE -->
             <div id="rigIndicator" class="hidden absolute top-3 right-3 text-xs bg-red-900/80 text-red-200 border border-red-500 px-2 py-1 rounded uppercase tracking-wider animate-pulse">
-                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Mode Active
+                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Режим активний
             </div>
 
             <!-- RESULT ANNOUNCEMENT BANNER -->
@@ -305,13 +300,12 @@
     <!-- ADMIN PANEL MODAL -->
     <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="tf-box max-w-2xl w-full p-6 rounded-lg border-2 border-tfYellow shadow-2xl relative">
-            <!-- Close Button -->
             <button onclick="toggleAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
             <h2 class="tf-font text-4xl text-tfYellow border-b border-tfBorder pb-2 mb-4 flex items-center gap-2">
-                <i class="fa-solid fa-user-gear"></i> Панель Адміністратора (Безкоштовне Керування)
+                <i class="fa-solid fa-user-gear"></i> Панель Адміністратора (Захищено)
             </h2>
 
             <div class="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
@@ -319,7 +313,7 @@
                 <div class="bg-tfDarker p-4 rounded border border-tfBorder">
                     <h3 class="tf-font text-2xl text-tfOrange mb-2">💰 Поповнення Балансу</h3>
                     <div class="flex gap-3 items-center">
-                        <input id="adminAddRefInput" type="number" value="100" min="1" class="bg-tfPanel border border-tfBorder px-3 py-2 rounded text-tfYellow font-bold w-36 focus:outline-none">
+                        <input id="adminAddRefInput" type="number" value="100" min="1" max="1000000" class="bg-tfPanel border border-tfBorder px-3 py-2 rounded text-tfYellow font-bold w-36 focus:outline-none">
                         <button onclick="adminAddBalance()" class="tf-btn px-4 py-2 rounded font-bold uppercase text-sm">
                             + Додати Refined Metal
                         </button>
@@ -333,24 +327,24 @@
                 <div class="bg-tfDarker p-4 rounded border border-tfBorder">
                     <h3 class="tf-font text-2xl text-tfOrange mb-2">🎁 Створити Свій Предмет</h3>
                     <div class="grid grid-cols-2 gap-3 mb-3">
-                        <input id="newItemName" type="text" placeholder="Назва предмета" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm">
-                        <input id="newItemPrice" type="number" placeholder="Ціна (в Refined)" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm">
-                        <select id="newItemQuality" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm">
+                        <input id="newItemName" type="text" placeholder="Назва предмета" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm text-white">
+                        <input id="newItemPrice" type="number" min="1" max="100000" placeholder="Ціна (в Refined)" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm text-white">
+                        <select id="newItemQuality" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm text-white">
                             <option value="unique">Unique (Жовтий)</option>
                             <option value="strange">Strange (Оранжевий)</option>
                             <option value="unusual">Unusual (Фіолетовий)</option>
                             <option value="australium">Australium (Золотий)</option>
                         </select>
-                        <input id="newItemEffect" type="text" placeholder="Ефект (напр. Burning Flames)" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm">
+                        <input id="newItemEffect" type="text" placeholder="Ефект (напр. Burning Flames)" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm text-white">
                     </div>
                     <button onclick="adminCreateCustomItem()" class="tf-btn tf-btn-gold w-full py-2 rounded font-bold uppercase text-sm">
                         Додати предмет у магазин & Інвентар
                     </button>
                 </div>
 
-                <!-- Win Rate Override (Rigged Mode for Testing) -->
+                <!-- Win Rate Override -->
                 <div class="bg-tfDarker p-4 rounded border border-tfBorder">
-                    <h3 class="tf-font text-2xl text-tfOrange mb-2">⚙️ Налаштування Шансів (Режим Тестування)</h3>
+                    <h3 class="tf-font text-2xl text-tfOrange mb-2">⚙️ Режим Тестування (Rig Mode)</h3>
                     <div class="flex gap-3">
                         <button onclick="setRigMode('normal')" id="rigNormalBtn" class="flex-1 py-2 rounded border border-tfOrange bg-tfOrange text-white font-bold text-sm">
                             Звичайний (Чесний)
@@ -369,119 +363,107 @@
 
     <!-- FOOTER -->
     <footer class="tf-box border-t-2 border-tfBorder p-2 text-center text-xs text-gray-500">
-        Team Fortress 2 Simulator — Mann Co. Quality Guaranteed. Powered by Web Audio & Canvas.
+        Team Fortress 2 Simulator — Mann Co. Quality Guaranteed. LocalStorage Active.
     </footer>
 
-    <!-- AUDIO SYNTHESIZER & SCRIPT LOGIC -->
+    <!-- SCRIPT LOGIC -->
     <script>
-        // --- SOUND EFFECTS SYNTHESIZER (WEB AUDIO API) ---
+        // --- SOUND ENGINE ---
         class TFSoundEngine {
             constructor() {
                 this.ctx = null;
                 this.muted = false;
             }
-
             init() {
                 if (!this.ctx) {
-                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) this.ctx = new AudioContext();
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
                 }
             }
-
             playClick() {
                 if (this.muted) return;
                 this.init();
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.05);
-                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.05);
-            }
-
-            playTick() {
-                if (this.muted) return;
-                this.init();
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.02);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + 0.02);
-            }
-
-            playWin() {
-                if (this.muted) return;
-                this.init();
-                const now = this.ctx.currentTime;
-                
-                // Fanfare Chords
-                [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                if (!this.ctx) return;
+                try {
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
                     osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-                    gain.gain.setValueAtTime(0.2, now + idx * 0.08);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.5);
+                    osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.05);
+                    gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
                     osc.connect(gain);
                     gain.connect(this.ctx.destination);
-                    osc.start(now + idx * 0.08);
-                    osc.stop(now + idx * 0.08 + 0.5);
-                });
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + 0.05);
+                } catch(e) {}
             }
-
+            playWin() {
+                if (this.muted) return;
+                this.init();
+                if (!this.ctx) return;
+                try {
+                    const now = this.ctx.currentTime;
+                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.4);
+                        osc.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        osc.start(now + idx * 0.08);
+                        osc.stop(now + idx * 0.08 + 0.4);
+                    });
+                } catch(e) {}
+            }
             playFail() {
                 if (this.muted) return;
                 this.init();
-                const now = this.ctx.currentTime;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(180, now);
-                osc.frequency.linearRampToValueAtTime(60, now + 0.4);
-                gain.gain.setValueAtTime(0.25, now);
-                gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.4);
+                if (!this.ctx) return;
+                try {
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.linearRampToValueAtTime(60, now + 0.4);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } catch(e) {}
             }
         }
 
         const sound = new TFSoundEngine();
-
         function toggleAudio() {
             sound.muted = !sound.muted;
             document.getElementById('soundIcon').className = sound.muted ? "fa-solid fa-volume-xmark" : "fa-solid fa-volume-high";
         }
 
-        // --- GAME DATA & STATE ---
-        let userBalanceRef = 150.0;
-        let selectedDepositItemIds = [];
-        let directRefDeposit = 0;
-        let selectedTargetItem = null;
-        let rigMode = 'normal'; // 'normal', 'win', 'loss'
+        // --- STATE & LOCALSTORAGE ---
+        let userBalanceRef = parseFloat(localStorage.getItem('tf2_bal')) || 50.0;
+        let selectedDepositItemIds = JSON.parse(localStorage.getItem('tf2_sel_items')) || [];
+        let directRefDeposit = parseFloat(localStorage.getItem('tf2_direct_ref')) || 0.0;
+        let selectedTargetItem = JSON.parse(localStorage.getItem('tf2_target')) || null;
+        let rigMode = localStorage.getItem('tf2_rig') || 'normal';
         let isSpinning = false;
-        let currentRollAngle = 0;
 
-        // Item Qualities Setup
         const QUALITIES = {
-            unique: { name: 'Unique', color: '#FFD700', border: 'border-yellow-600', class: '' },
-            strange: { name: 'Strange', color: '#CF6A32', border: 'border-orange-600', class: 'glow-strange' },
-            unusual: { name: 'Unusual', color: '#8650AC', border: 'border-purple-600', class: 'glow-unusual' },
-            australium: { name: 'Australium', color: '#E6B800', border: 'border-yellow-400', class: 'glow-australium' }
+            unique: { name: 'Unique', color: '#FFD700' },
+            strange: { name: 'Strange', color: '#CF6A32', class: 'glow-strange' },
+            unusual: { name: 'Unusual', color: '#8650AC', class: 'glow-unusual' },
+            australium: { name: 'Australium', color: '#E6B800', class: 'glow-australium' }
         };
 
-        // Master Catalog of Target Items
-        let targetCatalog = [
+        let targetCatalog = JSON.parse(localStorage.getItem('tf2_catalog')) || [
             { id: 't1', name: '✨ Australium Rocket Launcher', price: 120, quality: 'australium', category: 'australium', icon: 'fa-rocket' },
             { id: 't2', name: '🔥 Burning Flames Team Captain', price: 4500, quality: 'unusual', category: 'unusual', effect: 'Burning Flames', icon: 'fa-hat-cowboy' },
             { id: 't3', name: '🗡️ Australium Knife', price: 65, quality: 'australium', category: 'australium', icon: 'fa-khanda' },
@@ -492,26 +474,44 @@
             { id: 't8', name: '🎺 Taunt: The Frying Pan', price: 15, quality: 'strange', category: 'weapon', icon: 'fa-utensils' }
         ];
 
-        // User Inventory Storage
-        let userInventory = [
+        let userInventory = JSON.parse(localStorage.getItem('tf2_inv')) || [
             { id: 'u1', name: 'Mercenary Badge', price: 5, quality: 'unique', icon: 'fa-shield' },
             { id: 'u2', name: 'Strange Scattergun', price: 18, quality: 'strange', icon: 'fa-crosshairs' },
             { id: 'u3', name: 'Vintage Bill\'s Hat', price: 22, quality: 'unique', icon: 'fa-hat-cowboy-side' }
         ];
 
-        // --- CORE INITIALIZATION ---
+        function saveState() {
+            localStorage.setItem('tf2_bal', userBalanceRef);
+            localStorage.setItem('tf2_sel_items', JSON.stringify(selectedDepositItemIds));
+            localStorage.setItem('tf2_direct_ref', directRefDeposit);
+            localStorage.setItem('tf2_target', JSON.stringify(selectedTargetItem));
+            localStorage.setItem('tf2_rig', rigMode);
+            localStorage.setItem('tf2_catalog', JSON.stringify(targetCatalog));
+            localStorage.setItem('tf2_inv', JSON.stringify(userInventory));
+        }
+
         window.onload = function() {
+            document.getElementById('directRefInput').value = directRefDeposit;
             updateHeaderBalances();
             renderUserInventory();
             renderTargetCatalog('all');
-            initCanvasMeter(0);
+            if (selectedTargetItem) {
+                const found = targetCatalog.find(i => i.id === selectedTargetItem.id);
+                if (found) selectedTargetItem = found;
+                document.getElementById('targetDisplayName').innerText = selectedTargetItem.name;
+                document.getElementById('targetDisplayName').style.color = QUALITIES[selectedTargetItem.quality].color;
+                document.getElementById('targetDisplayBadge').innerText = selectedTargetItem.quality.toUpperCase();
+            }
+            calculateTotalDepositAndOdds();
+            setRigMode(rigMode, true);
         };
 
-        // --- UI & RENDER FUNCTIONS ---
         function updateHeaderBalances() {
+            if (userBalanceRef < 0) userBalanceRef = 0;
             document.getElementById('balRef').innerText = `${userBalanceRef.toFixed(2)} ref`;
             document.getElementById('balKeys').innerText = `${Math.floor(userBalanceRef / 60)} 🔑`;
             document.getElementById('balUsd').innerText = `$${(userBalanceRef * 1.6).toFixed(2)}`;
+            saveState();
         }
 
         function renderUserInventory() {
@@ -522,60 +522,55 @@
             userInventory.forEach(item => {
                 const isSelected = selectedDepositItemIds.includes(item.id);
                 const q = QUALITIES[item.quality] || QUALITIES.unique;
-
                 const card = document.createElement('div');
                 card.className = `tf-box p-2 rounded cursor-pointer transition flex flex-col items-center justify-between text-center relative border-2 ${isSelected ? 'border-tfYellow bg-tfDark' : 'border-tfBorder'} hover:border-tfOrange`;
                 card.onclick = () => toggleSelectDepositItem(item.id);
 
                 card.innerHTML = `
                     <div class="text-2xl mb-1" style="color: ${q.color}">
-                        <i class="fa-solid ${item.icon}"></i>
+                        <i class="fa-solid ${item.icon || 'fa-box'}"></i>
                     </div>
                     <div class="text-xs font-bold leading-tight truncate w-full" style="color: ${q.color}">${item.name}</div>
                     <div class="text-[10px] text-tfYellow font-mono mt-1">${item.price} ref</div>
                 `;
                 grid.appendChild(card);
             });
-
             calculateTotalDepositAndOdds();
         }
 
         function renderTargetCatalog(filter) {
             const grid = document.getElementById('targetCatalogGrid');
             grid.innerHTML = '';
-
             const filtered = filter === 'all' ? targetCatalog : targetCatalog.filter(i => i.category === filter);
 
             filtered.forEach(item => {
                 const isSelected = selectedTargetItem && selectedTargetItem.id === item.id;
                 const q = QUALITIES[item.quality] || QUALITIES.unique;
-
                 const card = document.createElement('div');
-                card.className = `tf-box p-2 rounded cursor-pointer transition flex items-center justify-between border-2 ${isSelected ? 'border-tfYellow bg-tfDark' : 'border-tfBorder'} hover:border-tfOrange ${q.class}`;
+                card.className = `tf-box p-2 rounded cursor-pointer transition flex items-center justify-between border-2 ${isSelected ? 'border-tfYellow bg-tfDark' : 'border-tfBorder'} hover:border-tfOrange ${q.class || ''}`;
                 card.onclick = () => selectTargetItem(item);
 
                 card.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div class="text-2xl" style="color: ${q.color}">
-                            <i class="fa-solid ${item.icon}"></i>
+                    <div class="flex items-center gap-3 truncate">
+                        <div class="text-2xl shrink-0" style="color: ${q.color}">
+                            <i class="fa-solid ${item.icon || 'fa-gift'}"></i>
                         </div>
-                        <div class="text-left">
-                            <div class="text-xs font-bold" style="color: ${q.color}">${item.name}</div>
-                            ${item.effect ? `<div class="text-[10px] text-purple-400 font-semibold">${item.effect}</div>` : ''}
+                        <div class="text-left truncate">
+                            <div class="text-xs font-bold truncate" style="color: ${q.color}">${item.name}</div>
+                            ${item.effect ? `<div class="text-[10px] text-purple-400 font-semibold truncate">${item.effect}</div>` : ''}
                         </div>
                     </div>
-                    <div class="text-sm font-mono font-bold text-tfYellow">${item.price} ref</div>
+                    <div class="text-sm font-mono font-bold text-tfYellow shrink-0 ml-2">${item.price} ref</div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        function filterCatalog(category) {
+        function filterCategory(cat) {
             sound.playClick();
-            renderTargetCatalog(category);
+            renderTargetCatalog(cat);
         }
 
-        // --- SELECTION & ODDS LOGIC ---
         function toggleSelectDepositItem(id) {
             sound.playClick();
             if (selectedDepositItemIds.includes(id)) {
@@ -589,6 +584,7 @@
         function handleDirectRefChange() {
             const input = document.getElementById('directRefInput');
             let val = parseFloat(input.value) || 0;
+            if (val < 0) val = 0;
             if (val > userBalanceRef) {
                 val = userBalanceRef;
                 input.value = val;
@@ -603,7 +599,6 @@
             document.getElementById('targetDisplayName').innerText = item.name;
             document.getElementById('targetDisplayName').style.color = QUALITIES[item.quality].color;
             document.getElementById('targetDisplayBadge').innerText = item.quality.toUpperCase();
-            
             renderTargetCatalog('all');
             calculateTotalDepositAndOdds();
         }
@@ -619,25 +614,22 @@
             const totalDeposit = itemSum + directRefDeposit;
             document.getElementById('totalDepositVal').innerText = `${totalDeposit.toFixed(2)} ref`;
 
-            if (!selectedTargetItem || totalDeposit <= 0) {
+            if (!selectedTargetItem || totalDeposit <= 0 || totalDeposit >= selectedTargetItem.price) {
                 updateOddsDisplay(0);
                 toggleUpgradeButton(false);
                 return;
             }
 
-            // Calculate Win Chance (Max capped at 95%)
             let chance = (totalDeposit / selectedTargetItem.price) * 100;
             if (chance > 95) chance = 95;
-
             updateOddsDisplay(chance);
             toggleUpgradeButton(true);
         }
 
-        function updateOddsDisplay(chancePercent) {
-            const formatted = chancePercent.toFixed(2);
-            document.getElementById('chancePercentText').innerText = `${formatted}%`;
-            document.getElementById('rollRangeText').innerText = `Roll Range: 0.00 - ${formatted}`;
-            initCanvasMeter(chancePercent);
+        function updateOddsDisplay(chance) {
+            document.getElementById('chancePercentText').innerText = `${chance.toFixed(2)}%`;
+            document.getElementById('rollRangeText').innerText = `Roll: 0.00 - ${chance.toFixed(2)}`;
+            drawCanvasWheel(chance, 0);
         }
 
         function toggleUpgradeButton(enabled) {
@@ -651,227 +643,195 @@
             }
         }
 
-        // --- CANVAS WHEEL METER RENDERER ---
-        function initCanvasMeter(winPercent, animatedAngle = null) {
+        function drawCanvasWheel(chance, angleOffset) {
             const canvas = document.getElementById('upgradeWheelCanvas');
+            if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-            const center = width / 2;
-            const radius = center - 15;
+            const w = canvas.width;
+            const h = canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+            const r = Math.min(cx, cy) - 10;
 
-            ctx.clearRect(0, 0, width, height);
+            ctx.clearRect(0, 0, w, h);
 
-            // Outer Metallic Ring
+            // Outer ring
             ctx.beginPath();
-            ctx.arc(center, center, radius + 5, 0, Math.PI * 2);
-            ctx.strokeStyle = '#524B48';
-            ctx.lineWidth = 8;
-            ctx.stroke();
-
-            // Background Circle (Fail Zone - Red/Dark)
-            ctx.beginPath();
-            ctx.arc(center, center, radius, 0, Math.PI * 2);
-            ctx.fillStyle = '#2B1C1D';
-            ctx.fill();
-
-            // Win Zone (Green Arc)
-            const winAngle = (winPercent / 100) * (Math.PI * 2);
-            const startAngle = -Math.PI / 2; // Start from top
-            
-            ctx.beginPath();
-            ctx.moveTo(center, center);
-            ctx.arc(center, center, radius, startAngle, startAngle + winAngle);
-            ctx.closePath();
-            ctx.fillStyle = '#3E6B39';
-            ctx.fill();
-
-            // Inner Ring Border
-            ctx.beginPath();
-            ctx.arc(center, center, radius - 25, 0, Math.PI * 2);
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
             ctx.fillStyle = '#1B1716';
             ctx.fill();
-            ctx.strokeStyle = '#322C2A';
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 6;
+            ctx.strokeStyle = '#524B48';
             ctx.stroke();
 
-            // Pointer/Ticker Indicator Angle
-            if (animatedAngle !== null) {
-                const pointerRad = startAngle + animatedAngle;
-                ctx.beginPath();
-                ctx.moveTo(center, center);
-                ctx.lineTo(center + Math.cos(pointerRad) * radius, center + Math.sin(pointerRad) * radius);
-                ctx.strokeStyle = '#FFD700';
-                ctx.lineWidth = 5;
-                ctx.stroke();
+            // Win arc
+            const winAngle = (chance / 100) * (Math.PI * 2);
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, r - 6, -Math.PI / 2 + angleOffset, -Math.PI / 2 + winAngle + angleOffset, false);
+            ctx.lineTo(cx, cy);
+            ctx.fillStyle = '#CF6A32';
+            ctx.fill();
 
-                // Pointer Head Tip
-                ctx.beginPath();
-                ctx.arc(center + Math.cos(pointerRad) * radius, center + Math.sin(pointerRad) * radius, 8, 0, Math.PI * 2);
-                ctx.fillStyle = '#CF6A32';
-                ctx.fill();
-            }
+            // Inner circle
+            ctx.beginPath();
+            ctx.arc(cx, cy, r * 0.72, 0, Math.PI * 2);
+            ctx.fillStyle = '#2B2625';
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#3E3633';
+            ctx.stroke();
+
+            // Needle pointer
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(angleOffset);
+            ctx.beginPath();
+            ctx.moveTo(0, -r + 2);
+            ctx.lineTo(-6, -r - 10);
+            ctx.lineTo(6, -r - 10);
+            ctx.closePath();
+            ctx.fillStyle = '#FFD700';
+            ctx.fill();
+            ctx.restore();
         }
 
-        // --- UPGRADE EXECUTION ENGINE ---
         function executeUpgrade() {
             if (isSpinning || !selectedTargetItem) return;
-            isSpinning = true;
-            toggleUpgradeButton(false);
-            sound.playClick();
-
-            // Deduct Direct Ref Deposit from balance
-            userBalanceRef -= directRefDeposit;
-            updateHeaderBalances();
-
-            // Calculate Win Chance
             let itemSum = 0;
-            userInventory.forEach(item => {
-                if (selectedDepositItemIds.includes(item.id)) itemSum += item.price;
+            selectedDepositItemIds.forEach(id => {
+                const item = userInventory.find(i => i.id === id);
+                if (item) itemSum += item.price;
             });
             const totalDeposit = itemSum + directRefDeposit;
-            let winChance = Math.min((totalDeposit / selectedTargetItem.price) * 100, 95);
-
-            // Determine Outcome (Rigged or Random)
-            let isWin = false;
-            let rollValue = Math.random() * 100;
-
-            if (rigMode === 'win') {
-                isWin = true;
-                rollValue = winChance * 0.5; // Always falls inside win zone
-            } else if (rigMode === 'loss') {
-                isWin = false;
-                rollValue = Math.min(winChance + 10, 99.9); // Always falls outside
-            } else {
-                isWin = rollValue <= winChance;
+            if (totalDeposit <= 0 || totalDeposit > userBalanceRef && directRefDeposit > 0) {
+                alert('Недостатньо коштів або предметів для ставки!');
+                return;
             }
 
-            // Target Final Angle Calculation
-            const winZoneRad = (winChance / 100) * (Math.PI * 2);
-            let targetRad = 0;
-
-            if (isWin) {
-                targetRad = Math.random() * winZoneRad;
-            } else {
-                targetRad = winZoneRad + Math.random() * ((Math.PI * 2) - winZoneRad);
+            // Deduct balance or items
+            if (directRefDeposit > 0) {
+                userBalanceRef -= directRefDeposit;
+                directRefDeposit = 0;
+                document.getElementById('directRefInput').value = 0;
             }
+            if (selectedDepositItemIds.length > 0) {
+                userInventory = userInventory.filter(i => !selectedDepositItemIds.includes(i.id));
+                selectedDepositItemIds = [];
+            }
+            updateHeaderBalances();
+            renderUserInventory();
 
-            // Spin Animation Parameters
-            const extraSpins = 5 * (Math.PI * 2); // 5 Full Revolutions
-            const totalTravelRad = extraSpins + targetRad;
-            const startTime = performance.now();
-            const spinDuration = 4000; // 4 Seconds animation
+            isSpinning = true;
+            toggleUpgradeButton(false);
 
-            let lastTickRad = 0;
+            let chance = (totalDeposit / selectedTargetItem.price) * 100;
+            if (chance > 95) chance = 95;
 
-            function animateSpin(now) {
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / spinDuration, 1);
-                
-                // Ease-Out Cubic Progression
-                const easeOut = 1 - Math.pow(1 - progress, 3);
-                const currentAngle = easeOut * totalTravelRad;
+            let isWin = Math.random() * 100 < chance;
+            if (rigMode === 'win') isWin = true;
+            if (rigMode === 'loss') isWin = false;
 
-                // Play tick sound every ~20 deg turn
-                if (currentAngle - lastTickRad > 0.3) {
-                    sound.playTick();
-                    lastTickRad = currentAngle;
-                }
+            let targetAngle = isWin ? (Math.random() * (chance / 100) * Math.PI * 2) : ((Math.random() * (1 - chance / 100) + chance / 100) * Math.PI * 2);
+            let totalSpin = Math.PI * 2 * 6 + targetAngle;
 
-                initCanvasMeter(winChance, currentAngle % (Math.PI * 2));
+            let startTime = null;
+            let duration = 3000;
+
+            function animateSpin(timestamp) {
+                if (!startTime) startTime = timestamp;
+                let progress = (timestamp - startTime) / duration;
+                if (progress > 1) progress = 1;
+
+                let easeOut = 1 - Math.pow(1 - progress, 3);
+                let currentAngle = totalSpin * easeOut;
+
+                drawCanvasWheel(chance, currentAngle);
+                sound.playClick();
 
                 if (progress < 1) {
                     requestAnimationFrame(animateSpin);
                 } else {
-                    // Spin Completed
-                    finalizeUpgrade(isWin, rollValue, winChance);
+                    isSpinning = false;
+                    showUpgradeResult(isWin, selectedTargetItem);
                 }
             }
-
             requestAnimationFrame(animateSpin);
         }
 
-        function finalizeUpgrade(isWin, rollValue, winChance) {
-            isSpinning = false;
-
-            // Remove Deposited Items from User Inventory
-            userInventory = userInventory.filter(i => !selectedDepositItemIds.includes(i.id));
-            selectedDepositItemIds = [];
-            directRefDeposit = 0;
-            document.getElementById('directRefInput').value = 0;
-
+        function showUpgradeResult(isWin, item) {
             const banner = document.getElementById('resultBanner');
             const title = document.getElementById('resultTitle');
             const desc = document.getElementById('resultDesc');
-            const itemShow = document.getElementById('resultItemShow');
+            const showDiv = document.getElementById('resultItemShow');
 
             banner.classList.remove('hidden');
+            showDiv.innerHTML = `
+                <div class="tf-box p-3 rounded text-center border-2" style="border-color: ${QUALITIES[item.quality].color}">
+                    <div class="text-3xl mb-1" style="color: ${QUALITIES[item.quality].color}"><i class="fa-solid ${item.icon || 'fa-gift'}"></i></div>
+                    <div class="text-sm font-bold" style="color: ${QUALITIES[item.quality].color}">${item.name}</div>
+                    <div class="text-xs text-tfYellow font-mono">${item.price} ref</div>
+                </div>
+            `;
 
             if (isWin) {
                 sound.playWin();
-                title.innerText = "🎉 УСПІХ! (SUCCESS)";
-                title.className = "tf-font text-5xl tracking-wider text-tfYellow";
-                desc.innerText = `Випало ${rollValue.toFixed(2)} (Шанс: ${winChance.toFixed(2)}%)`;
-
-                // Add won item to inventory
-                const wonItem = { ...selectedTargetItem, id: 'won_' + Date.now() };
-                userInventory.push(wonItem);
-
-                const q = QUALITIES[wonItem.quality];
-                itemShow.innerHTML = `
-                    <div class="tf-box p-4 rounded border-2 border-tfYellow text-center">
-                        <div class="text-4xl mb-2" style="color: ${q.color}"><i class="fa-solid ${wonItem.icon}"></i></div>
-                        <div class="font-bold" style="color: ${q.color}">${wonItem.name}</div>
-                        <div class="text-xs text-tfYellow font-mono">${wonItem.price} ref</div>
-                    </div>
-                `;
+                title.innerText = "УСПІХ!";
+                title.className = "tf-font text-5xl tracking-wider text-green-400";
+                desc.innerText = "Предмет успішно апгрейднуто та додано в інвентар!";
+                userInventory.push(item);
+                renderUserInventory();
             } else {
                 sound.playFail();
-                title.innerText = "💥 НЕВДАЧА! (DESTROYED)";
-                title.className = "tf-font text-5xl tracking-wider text-tfRed";
-                desc.innerText = `Випало ${rollValue.toFixed(2)} (Потрібно було <= ${winChance.toFixed(2)}%). Предмет згорів!`;
-                itemShow.innerHTML = `
-                    <div class="text-5xl text-tfRed my-2"><i class="fa-solid fa-fire"></i></div>
-                `;
+                title.innerText = "ПРОГРАШ!";
+                title.className = "tf-font text-5xl tracking-wider text-red-500";
+                desc.innerText = "На жаль, колесо зупинилося у червоній зоні.";
             }
 
-            renderUserInventory();
-
-            // Auto Hide Banner after 3.5 seconds
             setTimeout(() => {
                 banner.classList.add('hidden');
                 calculateTotalDepositAndOdds();
             }, 3500);
         }
 
-        // --- ADMIN PANEL FUNCTIONS ---
+        // --- ADMIN PANEL SECURED ---
+        function requestAdminAccess() {
+            const pin = prompt("Введіть PIN-код адміністратора (за замовчуванням: tf2admin):");
+            if (pin === "tf2admin") {
+                document.getElementById('adminModal').classList.remove('hidden');
+            } else if (pin !== null) {
+                alert("Невірний PIN-код!");
+            }
+        }
+
         function toggleAdminModal() {
-            sound.playClick();
-            const modal = document.getElementById('adminModal');
-            modal.classList.toggle('hidden');
+            document.getElementById('adminModal').classList.toggle('hidden');
         }
 
         function adminAddBalance() {
-            sound.playClick();
-            const amount = parseFloat(document.getElementById('adminAddRefInput').value) || 0;
-            userBalanceRef += amount;
+            const amt = parseFloat(document.getElementById('adminAddRefInput').value) || 0;
+            if (amt <= 0) return;
+            userBalanceRef += amt;
             updateHeaderBalances();
-            calculateTotalDepositAndOdds();
+            alert(`Успішно нараховано ${amt} ref!`);
         }
 
         function adminResetBalance() {
-            sound.playClick();
             userBalanceRef = 0;
             updateHeaderBalances();
-            calculateTotalDepositAndOdds();
+            alert("Баланс скинуто до 0!");
         }
 
         function adminCreateCustomItem() {
-            sound.playClick();
-            const name = document.getElementById('newItemName').value || 'Custom Hat';
-            const price = parseFloat(document.getElementById('newItemPrice').value) || 50;
+            const name = document.getElementById('newItemName').value.trim();
+            const price = parseFloat(document.getElementById('newItemPrice').value);
             const quality = document.getElementById('newItemQuality').value;
-            const effect = document.getElementById('newItemEffect').value;
+            const effect = document.getElementById('newItemEffect').value.trim();
+
+            if (!name || isNaN(price) || price <= 0) {
+                alert("Будь ласка, введіть коректну назву та ціну предмета.");
+                return;
+            }
 
             const newItem = {
                 id: 'custom_' + Date.now(),
@@ -885,26 +845,33 @@
 
             targetCatalog.unshift(newItem);
             userInventory.push(newItem);
-
             renderTargetCatalog('all');
             renderUserInventory();
             toggleAdminModal();
+            alert(`Предмет "${name}" успішно створено та додано у ваш інвентар!`);
         }
 
-        function setRigMode(mode) {
-            sound.playClick();
+        function setRigMode(mode, silent = false) {
             rigMode = mode;
+            saveState();
+            ['Normal', 'Win', 'Loss'].forEach(m => {
+                const btn = document.getElementById(`rig${m}Btn`);
+                if (btn) {
+                    btn.className = 'flex-1 py-2 rounded border border-tfBorder bg-tfPanel text-gray-300 font-bold text-sm';
+                }
+            });
+            const activeBtn = document.getElementById(`rig${mode.charAt(0).toUpperCase() + mode.slice(1)}Btn`);
+            if (activeBtn) {
+                activeBtn.className = 'flex-1 py-2 rounded border border-tfOrange bg-tfOrange text-white font-bold text-sm';
+            }
+
             const indicator = document.getElementById('rigIndicator');
-
-            document.getElementById('rigNormalBtn').className = mode === 'normal' ? 'flex-1 py-2 rounded border border-tfOrange bg-tfOrange text-white font-bold text-sm' : 'flex-1 py-2 rounded border border-tfBorder bg-tfPanel text-gray-300 font-bold text-sm';
-            document.getElementById('rigWinBtn').className = mode === 'win' ? 'flex-1 py-2 rounded border border-green-500 bg-green-700 text-white font-bold text-sm' : 'flex-1 py-2 rounded border border-tfBorder bg-tfPanel text-gray-300 font-bold text-sm';
-            document.getElementById('rigLossBtn').className = mode === 'loss' ? 'flex-1 py-2 rounded border border-red-500 bg-red-700 text-white font-bold text-sm' : 'flex-1 py-2 rounded border border-tfBorder bg-tfPanel text-gray-300 font-bold text-sm';
-
             if (mode !== 'normal') {
                 indicator.classList.remove('hidden');
             } else {
                 indicator.classList.add('hidden');
             }
+            if (!silent) alert(`Режим перемикання встановлено: ${mode.toUpperCase()}`);
         }
     </script>
 </body>
