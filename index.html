@@ -284,4 +284,701 @@
             totalWonValue: 0
         };
 
-        let liveDrops = JSON.parse(localStorage.getItem('tf_livedrops'))
+        let liveDrops = JSON.parse(localStorage.getItem('tf_livedrops')) || [
+            { player: 'SniperGod99', item: 'Mann Co. Cap', price: 15 },
+            { player: 'DemomanDrank', item: 'Golden Frying Pan', price: 6000 }
+        ];
+
+        const itemsDB = [
+            { id: '1', name: 'Mercenary Badge', price: 5, quality: 'unique', img: 'https://wiki.teamfortress.com/w/images/5/5e/Mercenary_Badge.png' },
+            { id: '2', name: 'Scout Bat', price: 8, quality: 'unique', img: 'https://wiki.teamfortress.com/w/images/7/7b/Bat.png' },
+            { id: '3', name: 'Gibus Hat', price: 12, quality: 'unique', img: 'https://wiki.teamfortress.com/w/images/8/85/Ghastly_Gibus.png' },
+            { id: '4', name: 'Mann Co. Cap', price: 15, quality: 'unique', img: 'https://wiki.teamfortress.com/w/images/e/e6/Mann_Co._Cap.png' },
+            { id: '5', name: 'Engineer Wrench', price: 18, quality: 'unique', img: 'https://wiki.teamfortress.com/w/images/d/df/Wrench.png' },
+            { id: '6', name: 'Strange Shotgun', price: 35, quality: 'strange', img: 'https://wiki.teamfortress.com/w/images/1/15/Shotgun.png' },
+            { id: '7', name: 'Pyromancer Mask', price: 45, quality: 'vintage', img: 'https://wiki.teamfortress.com/w/images/b/b2/Pyromancer%27s_Mask.png' },
+            { id: '8', name: 'Australium Wrench', price: 130, quality: 'australium', img: 'https://wiki.teamfortress.com/w/images/5/52/Australium_Wrench.png' },
+            { id: '9', name: 'Australium Medi Gun', price: 350, quality: 'australium', img: 'https://wiki.teamfortress.com/w/images/e/e0/Australium_Medi_Gun.png' },
+            { id: '10', name: 'Australium Rocket Launcher', price: 550, quality: 'australium', img: 'https://wiki.teamfortress.com/w/images/1/1a/Australium_Rocket_Launcher.png' },
+            { id: '11', name: 'Team Captain', price: 1200, quality: 'unusual', img: 'https://wiki.teamfortress.com/w/images/c/c5/Team_Captain.png' },
+            { id: '12', name: 'Burning Flames Team Captain', price: 4500, quality: 'unusual', img: 'https://wiki.teamfortress.com/w/images/c/c5/Team_Captain.png' },
+            { id: '13', name: 'Golden Frying Pan', price: 6000, quality: 'australium', img: 'https://wiki.teamfortress.com/w/images/d/d7/Golden_Frying_Pan.png' }
+        ];
+
+        const casesDB = {
+            bomzh: { cost: 10, items: [itemsDB[0], itemsDB[1], itemsDB[2], itemsDB[3], itemsDB[4]] },
+            injir: { cost: 50, items: [itemsDB[5], itemsDB[6], itemsDB[7], itemsDB[8]] },
+            fifty: { cost: 250, items: [itemsDB[1], itemsDB[9], itemsDB[10]] },
+            rich: { cost: 1000, items: [itemsDB[9], itemsDB[10], itemsDB[11], itemsDB[12]] }
+        };
+
+        let inventory = JSON.parse(localStorage.getItem('tf_inv')) || [itemsDB[0], itemsDB[1], itemsDB[2]];
+
+        function getCurrentPlayerName() {
+            return steamUser ? steamUser.name : "Гість";
+        }
+
+        function addLiveDrop(itemName, itemPrice) {
+            liveDrops.unshift({ player: getCurrentPlayerName(), item: itemName, price: itemPrice });
+            if(liveDrops.length > 25) liveDrops.pop();
+            localStorage.setItem('tf_livedrops', JSON.stringify(liveDrops));
+            renderTicker();
+        }
+
+        function renderTicker() {
+            const track = document.getElementById('tickerTrack');
+            if(!track) return;
+            let html = '';
+            liveDrops.forEach(drop => {
+                html += `<div class="inline-flex items-center gap-1.5 bg-panelBg px-3 py-1 rounded-lg border border-panelBorder mx-2 shrink-0 text-xs">
+                    <span class="text-textGray font-semibold">${drop.player}</span> вибив <span class="text-accentGold font-bold">${drop.item}</span> <span class="text-amber-500 font-bold">(${drop.price} ТК)</span>
+                </div>`;
+            });
+            track.innerHTML = html + html;
+        }
+
+        function steamLogin() {
+            const currentUrl = window.location.href.split('?')[0];
+            const openIdParams = new URLSearchParams({
+                'openid.ns': 'http://specs.openid.net/auth/2.0',
+                'openid.mode': 'checkid_setup',
+                'openid.return_to': currentUrl,
+                'openid.realm': currentUrl,
+                'openid.identity': 'http://specs.openid.net/auth/2.0/identifier_select',
+                'openid.claimed_id': 'http://specs.openid.net/auth/2.0/identifier_select'
+            });
+            window.location.href = 'https://steamcommunity.com/openid/login?' + openIdParams.toString();
+        }
+
+        function checkSteamOpenIDResponse() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('openid.identity')) {
+                const identity = urlParams.get('openid.identity');
+                const steamID64 = identity.split('/').pop();
+                
+                steamUser = {
+                    steamID: steamID64,
+                    name: "Гравець " + steamID64.substring(11),
+                    avatar: "https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg"
+                };
+                localStorage.setItem('tf_steam_user', JSON.stringify(steamUser));
+                
+                if(!registeredPlayers.some(p => p.name === steamUser.name)) {
+                    registeredPlayers.push({ name: steamUser.name, isSelf: true });
+                    localStorage.setItem('tf_players_db', JSON.stringify(registeredPlayers));
+                }
+
+                window.history.replaceState({}, document.title, window.location.pathname);
+                updateProfileUI();
+                renderProfileTab();
+            }
+        }
+
+        function steamLogout() {
+            steamUser = null;
+            localStorage.removeItem('tf_steam_user');
+            updateProfileUI();
+            renderProfileTab();
+        }
+
+        function updateProfileUI() {
+            const container = document.getElementById('profileHeaderContainer');
+            if(!container) return;
+            if(steamUser) {
+                container.innerHTML = `
+                    <div onclick="switchTab('profile')" class="flex items-center gap-3 bg-black/40 px-3 py-1.5 rounded-xl border border-panelBorder cursor-pointer hover:border-amber-500 transition relative z-40">
+                        <img src="${steamUser.avatar}" class="w-8 h-8 rounded-full border border-amber-500">
+                        <div class="text-left">
+                            <span class="text-[10px] text-textGray block font-bold leading-none">STEAM USER</span>
+                            <span class="text-xs font-bold text-white">${steamUser.name}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <button type="button" onclick="steamLogin()" class="steam-btn px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2">
+                        <i class="fa-brands fa-steam text-lg"></i> Увійти через Steam
+                    </button>
+                `;
+            }
+        }
+
+        function renderProfileTab() {
+            const area = document.getElementById('profileContentArea');
+            if(!area) return;
+
+            if(!steamUser) {
+                area.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fa-brands fa-steam text-6xl text-textGray mb-4"></i>
+                        <h3 class="cyber-font text-3xl text-white mb-2">Профіль не активовано</h3>
+                        <p class="text-xs text-textGray mb-6">Увійдіть через Steam, щоб бачити свою статистику та історію.</p>
+                        <button type="button" onclick="steamLogin()" class="steam-btn px-6 py-3 rounded-xl text-sm font-bold inline-flex items-center gap-2">
+                            <i class="fa-brands fa-steam text-lg"></i> Увійти через Steam
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            let winrate = stats.upgradesAttempted > 0 ? ((stats.upgradesWon / stats.upgradesAttempted) * 100).toFixed(1) : 0;
+            area.innerHTML = `
+                <div class="flex items-center gap-6 border-b border-panelBorder pb-6 mb-6">
+                    <img src="${steamUser.avatar}" class="w-20 h-20 rounded-2xl border-2 border-amber-500 shadow-xl">
+                    <div>
+                        <h2 class="cyber-font text-4xl text-accentGold">${steamUser.name}</h2>
+                        <span class="text-[10px] font-mono text-textGray block">SteamID64: ${steamUser.steamID || 'Local'}</span>
+                        <span class="text-xs text-emerald-400 font-bold bg-emerald-950/40 px-3 py-1 rounded-full border border-emerald-800/50 inline-block mt-2">✓ Авторизовано через Steam</span>
+                    </div>
+                    <button type="button" onclick="steamLogout()" class="ml-auto text-xs text-red-400 hover:text-red-300 bg-red-950/30 px-4 py-2 rounded-xl border border-red-900/40 cursor-pointer relative z-30">Вийти з аккаунта</button>
+                </div>
+
+                <h3 class="text-xs font-bold uppercase tracking-wider text-textGray mb-4">Статистика гравця</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-black/40 p-4 rounded-xl border border-panelBorder text-center">
+                        <span class="text-[10px] text-textGray block font-bold">ВІДКРИТО КЕЙСІВ</span>
+                        <span class="cyber-font text-3xl text-white">${stats.casesOpened}</span>
+                    </div>
+                    <div class="bg-black/40 p-4 rounded-xl border border-panelBorder text-center">
+                        <span class="text-[10px] text-textGray block font-bold">АПГРЕЙДІВ</span>
+                        <span class="cyber-font text-3xl text-amber-400">${stats.upgradesAttempted}</span>
+                    </div>
+                    <div class="bg-black/40 p-4 rounded-xl border border-panelBorder text-center">
+                        <span class="text-[10px] text-textGray block font-bold">ВІНРЕЙТ</span>
+                        <span class="cyber-font text-3xl text-emerald-400">${winrate}%</span>
+                    </div>
+                    <div class="bg-black/40 p-4 rounded-xl border border-panelBorder text-center">
+                        <span class="text-[10px] text-textGray block font-bold">ВИГРАНО ШМОТУ</span>
+                        <span class="cyber-font text-3xl text-accentGold">${stats.totalWonValue} ТК</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function save() {
+            localStorage.setItem('tf_coins', balance);
+            localStorage.setItem('tf_inv', JSON.stringify(inventory));
+            localStorage.setItem('tf_sel', JSON.stringify(selectedInv));
+            localStorage.setItem('tf_stats', JSON.stringify(stats));
+            localStorage.setItem('tf_withdraw_requests', JSON.stringify(withdrawRequests));
+        }
+
+        function updateUI() {
+            let balElem = document.getElementById('balCoins');
+            if(balElem) balElem.innerText = `${balance.toFixed(0)} ТК`;
+            save();
+        }
+
+        function switchTab(tab) {
+            ['upgrader', 'cases', 'shop', 'inventory', 'profile'].forEach(t => {
+                let sec = document.getElementById(`section-${t}`);
+                let btn = document.getElementById(`tab-btn-${t}`);
+                if(sec) sec.classList.add('hidden');
+                if(btn) btn.classList.remove('active');
+            });
+            let activeSec = document.getElementById(`section-${tab}`);
+            let activeBtn = document.getElementById(`tab-btn-${tab}`);
+            if(activeSec) activeSec.classList.remove('hidden');
+            if(activeBtn) activeBtn.classList.add('active');
+
+            if(tab === 'inventory') renderFullInv();
+            if(tab === 'shop') renderShop();
+            if(tab === 'profile') renderProfileTab();
+        }
+
+        function renderShop() {
+            const grid = document.getElementById('shopGrid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            itemsDB.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "cyber-panel p-4 rounded-xl text-center flex flex-col items-center justify-between";
+                div.innerHTML = `
+                    <img src="${item.img}" class="w-20 h-20 object-contain mb-2 drop-shadow-md">
+                    <div class="text-xs font-bold text-white mb-1">${item.name}</div>
+                    <div class="text-xs text-accentGold font-bold mb-3">${item.price} ТК</div>
+                    <button type="button" onclick="buyItem('${item.id}')" class="cyber-btn w-full py-2 rounded-lg text-xs uppercase">Купити</button>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function buyItem(id) {
+            let item = itemsDB.find(i => i.id === id);
+            if(!item) return;
+            if(balance < item.price) {
+                alert('Недостатньо ТК для покупки!');
+                return;
+            }
+            balance -= item.price;
+            inventory.push(item);
+            updateUI();
+            renderInv();
+            alert(`Ви успішно купили: ${item.name}!`);
+        }
+
+        function sellItem(index) {
+            let item = inventory[index];
+            if(!item) return;
+            balance += item.price;
+            inventory.splice(index, 1);
+            selectedInv = selectedInv.filter(i => i !== index).map(i => i > index ? i - 1 : i);
+            updateUI();
+            renderInv();
+            renderFullInv();
+            calcOdds();
+        }
+
+        function openWithdrawModal(index) {
+            pendingWithdrawIndex = index;
+            let item = inventory[index];
+            if(!item) return;
+
+            const preview = document.getElementById('withdrawItemPreview');
+            preview.innerHTML = `
+                <img src="${item.img}" class="w-12 h-12 object-contain">
+                <div>
+                    <div class="text-xs font-bold text-white">${item.name}</div>
+                    <div class="text-xs text-accentGold font-bold">${item.price} ТК</div>
+                </div>
+            `;
+            document.getElementById('withdrawModal').classList.remove('hidden');
+        }
+
+        function toggleWithdrawModal() {
+            document.getElementById('withdrawModal').classList.add('hidden');
+        }
+
+        function confirmWithdrawRequest() {
+            let tradeUrl = document.getElementById('tradeUrlInput').value.trim();
+            if(!tradeUrl || !tradeUrl.includes('steamcommunity.com')) {
+                alert('Будь ласка, вкажіть коректне Steam Trade URL!');
+                return;
+            }
+
+            if(pendingWithdrawIndex === null || !inventory[pendingWithdrawIndex]) return;
+            let item = inventory[pendingWithdrawIndex];
+
+            let req = {
+                id: Date.now(),
+                user: getCurrentPlayerName(),
+                steamID: steamUser ? steamUser.steamID : 'Невідомо',
+                tradeUrl: tradeUrl,
+                item: item,
+                status: 'pending'
+            };
+
+            withdrawRequests.unshift(req);
+            inventory.splice(pendingWithdrawIndex, 1);
+            pendingWithdrawIndex = null;
+
+            updateUI();
+            renderInv();
+            renderFullInv();
+            toggleWithdrawModal();
+
+            alert('Заявку на вивід успішно створено! Вона з\'явиться в адмін-панелі.');
+        }
+
+        function renderInv() {
+            const grid = document.getElementById('invGrid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            inventory.forEach((item, index) => {
+                const isSel = selectedInv.includes(index);
+                const div = document.createElement('div');
+                div.className = `item-card p-3 rounded-xl flex flex-col items-center text-center ${isSel ? 'selected' : ''}`;
+                div.onclick = function(e) {
+                    if(e.target.tagName === 'BUTTON') return;
+                    if(isSel) {
+                        selectedInv = selectedInv.filter(i => i !== index);
+                    } else {
+                        selectedInv.push(index);
+                    }
+                    renderInv();
+                };
+                div.innerHTML = `
+                    <img src="${item.img}" class="w-14 h-14 object-contain mb-1 drop-shadow">
+                    <div class="text-[11px] font-bold truncate w-full text-white">${item.name}</div>
+                    <div class="text-[10px] text-accentGold font-bold mb-2">${item.price} ТК</div>
+                    <div class="flex gap-1 w-full mt-auto">
+                        <button type="button" onclick="openWithdrawModal(${index})" class="bg-amber-500 hover:bg-amber-400 text-black text-[9px] font-black py-1 px-1 rounded w-1/2 cursor-pointer relative z-30">Вивести</button>
+                        <button type="button" onclick="sellItem(${index})" class="bg-red-950/60 hover:bg-red-900 text-red-300 text-[9px] font-bold py-1 px-1 rounded border border-red-800/50 w-1/2 cursor-pointer relative z-30">Продати</button>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+            calcOdds();
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalogGrid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            itemsDB.forEach(item => {
+                const isSel = targetItem && targetItem.id === item.id;
+                const div = document.createElement('div');
+                div.className = `item-card p-2.5 rounded-xl flex items-center justify-between ${isSel ? 'selected' : ''}`;
+                div.onclick = function() {
+                    targetItem = item;
+                    document.getElementById('targetName').innerText = item.name;
+                    document.getElementById('targetBadge').innerText = item.quality.toUpperCase();
+                    renderCatalog();
+                    calcOdds();
+                };
+                div.innerHTML = `
+                    <div class="flex items-center gap-2.5 truncate">
+                        <img src="${item.img}" class="w-10 h-10 object-contain drop-shadow">
+                        <span class="text-xs font-bold truncate text-white">${item.name}</span>
+                    </div>
+                    <span class="text-xs text-accentGold font-bold">${item.price} ТК</span>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function calcOdds() {
+            if(isSpinning) return;
+            let directInput = document.getElementById('directRef');
+            let total = directInput ? (parseFloat(directInput.value) || 0) : 0;
+            selectedInv.forEach(idx => { if(inventory[idx]) total += inventory[idx].price; });
+            
+            let betElem = document.getElementById('totalBet');
+            if(betElem) betElem.innerText = `${total.toFixed(0)} ТК`;
+
+            let upgBtn = document.getElementById('upgradeBtn');
+            if(!targetItem || total <= 0 || total >= targetItem.price) {
+                drawWheel(0);
+                if(upgBtn) {
+                    upgBtn.disabled = true;
+                    upgBtn.classList.add('opacity-40', 'cursor-not-allowed');
+                }
+                return;
+            }
+
+            let chance = (total / targetItem.price) * 100;
+            if(chance > 95) chance = 95;
+            drawWheel(chance);
+            if(upgBtn) {
+                upgBtn.disabled = false;
+                upgBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+            }
+        }
+
+        function drawWheel(chance, rotationAngle = 0) {
+            let chanceElem = document.getElementById('chanceText');
+            if(chanceElem) chanceElem.innerText = `${chance.toFixed(2)}%`;
+            const canvas = document.getElementById('wheelCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, 280, 280);
+
+            ctx.save();
+            ctx.translate(140, 140);
+            ctx.rotate(rotationAngle);
+            ctx.translate(-140, -140);
+
+            ctx.beginPath(); ctx.arc(140, 140, 125, 0, Math.PI * 2); ctx.fillStyle = '#181b22'; ctx.fill();
+
+            const angle = (chance / 100) * (Math.PI * 2);
+            ctx.beginPath(); ctx.moveTo(140, 140); ctx.arc(140, 140, 115, -Math.PI / 2, -Math.PI / 2 + angle, false); ctx.lineTo(140, 140); ctx.fillStyle = '#f3ba2f'; ctx.fill();
+            
+            ctx.restore();
+        }
+
+        function startUpgrade() {
+            if(isSpinning || !targetItem) return;
+            let directInput = document.getElementById('directRef');
+            let directVal = directInput ? (parseFloat(directInput.value) || 0) : 0;
+            let total = directVal;
+            selectedInv.forEach(idx => { if(inventory[idx]) total += inventory[idx].price; });
+
+            if(directVal > balance) {
+                alert('Недостатньо ТК на балансі!');
+                return;
+            }
+
+            if(directVal > 0) {
+                balance -= directVal;
+                if(directInput) directInput.value = 0;
+            }
+
+            inventory = inventory.filter((_, idx) => !selectedInv.includes(idx));
+            selectedInv = [];
+            updateUI();
+            renderInv();
+
+            isSpinning = true;
+            let upgBtn = document.getElementById('upgradeBtn');
+            if(upgBtn) {
+                upgBtn.disabled = true;
+                upgBtn.classList.add('opacity-40', 'cursor-not-allowed');
+            }
+
+            let chance = (total / targetItem.price) * 100;
+            if(chance > 95) chance = 95;
+            let win = Math.random() * 100 < chance;
+
+            stats.upgradesAttempted++;
+            if(win) {
+                stats.upgradesWon++;
+                stats.totalWonValue += targetItem.price;
+            }
+            save();
+
+            let startTime = null;
+            let duration = 3000;
+            let totalRotations = Math.PI * 2 * 6;
+            let targetStopAngle = win ? (Math.random() * (chance / 100) * Math.PI * 2) : (Math.PI * 2 * (chance / 100) + Math.random() * (Math.PI * 2 * (1 - chance / 100)));
+
+            function animateSpin(timestamp) {
+                if(!startTime) startTime = timestamp;
+                let progress = (timestamp - startTime) / duration;
+                if(progress > 1) progress = 1;
+
+                let ease = 1 - Math.pow(1 - progress, 3);
+                let currentAngle = (totalRotations + targetStopAngle) * ease;
+
+                drawWheel(chance, currentAngle);
+
+                if(progress < 1) {
+                    requestAnimationFrame(animateSpin);
+                } else {
+                    isSpinning = false;
+                    const overlay = document.getElementById('resultOverlay');
+                    if(overlay) overlay.classList.remove('hidden');
+                    let resTitle = document.getElementById('resTitle');
+                    if(resTitle) {
+                        resTitle.innerText = win ? "УСПІХ!" : "ПРОГРАШ!";
+                        resTitle.className = `cyber-font text-6xl mb-2 ${win ? 'text-emerald-400' : 'text-red-500'}`;
+                    }
+                    let resBox = document.getElementById('resItemBox');
+                    if(resBox) {
+                        resBox.innerHTML = `
+                            <img src="${targetItem.img}" class="w-20 h-20 object-contain mx-auto mb-2 drop-shadow">
+                            <div class="font-bold text-lg text-white">${targetItem.name}</div>
+                        `;
+                    }
+                    if(win) {
+                        inventory.push(targetItem);
+                        addLiveDrop(targetItem.name, targetItem.price);
+                    }
+                    renderInv();
+                }
+            }
+
+            requestAnimationFrame(animateSpin);
+        }
+
+        function closeResult() {
+            const overlay = document.getElementById('resultOverlay');
+            if(overlay) overlay.classList.add('hidden');
+            calcOdds();
+        }
+
+        function openCase(caseKey) {
+            const c = casesDB[caseKey];
+            if(!c) return;
+            if(balance < c.cost) {
+                alert('Недостатньо ТК! Поповніть через адмін-панель.');
+                return;
+            }
+            balance -= c.cost;
+            stats.casesOpened++;
+            const won = c.items[Math.floor(Math.random() * c.items.length)];
+            inventory.push(won);
+            stats.totalWonValue += won.price;
+            updateUI();
+            addLiveDrop(won.name, won.price);
+            alert(`Ви відкрили кейс і виграли: ${won.name}!`);
+            renderInv();
+        }
+
+        function renderFullInv() {
+            const grid = document.getElementById('fullInvGrid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            inventory.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "cyber-panel p-4 rounded-xl text-center flex flex-col items-center justify-between";
+                div.innerHTML = `
+                    <img src="${item.img}" class="w-20 h-20 object-contain mb-2 drop-shadow">
+                    <div class="text-xs font-bold text-white mb-1">${item.name}</div>
+                    <div class="text-xs text-accentGold font-bold mb-3">${item.price} ТК</div>
+                    <div class="flex gap-2 w-full">
+                        <button type="button" onclick="openWithdrawModal(${index})" class="bg-amber-500 hover:bg-amber-400 text-black text-xs font-extrabold py-1.5 px-2 rounded w-1/2 cursor-pointer relative z-30">Вивести</button>
+                        <button type="button" onclick="sellItem(${index})" class="bg-red-950/60 hover:bg-red-900 text-red-300 text-xs font-bold py-1.5 px-2 rounded border border-red-800/50 w-1/2 cursor-pointer relative z-30">Продати</button>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function requestAdmin() {
+            let pin = prompt("Введіть PIN Адміністратора:");
+            if(pin === "11111") {
+                renderAdminUserList();
+                renderAdminWithdraws();
+                let modal = document.getElementById('adminModal');
+                if(modal) modal.classList.remove('hidden');
+            } else if(pin !== null) {
+                alert("Невірний PIN-код!");
+            }
+        }
+
+        function toggleAdmin() {
+            let modal = document.getElementById('adminModal');
+            if(modal) modal.classList.toggle('hidden');
+        }
+
+        function switchAdminTab(tab) {
+            ['withdraws', 'users'].forEach(t => {
+                document.getElementById(`admin-sec-${t}`).classList.add('hidden');
+                document.getElementById(`admin-tab-${t}`).className = "text-sm font-bold text-textGray uppercase hover:text-white pb-1";
+            });
+            document.getElementById(`admin-sec-${tab}`).classList.remove('hidden');
+            document.getElementById(`admin-tab-${tab}`).className = "text-sm font-bold text-accentGold uppercase border-b-2 border-accentGold pb-1";
+        }
+
+        function renderAdminWithdraws() {
+            const list = document.getElementById('adminWithdrawsList');
+            if(!list) return;
+            list.innerHTML = '';
+
+            if(withdrawRequests.length === 0) {
+                list.innerHTML = `<div class="text-xs text-textGray text-center py-4">Активних заявок на вивід немає</div>`;
+                return;
+            }
+
+            withdrawRequests.forEach(req => {
+                const div = document.createElement('div');
+                div.className = "bg-black/40 p-3 rounded-xl border border-panelBorder flex flex-col gap-2";
+                
+                let statusBadge = `<span class="text-amber-400 bg-amber-950/40 border border-amber-800 px-2 py-0.5 rounded text-[10px]">В ОЧІКУВАННІ</span>`;
+                if(req.status === 'approved') statusBadge = `<span class="text-emerald-400 bg-emerald-950/40 border border-emerald-800 px-2 py-0.5 rounded text-[10px]">СХВАЛЕНО</span>`;
+                if(req.status === 'rejected') statusBadge = `<span class="text-red-400 bg-red-950/40 border border-red-800 px-2 py-0.5 rounded text-[10px]">СКАСОВАНО</span>`;
+                if(req.status === 'exchanged') statusBadge = `<span class="text-blue-400 bg-blue-950/40 border border-blue-800 px-2 py-0.5 rounded text-[10px]">ЗАМІНЕНО</span>`;
+
+                div.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-white">${req.user} (${req.steamID})</span>
+                        ${statusBadge}
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <img src="${req.item.img}" class="w-10 h-10 object-contain">
+                        <div>
+                            <div class="text-xs font-bold text-accentGold">${req.item.name} (${req.item.price} ТК)</div>
+                            <a href="${req.tradeUrl}" target="_blank" class="text-[10px] text-blue-400 hover:underline truncate block max-w-xs">${req.tradeUrl}</a>
+                        </div>
+                    </div>
+                    ${req.status === 'pending' ? `
+                        <div class="flex gap-2 mt-2">
+                            <button onclick="approveWithdraw(${req.id})" class="bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold py-1 px-3 rounded cursor-pointer relative z-30">Схвалити</button>
+                            <button onclick="rejectWithdraw(${req.id})" class="bg-red-600 hover:bg-red-500 text-white text-[10px] font-bold py-1 px-3 rounded cursor-pointer relative z-30">Скасувати (Повернути)</button>
+                            <button onclick="proposeExchange(${req.id})" class="bg-amber-600 hover:bg-amber-500 text-white text-[10px] font-bold py-1 px-3 rounded cursor-pointer relative z-30">Запропонувати заміну</button>
+                        </div>
+                    ` : ''}
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function approveWithdraw(reqId) {
+            let req = withdrawRequests.find(r => r.id === reqId);
+            if(!req) return;
+            req.status = 'approved';
+            updateUI();
+            renderAdminWithdraws();
+            alert('Заявку схвалено! Відправте предмет через Trade URL у Steam.');
+        }
+
+        function rejectWithdraw(reqId) {
+            let req = withdrawRequests.find(r => r.id === reqId);
+            if(!req) return;
+            req.status = 'rejected';
+            inventory.push(req.item);
+            updateUI();
+            renderInv();
+            renderAdminWithdraws();
+            alert('Заявку скасовано. Предмет повернуто гравцю в інвентар.');
+        }
+
+        function proposeExchange(reqId) {
+            let req = withdrawRequests.find(r => r.id === reqId);
+            if(!req) return;
+
+            let newItemName = prompt("Введіть назву предмета для заміни (наприклад, Australium Wrench):");
+            let newItem = itemsDB.find(i => i.name.toLowerCase().includes(newItemName ? newItemName.toLowerCase() : ''));
+
+            if(!newItem) {
+                alert('Предмет не знайдено в базі!');
+                return;
+            }
+
+            req.status = 'exchanged';
+            req.item = newItem;
+            inventory.push(newItem);
+
+            updateUI();
+            renderInv();
+            renderAdminWithdraws();
+            alert(`Заявку замінено на ${newItem.name} та відправлено гравцю в інвентар.`);
+        }
+
+        function renderAdminUserList() {
+            const list = document.getElementById('adminUserList');
+            if(!list) return;
+            list.innerHTML = '';
+            registeredPlayers.forEach(p => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between p-2 rounded-lg bg-panelBg hover:bg-panelBorder/50 cursor-pointer text-xs font-bold";
+                div.onclick = function() {
+                    document.getElementById('adminTargetUser').value = p.name;
+                };
+                div.innerHTML = `<span class="${p.isSelf ? 'text-accentGold' : 'text-white'}">${p.name}</span><i class="fa-solid fa-chevron-right text-[10px] text-textGray"></i>`;
+                list.appendChild(div);
+            });
+        }
+
+        function setAdminAmount(amt) {
+            document.getElementById('adminInput').value = amt;
+        }
+
+        function addAdminRef() {
+            let adminInput = document.getElementById('adminInput');
+            let targetUser = document.getElementById('adminTargetUser').value.trim();
+            let amt = adminInput ? (parseFloat(adminInput.value) || 0) : 0;
+            
+            if(targetUser.toLowerCase().includes("я") || targetUser.toLowerCase().includes("мій") || (steamUser && targetUser === steamUser.name)) {
+                balance += amt;
+                updateUI();
+                alert(`Успішно додано ${amt} ТК на ваш баланс!`);
+            } else {
+                alert(`Гравцю "${targetUser}" успішно нараховано ${amt} ТК!`);
+            }
+            toggleAdmin();
+        }
+
+        function resetUserBalance() {
+            let targetUser = document.getElementById('adminTargetUser').value.trim();
+            if(targetUser.toLowerCase().includes("я") || targetUser.toLowerCase().includes("мій") || (steamUser && targetUser === steamUser.name)) {
+                balance = 0;
+                updateUI();
+                alert("Ваш баланс скинуто до 0 ТК!");
+            } else {
+                alert(`Баланс гравця "${targetUser}" скинуто!`);
+            }
+            toggleAdmin();
+        }
+
+        window.onload = function() {
+            checkSteamOpenIDResponse();
+            updateUI();
+            renderInv();
+            renderCatalog();
+            renderTicker();
+            updateProfileUI();
+        };
+    </script>
+</body>
+</html>
