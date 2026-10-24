@@ -3,166 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Fortress 2 Upgrader & Cases</title>
+    <title>TeamToGrader — Преміум Апгрейдер</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Teko:wght@600&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        tfDark: '#1b1a17', tfDarker: '#12110f', tfPanel: '#2a2825',
-                        tfBorder: '#423f3a', tfOrange: '#b86125', tfYellow: '#ffd700',
-                        qUnique: '#ffd700', qStrange: '#cf6a32', qUnusual: '#8650ac', qAustralium: '#e6b800'
+                        darkBg: '#0b0f19', panelBg: '#131b2e', panelBorder: '#1e293b',
+                        accentGold: '#f59e0b', accentOrange: '#f97316', accentGreen: '#10b981'
                     }
                 }
             }
         }
     </script>
     <style>
-        body { background-color: #12110f; color: #d0c5b4; font-family: 'Roboto Condensed', sans-serif; user-select: none; }
-        .tf-font { font-family: 'Teko', sans-serif; letter-spacing: 0.05em; text-transform: uppercase; }
-        .tf-box { background: linear-gradient(180deg, #2a2825 0%, #1b1a17 100%); border: 2px solid #423f3a; box-shadow: 0 4px 12px rgba(0,0,0,0.6); }
-        .tf-btn { background: linear-gradient(180deg, #b86125 0%, #8a4515 100%); border: 2px solid #d97736; color: #fff; font-family: 'Teko', sans-serif; font-size: 1.25rem; letter-spacing: 0.05em; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); box-shadow: 0 4px 0 #5c2d0e; transition: all 0.05s; }
-        .tf-btn:hover { background: linear-gradient(180deg, #cf7130 0%, #9e501a 100%); }
-        .tf-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #5c2d0e; }
-        .tf-btn-gold { background: linear-gradient(180deg, #ffd700 0%, #c9a000 100%); border: 2px solid #ffea75; color: #1b1a17; text-shadow: none; box-shadow: 0 4px 0 #806600; }
-        .tf-btn-gold:hover { background: linear-gradient(180deg, #ffe033 0%, #e0b400 100%); }
-        .item-card { background: #22201d; border: 2px solid #423f3a; transition: all 0.2s; position: relative; overflow: hidden; }
-        .item-card:hover { border-color: #b86125; transform: translateY(-2px); }
-        .item-card.selected { border-color: #ffd700 !important; background: #2f2b25; }
+        body { background-color: #0b0f19; color: #f8fafc; font-family: 'Montserrat', sans-serif; user-select: none; }
+        .teko-font { font-family: 'Teko', sans-serif; letter-spacing: 0.05em; }
+        .glass-panel { background: rgba(19, 27, 46, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.07); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .cyber-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #0b0f19; font-weight: 900; transition: all 0.2s; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); }
+        .cyber-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5); }
+        .cyber-btn:active { transform: translateY(1px); }
+        .item-card { background: #162035; border: 1px solid #1e293b; transition: all 0.2s; position: relative; }
+        .item-card:hover { border-color: #f59e0b; transform: translateY(-3px); }
+        .item-card.selected { border-color: #10b981 !important; background: rgba(16, 185, 129, 0.1); }
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #423f3a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <!-- HEADER -->
-    <header class="tf-box border-b-4 border-tfOrange p-4">
+    <!-- NAVBAR -->
+    <header class="glass-panel border-b border-panelBorder px-6 py-4 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-tfOrange rounded flex items-center justify-center text-tfDarker text-2xl font-bold border border-tfYellow">
-                    <i class="fa-solid fa-gamepad"></i>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-darkBg text-xl font-black shadow-lg">
+                    <i class="fa-solid fa-coins"></i>
                 </div>
                 <div>
-                    <h1 class="tf-font text-3xl text-tfYellow leading-none">Team Fortress 2 Upgrader</h1>
-                    <p class="text-xs text-gray-400 tracking-wider">MANN CO. CASES & UPGRADE SYSTEM</p>
+                    <h1 class="teko-font text-3xl text-amber-400 leading-none">TEAMTOGRADER</h1>
+                    <p class="text-[10px] text-slate-400 tracking-widest font-bold">PREMIUM UPGRADER & CASES</p>
                 </div>
             </div>
 
-            <div class="flex gap-2">
-                <button onclick="switchTab('upgrader')" id="tab-upgrader" class="tf-btn px-4 py-1 rounded">⚡ Апгрейдер</button>
-                <button onclick="switchTab('cases')" id="tab-cases" class="tf-btn px-4 py-1 rounded opacity-75">🎁 Кейси</button>
-                <button onclick="switchTab('inventory')" id="tab-inventory" class="tf-btn px-4 py-1 rounded opacity-75">🎒 Інвентар</button>
+            <!-- TABS -->
+            <div class="flex gap-2 bg-darkBg/60 p-1.5 rounded-xl border border-panelBorder">
+                <button onclick="switchTab('upgrader')" id="tab-upgrader" class="px-5 py-2 rounded-lg font-bold text-sm transition text-white bg-amber-500 text-darkBg shadow">⚡ Апгрейдер</button>
+                <button onclick="switchTab('cases')" id="tab-cases" class="px-5 py-2 rounded-lg font-bold text-sm transition text-slate-400 hover:text-white">🎁 Кейси</button>
+                <button onclick="switchTab('inventory')" id="tab-inventory" class="px-5 py-2 rounded-lg font-bold text-sm transition text-slate-400 hover:text-white">🎒 Інвентар</button>
             </div>
 
-            <div class="flex items-center gap-4 bg-tfDarker px-4 py-2 rounded border border-tfBorder">
+            <!-- BALANCE & ADMIN -->
+            <div class="flex items-center gap-4 bg-darkBg px-4 py-2 rounded-xl border border-panelBorder">
                 <div>
-                    <span class="text-xs text-gray-400 block">Баланс:</span>
-                    <span id="balRef" class="tf-font text-2xl text-tfYellow">50.00 ref</span>
+                    <span class="text-[10px] text-slate-400 block font-bold">БАЛАНС</span>
+                    <span id="balCoins" class="teko-font text-2xl text-amber-400">100 ТК</span>
                 </div>
-                <button onclick="requestAdmin()" class="text-xs text-gray-400 hover:text-white bg-tfPanel px-2 py-1 rounded border border-tfBorder" title="Адмін панель">
-                    <i class="fa-solid fa-user-shield"></i>
+                <button onclick="requestAdmin()" class="w-8 h-8 rounded-lg bg-panelBorder flex items-center justify-center text-slate-300 hover:text-amber-400 transition" title="Адмін-панель">
+                    <i class="fa-solid fa-shield-halved"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
-    <main class="max-w-7xl w-full mx-auto p-4 flex-1">
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl w-full mx-auto p-6 flex-1">
 
         <!-- TAB 1: UPGRADER -->
         <div id="section-upgrader" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            <!-- Left: Inventory -->
-            <div class="lg:col-span-3 tf-box p-4 rounded h-[580px] flex flex-col">
-                <h2 class="tf-font text-2xl text-tfYellow border-b border-tfBorder pb-1 mb-2">Твій інвентар</h2>
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-xs text-gray-400">Внесіть метал або скіни:</span>
-                    <input id="directRef" type="number" min="0" value="0" oninput="calcOdds()" class="w-20 bg-tfPanel border border-tfBorder text-right px-2 py-1 rounded text-tfYellow font-bold text-sm">
+            <!-- Left Inventory -->
+            <div class="lg:col-span-3 glass-panel p-4 rounded-2xl h-[600px] flex flex-col">
+                <h2 class="teko-font text-2xl text-amber-400 mb-3 border-b border-panelBorder pb-2">Твій інвентар</h2>
+                <div class="mb-3 flex justify-between items-center bg-darkBg p-2 rounded-xl border border-panelBorder">
+                    <span class="text-xs text-slate-400 font-bold">Ставка (ТК):</span>
+                    <input id="directRef" type="number" min="0" value="0" oninput="calcOdds()" class="w-24 bg-panelBg border border-panelBorder text-right px-2 py-1 rounded-lg text-amber-400 font-bold text-sm focus:outline-none focus:border-amber-500">
                 </div>
                 <div id="invGrid" class="flex-1 overflow-y-auto grid grid-cols-2 gap-2 pr-1 content-start"></div>
-                <div class="mt-2 pt-2 border-t border-tfBorder text-center">
-                    <span class="text-xs text-gray-400">ЗАГАЛЬНА СТАВКА</span>
-                    <div id="totalBet" class="tf-font text-3xl text-tfYellow">0.00 ref</div>
+                <div class="mt-3 pt-3 border-t border-panelBorder text-center bg-darkBg/50 p-2 rounded-xl">
+                    <span class="text-[10px] text-slate-400 font-bold block">ЗАГАЛЬНА СТАВКА</span>
+                    <div id="totalBet" class="teko-font text-3xl text-amber-400">0 ТК</div>
                 </div>
             </div>
 
-            <!-- Center: Wheel & Upgrader Machine -->
-            <div class="lg:col-span-6 tf-box p-6 rounded h-[580px] flex flex-col items-center justify-between relative overflow-hidden">
+            <!-- Center Wheel -->
+            <div class="lg:col-span-6 glass-panel p-6 rounded-2xl h-[600px] flex flex-col items-center justify-between relative overflow-hidden">
                 <div class="text-center z-10">
-                    <span id="targetBadge" class="text-xs bg-gray-800 text-gray-300 px-3 py-1 rounded border border-gray-600 uppercase font-bold">Оберіть ціль праворуч</span>
-                    <h2 id="targetName" class="tf-font text-3xl text-white mt-1">---</h2>
+                    <span id="targetBadge" class="text-xs bg-slate-800 text-slate-300 px-3 py-1 rounded-full border border-slate-700 font-bold uppercase tracking-wider">Оберіть ціль праворуч</span>
+                    <h2 id="targetName" class="teko-font text-4xl text-white mt-1">---</h2>
                 </div>
 
                 <div class="relative flex items-center justify-center my-auto">
-                    <canvas id="wheelCanvas" width="260" height="260" class="rounded-full shadow-2xl"></canvas>
+                    <canvas id="wheelCanvas" width="280" height="280" class="rounded-full shadow-2xl"></canvas>
                     <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
-                        <span class="text-xs text-gray-400 uppercase">Шанс</span>
-                        <span id="chanceText" class="tf-font text-5xl text-tfYellow font-bold">0.00%</span>
+                        <span class="text-xs text-slate-400 uppercase font-bold">Шанс</span>
+                        <span id="chanceText" class="teko-font text-5xl text-amber-400 font-bold">0.00%</span>
                     </div>
                 </div>
 
-                <div id="resultOverlay" class="hidden absolute inset-0 bg-tfDarker/90 flex flex-col items-center justify-center z-30 p-6 text-center">
-                    <h3 id="resTitle" class="tf-font text-5xl mb-2">УСПІХ!</h3>
-                    <div id="resItemBox" class="mb-4"></div>
-                    <button onclick="closeResult()" class="tf-btn px-6 py-2 rounded">Продовжити</button>
+                <!-- Result Modal Overlay -->
+                <div id="resultOverlay" class="hidden absolute inset-0 bg-darkBg/95 backdrop-blur-md flex flex-col items-center justify-center z-30 p-6 text-center animate-fade-in">
+                    <h3 id="resTitle" class="teko-font text-6xl mb-2">УСПІХ!</h3>
+                    <div id="resItemBox" class="mb-6 p-4 rounded-xl border border-panelBorder bg-panelBg"></div>
+                    <button onclick="closeResult()" class="cyber-btn px-8 py-3 rounded-xl text-lg">ПРОДОВЖИТИ</button>
                 </div>
 
-                <button id="upgradeBtn" onclick="startUpgrade()" disabled class="tf-btn tf-btn-gold w-full py-3 rounded tf-font text-3xl uppercase opacity-50 cursor-not-allowed">
+                <button id="upgradeBtn" onclick="startUpgrade()" disabled class="cyber-btn w-full py-4 rounded-xl teko-font text-3xl uppercase opacity-50 cursor-not-allowed">
                     РОЗПОЧАТИ АПГРЕЙД
                 </button>
             </div>
 
-            <!-- Right: Target Catalog -->
-            <div class="lg:col-span-3 tf-box p-4 rounded h-[580px] flex flex-col">
-                <h2 class="tf-font text-2xl text-tfYellow border-b border-tfBorder pb-1 mb-2">Цілі апгрейду</h2>
+            <!-- Right Catalog -->
+            <div class="lg:col-span-3 glass-panel p-4 rounded-2xl h-[600px] flex flex-col">
+                <h2 class="teko-font text-2xl text-amber-400 mb-3 border-b border-panelBorder pb-2">Цілі апгрейду</h2>
                 <div id="catalogGrid" class="flex-1 overflow-y-auto space-y-2 pr-1"></div>
             </div>
         </div>
 
         <!-- TAB 2: CASES -->
-        <div id="section-cases" class="hidden grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="tf-box p-6 rounded text-center flex flex-col justify-between items-center h-[420px]">
-                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zJYQJD_9W7m5O0m_7zO6-fujkGv5wh3brFoNmgiwCyrkBrazymctOedwVvYl_Y81DrxO_rhcG6uM_JnSI37HRw4XjUlwv3308_K7q79g/360fx360f" class="w-36 h-36 object-contain">
-                <h3 class="tf-font text-3xl text-tfYellow">Mann Co. Supply Crate</h3>
-                <p class="text-xs text-gray-400">Класичний ящик зброї та шапок TF2.</p>
-                <button onclick="openCase(20)" class="tf-btn tf-btn-gold w-full py-3 rounded tf-font text-2xl uppercase">Відкрити (20 ref)</button>
+        <div id="section-cases" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Bomzh -->
+            <div class="glass-panel p-5 rounded-2xl text-center flex flex-col justify-between items-center h-[420px] border-slate-700">
+                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zJYQJD_9W7m5O0m_7zO6-fujkGv5wh3brFoNmgiwCyrkBrazymctOedwVvYl_Y81DrxO_rhcG6uM_JnSI37HRw4XjUlwv3308_K7q79g/360fx360f" class="w-36 h-36 object-contain drop-shadow-xl">
+                <div>
+                    <h3 class="teko-font text-3xl text-slate-200">Бомженятко</h3>
+                    <p class="text-xs text-slate-400 mt-1">Дешевий старт для новачків.</p>
+                </div>
+                <button onclick="openCase('bomzh')" class="cyber-btn w-full py-3 rounded-xl teko-font text-2xl uppercase">Відкрити (10 ТК)</button>
             </div>
-            <div class="tf-box p-6 rounded text-center flex flex-col justify-between items-center h-[420px] border-purple-500">
-                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2PLacDBA5ciJnJm0h8j_-r-Uzj8Fv5Un37rHptjwiwC2_hJuZmimLI6Wcw48MArSqFjvx-7t15O6tZ-YnHM1uXEl4n-NnxK1h08ZcKUx0j3V85U/360fx360f" class="w-36 h-36 object-contain">
-                <h3 class="tf-font text-3xl text-purple-400">Unusual Hat Crate</h3>
-                <p class="text-xs text-gray-400">Шанс вибити незвичайну шапку з ефектом.</p>
-                <button onclick="openCase(100)" class="tf-btn w-full py-3 rounded tf-font text-2xl uppercase">Відкрити (100 ref)</button>
+            <!-- Injir -->
+            <div class="glass-panel p-5 rounded-2xl text-center flex flex-col justify-between items-center h-[420px] border-amber-600/50">
+                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf2PLacDBA5ciJnJm0h8j_-r-Uzj8Fv5Un37rHptjwiwC2_hJuZmimLI6Wcw48MArSqFjvx-7t15O6tZ-YnHM1uXEl4n-NnxK1h08ZcKUx0j3V85U/360fx360f" class="w-36 h-36 object-contain drop-shadow-xl">
+                <div>
+                    <h3 class="teko-font text-3xl text-amber-500">Інжирчик</h3>
+                    <p class="text-xs text-slate-400 mt-1">Дробовики та Australium Wrench.</p>
+                </div>
+                <button onclick="openCase('injir')" class="cyber-btn w-full py-3 rounded-xl teko-font text-2xl uppercase">Відкрити (50 ТК)</button>
             </div>
-            <div class="tf-box p-6 rounded text-center flex flex-col justify-between items-center h-[420px] border-yellow-500">
-                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zLZAJG7dizq4y0nvL8J_LEmj4G65Mh2u2T89it2Vax-hdoNWD1JteWdAFvN1rWq1C-w-m9jJTovp_NnyNlvSEr537YnB2zhxxEOPsu26cQW44G3Q/360fx360f" class="w-36 h-36 object-contain">
-                <h3 class="tf-font text-3xl text-yellow-300">Australium Weapon Case</h3>
-                <p class="text-xs text-gray-400">Чистий золотий австраліум найвищої якості.</p>
-                <button onclick="openCase(300)" class="tf-btn tf-btn-gold w-full py-3 rounded tf-font text-2xl uppercase">Відкрити (300 ref)</button>
+            <!-- 50/50 -->
+            <div class="glass-panel p-5 rounded-2xl text-center flex flex-col justify-between items-center h-[420px] border-red-600/50">
+                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopuj7DAR17PLfYQJD_9W7m5O0m_7zO6-fujkGv5wh3brFosjwiwK28hBuN2mlLIGTewE3Zl3YqVftwe_s0Z7qup7Iz3Zj6HM8pSuJlwv33086N6R_fQ/360fx360f" class="w-36 h-36 object-contain drop-shadow-xl">
+                <div>
+                    <h3 class="teko-font text-3xl text-red-500">50 / 50</h3>
+                    <p class="text-xs text-slate-400 mt-1">Ризик повний: або топ, або нічого.</p>
+                </div>
+                <button onclick="openCase('fifty')" class="cyber-btn w-full py-3 rounded-xl teko-font text-2xl uppercase">Відкрити (250 ТК)</button>
             </div>
-        </div>
-
-        <!-- TAB 3: INVENTORY -->
-        <div id="section-inventory" class="hidden tf-box p-6 rounded">
-            <h2 class="tf-font text-3xl text-tfYellow mb-4">Ваш колекційний інвентар</h2>
-            <div id="fullInvGrid" class="grid grid-cols-2 md:grid-cols-5 gap-4"></div>
-        </div>
-
-    </main>
-
-    <!-- ADMIN MODAL -->
-    <div id="adminModal" class="fixed inset-0 bg-black/80 flex items-center justify-center hidden z-50">
-        <div class="tf-box max-w-sm w-full p-6 rounded relative">
-            <button onclick="toggleAdmin()" class="absolute top-3 right-3 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
-            <h3 class="tf-font text-2xl text-tfYellow mb-3">Адмін-панель</h3>
-            <input id="adminInput" type="number" value="500" class="w-full bg-tfPanel border border-tfBorder p-2 rounded text-tfYellow font-bold mb-3">
-            <button onclick="addAdminRef()" class="tf-btn w-full py-2 rounded">Додати Refined Metal</button>
-        </div>
-    </div>
-
-    <!-- SCRIPT -->
-    <script>
-        let balance = parseFloat(localStorage.getItem('tf_bal')) || 50.0;
-        let selectedInv = JSON.parse(localStorage.getItem('tf_sel')) || [];
-        let targetItem = null
+            <!-- Rich -->
+            <div class="glass-panel p-5 rounded-2xl text-center flex flex-col justify-between items-center h-[420px] border-amber-400/50">
+                <img src="https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zLZAJG7dizq4y0nvL8J_LEmj4G65Mh2u2T89it2Vax-hdoNWD1JteWdAFvN1rWq1C-w-m9jJTovp_NnyNlvSEr537YnB2zhxxEOPsu26cQW44G3Q/360fx360f" class="w-36 h-36 object-contain drop-shadow-xl">
+                <div>
+                    <h3 class="teko-font text-3xl text-amber-300">Богач</h3>
+                    <p class="text-xs text-
