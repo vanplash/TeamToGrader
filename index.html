@@ -187,4 +187,38 @@
                     <h3 class="cyber-font text-3xl text-accentGold">Богач</h3>
                     <p class="text-xs text-textGray mt-1">Елітний шмот та шапки.</p>
                 </div>
-                <button type="button" onclick="openCase('rich')" class
+                <button type="button" onclick="openCase('rich')" class="cyber-btn w-full py-3 rounded-xl cyber-font text-2xl uppercase">Відкрити (1000 ТК)</button>
+            </div>
+        </div>
+
+        <!-- TAB 3: INVENTORY -->
+        <div id="section-inventory" class="hidden cyber-panel p-6 rounded-2xl">
+            <h2 class="cyber-font text-3xl text-accentGold mb-4">Колекція предметів</h2>
+            <div id="fullInvGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4"></div>
+        </div>
+
+    </main>
+
+    <!-- ADMIN MODAL -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center hidden z-50">
+        <div class="cyber-panel max-w-sm w-full p-6 rounded-2xl relative border border-panelBorder">
+            <button type="button" onclick="toggleAdmin()" class="absolute top-4 right-4 text-textGray hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="cyber-font text-3xl text-accentGold mb-4">Адмін-панель</h3>
+            
+            <label class="text-xs text-textGray block mb-1 font-bold">Кому надати ТК (Нікнейм гравця):</label>
+            <input id="adminTargetUser" type="text" value="Я (Мій баланс)" class="w-full bg-siteBg border border-panelBorder p-2.5 rounded-xl text-white font-bold mb-3 focus:outline-none focus:border-amber-500 text-sm">
+
+            <label class="text-xs text-textGray block mb-1 font-bold">Скільки ТК?</label>
+            <input id="adminInput" type="number" value="1000" class="w-full bg-siteBg border border-panelBorder p-3 rounded-xl text-accentGold font-bold mb-4 focus:outline-none focus:border-amber-500">
+            
+            <button type="button" onclick="addAdminRef()" class="cyber-btn w-full py-3 rounded-xl cyber-font text-2xl uppercase">Нарахувати гравцю</button>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        let balance = parseFloat(localStorage.getItem('tf_coins')) || 100.0;
+        let selectedInv = JSON.parse(localStorage.getItem('tf_sel')) || [];
+        let targetItem = null;
+        let isSpinning = false;
+        let steamUser = JSON.parse(localStorage.getItem('
