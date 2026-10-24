@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TF2 Upgrade Simulator - Mann Co. Upgrade Station</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts for TF2 Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@500;700&family=Oswald:wght@500;700&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tfRed: '#B8383B',
+                        tfRedDark: '#8B2527',
+                        tfBlu: '#5B7A8C',
+                        tfBluDark: '#3A5261',
+                        tfDark: '#2B2625',
+                        tfDarker: '#1B1716',
+                        tfPanel: '#3B3533',
+                        tfBorder: '#524B48',
+                        tfOrange: '#CF6A32',
+                        tfYellow: '#FFD700',
+                        
+                        // Quality Colors
+                        qUnique: '#7D6D00',
+                        qUniqueBorder: '#FFD700',
+                        qStrange: '#CF6A32',
+                        qUnusual: '#8650AC',
+                        qAustralium: '#E6B800',
+                        qGenuine: '#4D7455',
+                        qVintage: '#476291'
+                    },
+                    fontFamily: {
+                        tf2: ['Teko', 'Oswald', 'sans-serif'],
+                        condensed: ['Roboto Condensed', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #120f0e;
+            background-image: radial-gradient(#2b2625 1px, transparent 0);
+            background-size: 24px 24px;
+            color: #e1dcd6;
+            font-family: 'Roboto Condensed', sans-serif;
+            user-select: none;
+        }
+
+        .tf-font {
+            font-family: 'Teko', 'Oswald', sans-serif;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        /* TF2 Box Styling */
+        .tf-box {
+            background: linear-gradient(180deg, #3B3533 0%, #2B2625 100%);
+            border: 2px solid #524B48;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .tf-box-inner {
+            background: #1B1716;
+            border: 2px solid #322C2A;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+        }
+
+        /* Quality Glow Effects */
+        .glow-unusual {
+            box-shadow: 0 0 15px rgba(134, 80, 172, 0.6);
+            border-color: #8650AC !important;
+        }
+        .glow-australium {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            border-color: #FFD700 !important;
+        }
+        .glow-strange {
+            box-shadow: 0 0 10px rgba(207, 106, 50, 0.5);
+            border-color: #CF6A32 !important;
+        }
+
+        /* Custom TF Buttons */
+        .tf-btn {
+            background: linear-gradient(180deg, #B8383B 0%, #8B2527 100%);
+            border: 2px solid #D64548;
+            color: #FFF;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            box-shadow: 0 4px 0 #5C1819, 0 5px 10px rgba(0,0,0,0.5);
+            transition: all 0.05s ease;
+        }
+
+        .tf-btn:hover {
+            background: linear-gradient(180deg, #C94447 0%, #9C2C2E 100%);
+            transform: translateY(-1px);
+        }
+
+        .tf-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #5C1819, 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .tf-btn-gold {
+            background: linear-gradient(180deg, #E6B800 0%, #B38F00 100%);
+            border: 2px solid #FFE066;
+            color: #1B1716;
+            text-shadow: none;
+            box-shadow: 0 4px 0 #806600, 0 5px 10px rgba(0,0,0,0.5);
+        }
+
+        .tf-btn-gold:hover {
+            background: linear-gradient(180deg, #FFC800 0%, #C9A000 100%);
+        }
+
+        .tf-btn-gold:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #806600, 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* Canvas Meter Wheel Overlay */
+        #upgradeWheelCanvas {
+            filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.8));
+        }
+
+        /* Item Fire Animated Particles simulation */
+        .flame-bg {
+            background: radial-gradient(circle, rgba(207,106,50,0.15) 0%, rgba(27,23,22,0) 70%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1B1716;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #524B48;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #CF6A32;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- TOP HEADER / NAVBAR -->
+    <header class="tf-box border-b-4 border-tfOrange p-3 shadow-2xl relative z-20">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-4">
+            <!-- Logo & Title -->
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-tfOrange rounded-full border-2 border-tfYellow flex items-center justify-center text-tfDarker font-bold text-2xl shadow-lg">
+                    <i class="fa-solid fa-wrench"></i>
+                </div>
+                <div>
+                    <h1 class="tf-font text-3xl md:text-4xl leading-none text-tfYellow tracking-wider drop-shadow-md">
+                        MANN CO. UPGRADE STATION
+                    </h1>
+                    <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold">TF2 Item Simulator & Casino</p>
+                </div>
+            </div>
+
+            <!-- Stats & Balances -->
+            <div class="flex items-center gap-4 bg-tfDarker px-4 py-2 rounded border border-tfBorder">
+                <div class="text-center px-2">
+                    <span class="block text-xs text-gray-400">Refined Metal</span>
+                    <span id="balRef" class="tf-font text-2xl text-tfYellow">50.00 ref</span>
+                </div>
+                <div class="h-8 w-px bg-tfBorder"></div>
+                <div class="text-center px-2">
+                    <span class="block text-xs text-gray-400">Keys</span>
+                    <span id="balKeys" class="tf-font text-2xl text-tfOrange">0 🔑</span>
+                </div>
+                <div class="h-8 w-px bg-tfBorder"></div>
+                <div class="text-center px-2">
+                    <span class="block text-xs text-gray-400">Est. Value</span>
+                    <span id="balUsd" class="tf-font text-2xl text-green-400">$80.00</span>
+                </div>
+            </div>
+
+            <!-- Controls & Admin Toggle -->
+            <div class="flex items-center gap-2">
+                <button id="soundToggleBtn" onclick="toggleAudio()" class="px-3 py-2 bg-tfPanel border border-tfBorder rounded hover:bg-tfBorder transition text-gray-300">
+                    <i id="soundIcon" class="fa-solid fa-volume-high"></i>
+                </button>
+                <button onclick="toggleAdminModal()" class="tf-btn px-4 py-2 rounded text-sm font-bold flex items-center gap-2 uppercase tracking-wider">
+                    <i class="fa-solid fa-user-shield text-tfYellow"></i> Адмін Панель
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN UPGRADE WORKSPACE -->
+    <main class="max-w-7xl w-full mx-auto p-4 my-2 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- LEFT PANEL: DEPOSIT / USER INVENTORY SELECTOR -->
+        <section class="lg:col-span-3 tf-box p-4 rounded-lg flex flex-col h-[620px]">
+            <div class="flex justify-between items-center border-b border-tfBorder pb-2 mb-3">
+                <h2 class="tf-font text-2xl text-tfYellow tracking-wide"><i class="fa-solid fa-box-archive mr-2"></i>Твій Інвентар</h2>
+                <span id="invCount" class="text-xs bg-tfDarker px-2 py-1 rounded text-gray-400">0 Items</span>
+            </div>
+
+            <!-- Deposit Balance Option / Direct Ref Deposit -->
+            <div class="bg-tfDarker p-2 rounded mb-3 border border-tfBorder flex justify-between items-center">
+                <span class="text-sm text-gray-300 font-bold">Використати Баланс (ref):</span>
+                <input id="directRefInput" type="number" step="0.5" min="0" value="0" oninput="handleDirectRefChange()" 
+                       class="w-24 bg-tfPanel border border-tfBorder rounded text-right px-2 py-1 font-bold text-tfYellow focus:outline-none focus:border-tfOrange">
+            </div>
+
+            <!-- Inventory Grid -->
+            <div id="userInventoryGrid" class="tf-box-inner p-2 rounded flex-1 overflow-y-auto grid grid-cols-2 gap-2 align-content-start">
+                <!-- Dynamic Items Inserted Here -->
+            </div>
+
+            <!-- Selected Deposit Summary -->
+            <div class="mt-3 border-t border-tfBorder pt-2 text-center bg-tfDarker p-2 rounded">
+                <span class="text-xs text-gray-400 block uppercase">Ваша Ставка (Загалом)</span>
+                <span id="totalDepositVal" class="tf-font text-3xl text-tfYellow">0.00 ref</span>
+            </div>
+        </section>
+
+        <!-- CENTER PANEL: THE UPGRADE MACHINE (WHEEL / METER) -->
+        <section class="lg:col-span-6 tf-box p-6 rounded-lg flex flex-col items-center justify-between h-[620px] relative overflow-hidden flame-bg">
+            
+            <!-- Target Item Header Display -->
+            <div class="text-center z-10 w-full">
+                <div id="targetDisplayBadge" class="inline-block px-3 py-1 rounded text-xs uppercase font-bold tracking-widest bg-gray-800 text-gray-400 border border-gray-600 mb-1">
+                    Оберіть предмет для апгрейду
+                </div>
+                <h2 id="targetDisplayName" class="tf-font text-3xl text-white tracking-wide truncate max-w-md mx-auto">
+                    ---
+                </h2>
+            </div>
+
+            <!-- WHEEL METER CANVAS DISPLAY -->
+            <div class="relative my-auto flex items-center justify-center">
+                <!-- Canvas Gauge -->
+                <canvas id="upgradeWheelCanvas" width="320" height="320" class="rounded-full"></canvas>
+
+                <!-- Center Gauge Content / Odds Info -->
+                <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+                    <span class="text-xs text-gray-400 uppercase font-bold tracking-wider">Шанс Виграшу</span>
+                    <span id="chancePercentText" class="tf-font text-5xl font-bold text-tfYellow drop-shadow-lg">0.00%</span>
+                    <span id="rollRangeText" class="text-xs text-tfOrange font-mono bg-tfDarker/80 px-2 py-0.5 rounded border border-tfBorder mt-1">
+                        Roll: 0 - 0
+                    </span>
+                </div>
+            </div>
+
+            <!-- RIG / MULTIPLIER MODE BADGE (Admin active Indicator) -->
+            <div id="rigIndicator" class="hidden absolute top-3 right-3 text-xs bg-red-900/80 text-red-200 border border-red-500 px-2 py-1 rounded uppercase tracking-wider animate-pulse">
+                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Mode Active
+            </div>
+
+            <!-- RESULT ANNOUNCEMENT BANNER -->
+            <div id="resultBanner" class="hidden absolute inset-x-0 top-1/2 -translate-y-1/2 bg-tfDarker/95 border-y-4 border-tfYellow p-6 text-center z-30 shadow-2xl">
+                <h3 id="resultTitle" class="tf-font text-5xl tracking-wider">УСПІХ!</h3>
+                <p id="resultDesc" class="text-lg text-gray-200 mt-1">Ви виграли предмет!</p>
+                <div id="resultItemShow" class="mt-3 flex justify-center"></div>
+            </div>
+
+            <!-- UPGRADE TRIGGER BUTTON -->
+            <div class="w-full z-10 px-4">
+                <button id="upgradeBtn" onclick="executeUpgrade()" disabled 
+                        class="tf-btn tf-btn-gold w-full py-4 rounded-lg tf-font text-4xl tracking-wider uppercase opacity-50 cursor-not-allowed">
+                    <i class="fa-solid fa-bolt mr-2"></i> РОЗПОЧАТИ АПГРЕЙД
+                </button>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL: MARKETPLACE / TARGET ITEM CATALOG -->
+        <section class="lg:col-span-3 tf-box p-4 rounded-lg flex flex-col h-[620px]">
+            <div class="flex justify-between items-center border-b border-tfBorder pb-2 mb-3">
+                <h2 class="tf-font text-2xl text-tfYellow tracking-wide"><i class="fa-solid fa-crosshairs mr-2"></i>Ціль Апгрейду</h2>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex gap-1 mb-2 overflow-x-auto pb-1 text-xs">
+                <button onclick="filterCatalog('all')" class="px-2 py-1 bg-tfDarker border border-tfBorder rounded hover:bg-tfOrange">Всі</button>
+                <button onclick="filterCatalog('weapon')" class="px-2 py-1 bg-tfDarker border border-tfBorder rounded hover:bg-tfOrange">Зброя</button>
+                <button onclick="filterCatalog('hat')" class="px-2 py-1 bg-tfDarker border border-tfBorder rounded hover:bg-tfOrange">Шапки</button>
+                <button onclick="filterCatalog('australium')" class="px-2 py-1 bg-tfDarker border border-tfBorder rounded hover:bg-tfOrange">Australium</button>
+                <button onclick="filterCatalog('unusual')" class="px-2 py-1 bg-tfDarker border border-tfBorder rounded hover:bg-tfOrange">Unusual</button>
+            </div>
+
+            <!-- Target Catalog Grid -->
+            <div id="targetCatalogGrid" class="tf-box-inner p-2 rounded flex-1 overflow-y-auto space-y-2">
+                <!-- Target Items Dynamic Load -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ADMIN PANEL MODAL -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="tf-box max-w-2xl w-full p-6 rounded-lg border-2 border-tfYellow shadow-2xl relative">
+            <!-- Close Button -->
+            <button onclick="toggleAdminModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h2 class="tf-font text-4xl text-tfYellow border-b border-tfBorder pb-2 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-user-gear"></i> Панель Адміністратора (Безкоштовне Керування)
+            </h2>
+
+            <div class="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
+                <!-- Balance Injector -->
+                <div class="bg-tfDarker p-4 rounded border border-tfBorder">
+                    <h3 class="tf-font text-2xl text-tfOrange mb-2">💰 Поповнення Балансу</h3>
+                    <div class="flex gap-3 items-center">
+                        <input id="adminAddRefInput" type="number" value="100" min="1" class="bg-tfPanel border border-tfBorder px-3 py-2 rounded text-tfYellow font-bold w-36 focus:outline-none">
+                        <button onclick="adminAddBalance()" class="tf-btn px-4 py-2 rounded font-bold uppercase text-sm">
+                            + Додати Refined Metal
+                        </button>
+                        <button onclick="adminResetBalance()" class="bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded text-xs text-gray-200">
+                            Скинути до 0
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Custom Item Creator -->
+                <div class="bg-tfDarker p-4 rounded border border-tfBorder">
+                    <h3 class="tf-font text-2xl text-tfOrange mb-2">🎁 Створити Свій Предмет</h3>
+                    <div class="grid grid-cols-2 gap-3 mb-3">
+                        <input id="newItemName" type="text" placeholder="Назва предмета" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm">
+                        <input id="newItemPrice" type="number" placeholder="Ціна (в Refined)" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm">
+                        <select id="newItemQuality" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm">
+                            <option value="unique">Unique (Жовтий)</option>
+                            <option value="strange">Strange (Оранжевий)</option>
+                            <option value="unusual">Unusual (Фіолетовий)</option>
+                            <option value="australium">Australium (Золотий)</option>
+                        </select>
+                        <input id="newItemEffect" type="text" placeholder="Ефект (напр. Burning Flames)" class="bg-tfPanel border border-tfBorder p-2 rounded text-sm">
+                    </div>
+                    <button onclick="adminCreateCustomItem()" class="tf-btn tf-btn-gold w-full py-2 rounded font-bold uppercase text-sm">
+                        Додати предмет у магазин & Інвентар
+                    </button>
+                </div>
+
+                <!-- Win Rate Override (Rigged Mode for Testing) -->
+                <div class="bg-tfDarker p-4 rounded border border-tfBorder">
+                    <h3 class="tf-font text-2xl text-tfOrange mb-2">⚙️ Налаштування Шансів (Режим Тестування)</h3>
+                    <div class="flex gap-3">
+                        <button onclick="setRigMode('normal')" id="rigNormalBtn" class="flex-1 py-2 rounded border border-tfOrange bg-tfOrange text-white font-bold text-sm">
+                            Звичайний (Чесний)
+                        </button>
+                        <button onclick="setRigMode('win')" id="rigWinBtn" class="flex-1 py-2 rounded border border-tfBorder bg-tfPanel text-gray-300 font-bold text-sm">
+                            Завжди Перемога (100%)
+                        </button>
+                        <button onclick="setRigMode('loss')" id="rigLossBtn" class="flex-1 py-2 rounded border border-tfBorder bg-tfPanel text-gray-300 font-bold text-sm">
+                            Завжди Програш (0%)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="tf-box border-t-2 border-tfBorder p-2 text-center text-xs text-gray-500">
+        Team Fortress 2 Simulator — Mann Co. Quality Guaranteed. Powered by Web Audio & Canvas.
+    </footer>
+
+    <!-- AUDIO SYNTHESIZER & SCRIPT LOGIC -->
+    <script>
+        // --- SOUND EFFECTS SYNTHESIZER (WEB AUDIO API) ---
+        class TFSoundEngine {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+
+            playClick() {
+                if (this.muted) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.05);
+            }
+
+            playTick() {
+                if (this.muted) return;
+                this.init();
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.02);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.02);
+            }
+
+            playWin() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                
+                // Fanfare Chords
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                    gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.5);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.5);
+                });
+            }
+
+            playFail() {
+                if (this.muted) return;
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.linearRampToValueAtTime(60, now + 0.4);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        }
+
+        const sound = new TFSoundEngine();
+
+        function toggleAudio() {
+            sound.muted = !sound.muted;
+            document.getElementById('soundIcon').className = sound.muted ? "fa-solid fa-volume-xmark" : "fa-solid fa-volume-high";
+        }
+
+        // --- GAME DATA & STATE ---
+        let userBalanceRef = 150.0;
+        let selectedDepositItemIds = [];
+        let directRefDeposit = 0;
+        let selectedTargetItem = null;
+        let rigMode = 'normal'; // 'normal', 'win', 'loss'
+        let isSpinning = false;
+        let currentRollAngle = 0;
+
+        // Item Qualities Setup
+        const QUALITIES = {
+            unique: { name: 'Unique', color: '#FFD700', border: 'border-yellow-600', class: '' },
+            strange: { name: 'Strange', color: '#CF6A32', border: 'border-orange-600', class: 'glow-strange' },
+            unusual: { name: 'Unusual', color: '#8650AC', border: 'border-purple-600', class: 'glow-unusual' },
+            australium: { name: 'Australium', color: '#E6B800', border: 'border-yellow-400', class: 'glow-australium' }
+        };
+
+        // Master Catalog of Target Items
+        let targetCatalog = [
+            { id: 't1', name: '✨ Australium Rocket Launcher', price: 120, quality: 'australium', category: 'australium', icon: 'fa-rocket' },
+            { id: 't2', name: '🔥 Burning Flames Team Captain', price: 4500, quality: 'unusual', category: 'unusual', effect: 'Burning Flames', icon: 'fa-hat-cowboy' },
+            { id: 't3', name: '🗡️ Australium Knife', price: 65, quality: 'australium', category: 'australium', icon: 'fa-khanda' },
+            { id: 't4', name: '🍌 Potassium Bonnet', price: 40, quality: 'unique', category: 'hat', icon: 'fa-hat-wizard' },
+            { id: 't5', name: '🎩 Unusual Pillar of Hats', price: 28, quality: 'unusual', category: 'unusual', effect: 'Sunbeams', icon: 'fa-graduation-cap' },
+            { id: 't6', name: '⚡ Strange Australium Minigun', price: 140, quality: 'australium', category: 'australium', icon: 'fa-gun' },
+            { id: 't7', name: '💀 Scorching Flames Kabuto', price: 1800, quality: 'unusual', category: 'unusual', effect: 'Scorching Flames', icon: 'fa-helmet-safety' },
+            { id: 't8', name: '🎺 Taunt: The Frying Pan', price: 15, quality: 'strange', category: 'weapon', icon: 'fa-utensils' }
+        ];
+
+        // User Inventory Storage
+        let userInventory = [
+            { id: 'u1', name: 'Mercenary Badge', price: 5, quality: 'unique', icon: 'fa-shield' },
+            { id: 'u2', name: 'Strange Scattergun', price: 18, quality: 'strange', icon: 'fa-crosshairs' },
+            { id: 'u3', name: 'Vintage Bill\'s Hat', price: 22, quality: 'unique', icon: 'fa-hat-cowboy-side' }
+        ];
+
+        // --- CORE INITIALIZATION ---
+        window.onload = function() {
+            updateHeaderBalances();
+            renderUserInventory();
+            renderTargetCatalog('all');
+            initCanvasMeter(0);
+        };
+
+        // --- UI & RENDER FUNCTIONS ---
+        function updateHeaderBalances() {
+            document.getElementById('balRef').innerText = `${userBalanceRef.toFixed(2)} ref`;
+            document.getElementById('balKeys').innerText = `${Math.floor(userBalanceRef / 60)} 🔑`;
+            document.getElementById('balUsd').innerText = `$${(userBalanceRef * 1.6).toFixed(2)}`;
+        }
+
+        function renderUserInventory() {
+            const grid = document.getElementById('userInventoryGrid');
+            grid.innerHTML = '';
+            document.getElementById('invCount').innerText = `${userInventory.length} Items`;
+
+            userInventory.forEach(item => {
+                const isSelected = selectedDepositItemIds.includes(item.id);
+                const q = QUALITIES[item.quality] || QUALITIES.unique;
+
+                const card = document.createElement('div');
+                card.className = `tf-box p-2 rounded cursor-pointer transition flex flex-col items-center justify-between text-center relative border-2 ${isSelected ? 'border-tfYellow bg-tfDark' : 'border-tfBorder'} hover:border-tfOrange`;
+                card.onclick = () => toggleSelectDepositItem(item.id);
+
+                card.innerHTML = `
+                    <div class="text-2xl mb-1" style="color: ${q.color}">
+                        <i class="fa-solid ${item.icon}"></i>
+                    </div>
+                    <div class="text-xs font-bold leading-tight truncate w-full" style="color: ${q.color}">${item.name}</div>
+                    <div class="text-[10px] text-tfYellow font-mono mt-1">${item.price} ref</div>
+                `;
+                grid.appendChild(card);
+            });
+
+            calculateTotalDepositAndOdds();
+        }
+
+        function renderTargetCatalog(filter) {
+            const grid = document.getElementById('targetCatalogGrid');
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' ? targetCatalog : targetCatalog.filter(i => i.category === filter);
+
+            filtered.forEach(item => {
+                const isSelected = selectedTargetItem && selectedTargetItem.id === item.id;
+                const q = QUALITIES[item.quality] || QUALITIES.unique;
+
+                const card = document.createElement('div');
+                card.className = `tf-box p-2 rounded cursor-pointer transition flex items-center justify-between border-2 ${isSelected ? 'border-tfYellow bg-tfDark' : 'border-tfBorder'} hover:border-tfOrange ${q.class}`;
+                card.onclick = () => selectTargetItem(item);
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="text-2xl" style="color: ${q.color}">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-xs font-bold" style="color: ${q.color}">${item.name}</div>
+                            ${item.effect ? `<div class="text-[10px] text-purple-400 font-semibold">${item.effect}</div>` : ''}
+                        </div>
+                    </div>
+                    <div class="text-sm font-mono font-bold text-tfYellow">${item.price} ref</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCatalog(category) {
+            sound.playClick();
+            renderTargetCatalog(category);
+        }
+
+        // --- SELECTION & ODDS LOGIC ---
+        function toggleSelectDepositItem(id) {
+            sound.playClick();
+            if (selectedDepositItemIds.includes(id)) {
+                selectedDepositItemIds = selectedDepositItemIds.filter(i => i !== id);
+            } else {
+                selectedDepositItemIds.push(id);
+            }
+            renderUserInventory();
+        }
+
+        function handleDirectRefChange() {
+            const input = document.getElementById('directRefInput');
+            let val = parseFloat(input.value) || 0;
+            if (val > userBalanceRef) {
+                val = userBalanceRef;
+                input.value = val;
+            }
+            directRefDeposit = val;
+            calculateTotalDepositAndOdds();
+        }
+
+        function selectTargetItem(item) {
+            sound.playClick();
+            selectedTargetItem = item;
+            document.getElementById('targetDisplayName').innerText = item.name;
+            document.getElementById('targetDisplayName').style.color = QUALITIES[item.quality].color;
+            document.getElementById('targetDisplayBadge').innerText = item.quality.toUpperCase();
+            
+            renderTargetCatalog('all');
+            calculateTotalDepositAndOdds();
+        }
+
+        function calculateTotalDepositAndOdds() {
+            let itemSum = 0;
+            userInventory.forEach(item => {
+                if (selectedDepositItemIds.includes(item.id)) {
+                    itemSum += item.price;
+                }
+            });
+
+            const totalDeposit = itemSum + directRefDeposit;
+            document.getElementById('totalDepositVal').innerText = `${totalDeposit.toFixed(2)} ref`;
+
+            if (!selectedTargetItem || totalDeposit <= 0) {
+                updateOddsDisplay(0);
+                toggleUpgradeButton(false);
+                return;
+            }
+
+            // Calculate Win Chance (Max capped at 95%)
+            let chance = (totalDeposit / selectedTargetItem.price) * 100;
+            if (chance > 95) chance = 95;
+
+            updateOddsDisplay(chance);
+            toggleUpgradeButton(true);
+        }
+
+        function updateOddsDisplay(chancePercent) {
+            const formatted = chancePercent.toFixed(2);
+            document.getElementById('chancePercentText').innerText = `${formatted}%`;
+            document.getElementById('rollRangeText').innerText = `Roll Range: 0.00 - ${formatted}`;
+            initCanvasMeter(chancePercent);
+        }
+
+        function toggleUpgradeButton(enabled) {
+            const btn = document.getElementById('upgradeBtn');
+            if (enabled && !isSpinning) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        // --- CANVAS WHEEL METER RENDERER ---
+        function initCanvasMeter(winPercent, animatedAngle = null) {
+            const canvas = document.getElementById('upgradeWheelCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const center = width / 2;
+            const radius = center - 15;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Outer Metallic Ring
+            ctx.beginPath();
+            ctx.arc(center, center, radius + 5, 0, Math.PI * 2);
+            ctx.strokeStyle = '#524B48';
+            ctx.lineWidth = 8;
+            ctx.stroke();
+
+            // Background Circle (Fail Zone - Red/Dark)
+            ctx.beginPath();
+            ctx.arc(center, center, radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#2B1C1D';
+            ctx.fill();
+
+            // Win Zone (Green Arc)
+            const winAngle = (winPercent / 100) * (Math.PI * 2);
+            const startAngle = -Math.PI / 2; // Start from top
+            
+            ctx.beginPath();
+            ctx.moveTo(center, center);
+            ctx.arc(center, center, radius, startAngle, startAngle + winAngle);
+            ctx.closePath();
+            ctx.fillStyle = '#3E6B39';
+            ctx.fill();
+
+            // Inner Ring Border
+            ctx.beginPath();
+            ctx.arc(center, center, radius - 25, 0, Math.PI * 2);
+            ctx.fillStyle = '#1B1716';
+            ctx.fill();
+            ctx.strokeStyle = '#322C2A';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // Pointer/Ticker Indicator Angle
+            if (animatedAngle !== null) {
+                const pointerRad = startAngle + animatedAngle;
+                ctx.beginPath();
+                ctx.moveTo(center, center);
+                ctx.lineTo(center + Math.cos(pointerRad) * radius, center + Math.sin(pointerRad) * radius);
+                ctx.strokeStyle = '#FFD700';
+                ctx.lineWidth = 5;
+                ctx.stroke();
+
+                // Pointer Head Tip
+                ctx.beginPath();
+                ctx.arc(center + Math.cos(pointerRad) * radius, center + Math.sin(pointerRad) * radius, 8, 0, Math.PI * 2);
+                ctx.fillStyle = '#CF6A32';
+                ctx.fill();
+            }
+        }
+
+        // --- UPGRADE EXECUTION ENGINE ---
+        function executeUpgrade() {
+            if (isSpinning || !selectedTargetItem) return;
+            isSpinning = true;
+            toggleUpgradeButton(false);
+            sound.playClick();
+
+            // Deduct Direct Ref Deposit from balance
+            userBalanceRef -= directRefDeposit;
+            updateHeaderBalances();
+
+            // Calculate Win Chance
+            let itemSum = 0;
+            userInventory.forEach(item => {
+                if (selectedDepositItemIds.includes(item.id)) itemSum += item.price;
+            });
+            const totalDeposit = itemSum + directRefDeposit;
+            let winChance = Math.min((totalDeposit / selectedTargetItem.price) * 100, 95);
+
+            // Determine Outcome (Rigged or Random)
+            let isWin = false;
+            let rollValue = Math.random() * 100;
+
+            if (rigMode === 'win') {
+                isWin = true;
+                rollValue = winChance * 0.5; // Always falls inside win zone
+            } else if (rigMode === 'loss') {
+                isWin = false;
+                rollValue = Math.min(winChance + 10, 99.9); // Always falls outside
+            } else {
+                isWin = rollValue <= winChance;
+            }
+
+            // Target Final Angle Calculation
+            const winZoneRad = (winChance / 100) * (Math.PI * 2);
+            let targetRad = 0;
+
+            if (isWin) {
+                targetRad = Math.random() * winZoneRad;
+            } else {
+                targetRad = winZoneRad + Math.random() * ((Math.PI * 2) - winZoneRad);
+            }
+
+            // Spin Animation Parameters
+            const extraSpins = 5 * (Math.PI * 2); // 5 Full Revolutions
+            const totalTravelRad = extraSpins + targetRad;
+            const startTime = performance.now();
+            const spinDuration = 4000; // 4 Seconds animation
+
+            let lastTickRad = 0;
+
+            function animateSpin(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / spinDuration, 1);
+                
+                // Ease-Out Cubic Progression
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const currentAngle = easeOut * totalTravelRad;
+
+                // Play tick sound every ~20 deg turn
+                if (currentAngle - lastTickRad > 0.3) {
+                    sound.playTick();
+                    lastTickRad = currentAngle;
+                }
+
+                initCanvasMeter(winChance, currentAngle % (Math.PI * 2));
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateSpin);
+                } else {
+                    // Spin Completed
+                    finalizeUpgrade(isWin, rollValue, winChance);
+                }
+            }
+
+            requestAnimationFrame(animateSpin);
+        }
+
+        function finalizeUpgrade(isWin, rollValue, winChance) {
+            isSpinning = false;
+
+            // Remove Deposited Items from User Inventory
+            userInventory = userInventory.filter(i => !selectedDepositItemIds.includes(i.id));
+            selectedDepositItemIds = [];
+            directRefDeposit = 0;
+            document.getElementById('directRefInput').value = 0;
+
+            const banner = document.getElementById('resultBanner');
+            const title = document.getElementById('resultTitle');
+            const desc = document.getElementById('resultDesc');
+            const itemShow = document.getElementById('resultItemShow');
+
+            banner.classList.remove('hidden');
+
+            if (isWin) {
+                sound.playWin();
+                title.innerText = "🎉 УСПІХ! (SUCCESS)";
+                title.className = "tf-font text-5xl tracking-wider text-tfYellow";
+                desc.innerText = `Випало ${rollValue.toFixed(2)} (Шанс: ${winChance.toFixed(2)}%)`;
+
+                // Add won item to inventory
+                const wonItem = { ...selectedTargetItem, id: 'won_' + Date.now() };
+                userInventory.push(wonItem);
+
+                const q = QUALITIES[wonItem.quality];
+                itemShow.innerHTML = `
+                    <div class="tf-box p-4 rounded border-2 border-tfYellow text-center">
+                        <div class="text-4xl mb-2" style="color: ${q.color}"><i class="fa-solid ${wonItem.icon}"></i></div>
+                        <div class="font-bold" style="color: ${q.color}">${wonItem.name}</div>
+                        <div class="text-xs text-tfYellow font-mono">${wonItem.price} ref</div>
+                    </div>
+                `;
+            } else {
+                sound.playFail();
+                title.innerText = "💥 НЕВДАЧА! (DESTROYED)";
+                title.className = "tf-font text-5xl tracking-wider text-tfRed";
+                desc.innerText = `Випало ${rollValue.toFixed(2)} (Потрібно було <= ${winChance.toFixed(2)}%). Предмет згорів!`;
+                itemShow.innerHTML = `
+                    <div class="text-5xl text-tfRed my-2"><i class="fa-solid fa-fire"></i></div>
+                `;
+            }
+
+            renderUserInventory();
+
+            // Auto Hide Banner after 3.5 seconds
+            setTimeout(() => {
+                banner.classList.add('hidden');
+                calculateTotalDepositAndOdds();
+            }, 3500);
+        }
+
+        // --- ADMIN PANEL FUNCTIONS ---
+        function toggleAdminModal() {
+            sound.playClick();
+            const modal = document.getElementById('adminModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function adminAddBalance() {
+            sound.playClick();
+            const amount = parseFloat(document.getElementById('adminAddRefInput').value) || 0;
+            userBalanceRef += amount;
+            updateHeaderBalances();
+            calculateTotalDepositAndOdds();
+        }
+
+        function adminResetBalance() {
+            sound.playClick();
+            userBalanceRef = 0;
+            updateHeaderBalances();
+            calculateTotalDepositAndOdds();
+        }
+
+        function adminCreateCustomItem() {
+            sound.playClick();
+            const name = document.getElementById('newItemName').value || 'Custom Hat';
+            const price = parseFloat(document.getElementById('newItemPrice').value) || 50;
+            const quality = document.getElementById('newItemQuality').value;
+            const effect = document.getElementById('newItemEffect').value;
+
+            const newItem = {
+                id: 'custom_' + Date.now(),
+                name: name,
+                price: price,
+                quality: quality,
+                category: quality === 'unusual' ? 'unusual' : 'hat',
+                effect: effect || null,
+                icon: 'fa-gift'
+            };
+
+            targetCatalog.unshift(newItem);
+            userInventory.push(newItem);
+
+            renderTargetCatalog('all');
+            renderUserInventory();
+            toggleAdminModal();
+        }
+
+        function setRigMode(mode) {
+            sound.playClick();
+            rigMode = mode;
+            const indicator = document.getElementById('rigIndicator');
+
+            document.getElementById('rigNormalBtn').className = mode === 'normal' ? 'flex-1 py-2 rounded border border-tfOrange bg-tfOrange text-white font-bold text-sm' : 'flex-1 py-2 rounded border border-tfBorder bg-tfPanel text-gray-300 font-bold text-sm';
+            document.getElementById('rigWinBtn').className = mode === 'win' ? 'flex-1 py-2 rounded border border-green-500 bg-green-700 text-white font-bold text-sm' : 'flex-1 py-2 rounded border border-tfBorder bg-tfPanel text-gray-300 font-bold text-sm';
+            document.getElementById('rigLossBtn').className = mode === 'loss' ? 'flex-1 py-2 rounded border border-red-500 bg-red-700 text-white font-bold text-sm' : 'flex-1 py-2 rounded border border-tfBorder bg-tfPanel text-gray-300 font-bold text-sm';
+
+            if (mode !== 'normal') {
+                indicator.classList.remove('hidden');
+            } else {
+                indicator.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
